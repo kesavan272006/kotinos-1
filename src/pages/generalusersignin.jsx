@@ -5,7 +5,7 @@ function Generaluser(){
         <div id='outerdivsignin'>
             <div id='signin-imageh1div'>
                 <img src={logo} alt="Logo" id='Logo' />
-                <h1>Kotinos</h1>
+                <h1 className='russo pt-3'>Kotinos</h1>
             </div>
             <div id='signinbox'>
                 <h2>Email Id</h2>

@@ -14,7 +14,7 @@ function Signup(){
         }else if(selectedOption=='organization'){
             navigate('/organization');
         }else{
-            navigate('/signin');
+            navigate('/athleteinfo');
         }
     }
     return(
