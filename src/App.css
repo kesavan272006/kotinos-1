@@ -85,6 +85,7 @@ body{
   flex-direction: column;
   justify-content: center;
   margin-bottom: 50px;
+  align-self: center;
 }
 #firstinputsignin{
   height: 52px;
@@ -115,13 +116,38 @@ body{
   align-self: center;
   box-shadow: 10px 10px 10px 10px rgba(0, 0, 0, 0.1);
   align-items: center;
-
+  
+}
+#signupbox3{
+  background-color: white;
+  height: 500px;
+  width: 500px;
+  align-self: center;
+  box-shadow: 10px 10px 10px 10px rgba(0, 0, 0, 0.1);
+  align-items: center;
+  margin: 0 auto;
+}
+#signupbox2{
+  background-color: white;
+  height: 1000px;
+  width: 500px;
+  align-self: center;
+  box-shadow: 10px 10px 10px 10px rgba(0, 0, 0, 0.1);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
 }
 #signupcontinue{
   background-color: black;
   color: white;
   height: 30px;
   width: 100px;
+}
+#signupcontinue2{
+  background-color: black;
+  color: white;
+  height: 30px;
+  width: 200px;
 }
 #googlebutton{
   height: 50px;
