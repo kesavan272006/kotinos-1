@@ -8,7 +8,7 @@ function Athleteinfo(){
         if(selectedOption===''||username===''||birthdate==''||primarysports===''||state===''){
             alert("Please fill in the required fields.");
         }else{
-            navigate('/emaillogin');
+            navigate('/profile');
         }
     }
     const statesOfIndia = [

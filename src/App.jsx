@@ -7,6 +7,8 @@ import Organization from './pages/organization';
 import About from './pages/about';
 import Athleteinfo from './pages/athleteinfo';
 import Emaillogin from './pages/emaillogin';
+import Coachpage from './pages/coachpage';
+import Profile from './pages/profile';
 function App() {
   return (
     <div>
@@ -19,6 +21,8 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/athleteinfo" element={<Athleteinfo />} />
         <Route path="/emaillogin" element={<Emaillogin />} />
+        <Route path="/coachpage" element={<Coachpage />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </div>
   );
