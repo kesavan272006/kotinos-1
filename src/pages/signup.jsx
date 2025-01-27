@@ -9,11 +9,14 @@ function Signup(){
         setselectedOption(event.target.value)
     } 
     function handlenavigation(){
-        if(selectedOption=='user'||selectedOption=='other'){
+        if(selectedOption=='user'){
             navigate("/generaluser");
         }else if(selectedOption=='organization'){
             navigate('/organization');
-        }else{
+        }else if(selectedOption=='coach'){
+            navigate("/coachpage")
+        }
+        else{
             navigate('/athleteinfo');
         }
     }
@@ -45,12 +48,11 @@ function Signup(){
                 </div>
                 <div>
                     <label>
-                        <input type="radio" value='others' checked={selectedOption==='others'} onChange={handleoption} />
-                        Others
+                        <input type="radio" value='coach' checked={selectedOption==='coach'} onChange={handleoption} />
+                        A coach aiming to train talented athletes
                     </label>
                 </div>
                 <button onClick={handlenavigation} id='signupcontinue'>Continue</button>
-                <p>Already have an account <Link id='signinpagesignuplink' to='/signin'>Sign In</Link></p>
             </div>
         </div>
     )
