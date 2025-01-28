@@ -2,6 +2,7 @@ import '../App.css';
 import { useNavigate } from 'react-router-dom'; // No need for Routes here
 import Footer from '../components/footer';
 import Navbarout from '../components/getstartednavbar';
+import bg from '../assets/background.png';
 
 function Getstarted(){
     const navigate = useNavigate();
@@ -12,7 +13,17 @@ function Getstarted(){
 
     return(
         <>
+            <style>
+                {`
+                    body{
+                        background-image: url(${bg});
+                        background-repeat: no-repeat;
+                        background-size: cover;
+                    }
+                `}
+            </style>
             <Navbarout />
+            <div>
             <div className="main-head flex items-center justify-center flex-col russo text-[28px] pt-40 pt-30 md:text-[64px] md:pt-32">
             <div className=''>Empowering <span className='text-[#2BCEE0]'>Athletes</span>.</div>
             <div>
@@ -27,6 +38,7 @@ function Getstarted(){
             <div className=' text-[#787777]'>Start Your Sports Journey <span className='text-[#2BCEE0] hover:underline'>Today</span></div>
             <div>
                 <button onClick={handleclick} className='rounded-[5px] px-5 py-2 bg-black text-white russo text-[17px] hover:scale-110 transition-all'>Get Started</button>
+            </div>
             </div>
             </div>
             <hr className='line' />

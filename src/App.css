@@ -4,6 +4,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Russo+One&display=swap');
 body{
   background-color: #f1f8f9;
+  
 }
 .navbar{
   box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
@@ -32,7 +33,7 @@ body{
 
 /*SIGN IN TO KOTINOS*/
 .input-box-signin{
-  border: 2px solid black;
+  border: 2px solid rgb(178, 174, 174);
   border-radius: 10px;
   padding: 4px;
 }
