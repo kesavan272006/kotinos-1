@@ -1,5 +1,7 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Russo+One&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Russo+One&display=swap');
 body{
   background-color: #f1f8f9;
 }
@@ -9,6 +11,9 @@ body{
 }
 .russo{
   font-family: "Russo One", serif;
+}
+.lexend{
+  font-family: "Lexend", serif;
 }
 .logo{
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
@@ -22,6 +27,14 @@ body{
 .line{
   border: 3px solid gray;
   margin-top: 40px;
+}
+
+
+/*SIGN IN TO KOTINOS*/
+.input-box-signin{
+  border: 2px solid black;
+  border-radius: 10px;
+  padding: 4px;
 }
 
 ::-webkit-scrollbar {
@@ -57,15 +70,7 @@ body{
   margin-top: 100px;
 
 }
-#signinbox{
-  background-color: white;
-  height: 500px;
-  width: 500px;
-  align-self: center;
-  box-shadow: 10px 10px 10px 10px rgba(0, 0, 0, 0.1);
-  align-items: center;
 
-}
 #signinbox2{
   background-color: white;
   height: max-content;
@@ -87,24 +92,14 @@ body{
   margin-bottom: 50px;
   align-self: center;
 }
-#firstinputsignin{
-  height: 52px;
-  width: 300px;
-  border: 2px solid black;
-  border-radius: 2%;
-}
+
 #firstinputsignin2{
   height: 52px;
   width: 400px;
   border: 2px solid black;
   border-radius: 2%;
 }
-#signinbutton{
-  height: 50px;
-  width: 100px;
-  background-color: black;
-  color: white;
-}
+
 #signinpagesignuplink{
   color: blue;
 
@@ -118,15 +113,7 @@ body{
   align-items: center;
   
 }
-#signupbox3{
-  background-color: white;
-  height: 500px;
-  width: 500px;
-  align-self: center;
-  box-shadow: 10px 10px 10px 10px rgba(0, 0, 0, 0.1);
-  align-items: center;
-  margin: 0 auto;
-}
+
 #signupbox2{
   background-color: white;
   height: 1000px;
