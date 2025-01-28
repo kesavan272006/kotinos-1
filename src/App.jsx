@@ -9,6 +9,10 @@ import Athleteinfo from './pages/athleteinfo';
 import Emaillogin from './pages/emaillogin';
 import Coachpage from './pages/coachpage';
 import Profile from './pages/profile';
+import Navbar from './components/navbar';
+import Home from './pages/home';
+import Messages from './pages/messages';
+import Notification from './pages/notification';
 function App() {
   return (
     <div>
@@ -23,6 +27,10 @@ function App() {
         <Route path="/emaillogin" element={<Emaillogin />} />
         <Route path="/coachpage" element={<Coachpage />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/navbar" element={<Navbar />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/messages" element={<Messages />} />
+        <Route path="/notification" element={<Notification />} />
       </Routes>
     </div>
   );
