@@ -1,5 +1,5 @@
 import '../App.css';
-import { useNavigate } from 'react-router-dom'; // No need for Routes here
+import { useNavigate } from 'react-router-dom'; 
 import Footer from '../components/footer';
 import Navbarout from '../components/getstartednavbar';
 import bg from '../assets/background.png';
