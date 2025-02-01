@@ -3,7 +3,7 @@ import Lottie from 'react-lottie';
 import loadingAnimation from '../assets/loading.json'; 
 
 const Loading = () => {
-    const [isLoading, setIsLoading] = useState(true); // State to control the loading display
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const timer = setTimeout(() => {
