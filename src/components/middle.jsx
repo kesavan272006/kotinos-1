@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import profileicon from '../assets/profileicon.svg'
 import galleryicon from '../assets/gallery.svg'
 import videoicon from '../assets/videoicon.svg'
@@ -7,11 +7,15 @@ import sachin from '../assets/sachin.jpg'
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { database, auth } from '../config/firebase';
-import { doc, getDoc } from 'firebase/firestore';
-const Middle = () => {
+import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
+import { Database } from 'firebase/database'
+import Posts from './posts'
+const Middle = ({userData}) => {
   const [username, setUsername] = useState('');
   const [role, setRole] = useState('');
   const navigate = useNavigate();
+  const postRef = useRef(null);
+  const [posts, setPosts]=useState([]);
   useEffect(()=>{
     const fetchUserData = async () => {
       const currentUser = auth.currentUser;
@@ -33,13 +37,33 @@ const Middle = () => {
 
   fetchUserData();
   }, [navigate]);
+  const getPost =  ()=>{
+    setTimeout(async() => {
+      const postDocument = doc(database, `User-${auth.currentUser?.uid}`, `${auth.currentUser?.uid}`)
+      const postRef = collection(postDocument, "Posts")
+      try {
+        const data = await getDocs(postRef );
+        const filteredData = data.docs.map((doc)=>({
+          ...doc.data(),
+          id: doc.id,
+        }))
+        setPosts(filteredData);
+      } catch (err) {
+        console.error(err);
+      }
+    }, 1000);
+  }
+  useEffect(()=>{
+    getPost();
+  })
   return (
     <>
       <div style={{width:'50vw', height:'100%', marginTop:'50px', }}>
         <div style={{backgroundColor:'white'}}>
           <div style={{display:'flex', paddingTop:'20px', flexDirection:'row', justifyContent:'space-evenly'}}>
             <img src={profileicon} alt="Profile" style={{height:'70px', width:'70px', borderRadius:'50%',backgroundColor:'gray'}} />
-            <input type="text" placeholder='start a post' style={{borderRadius:'10px', height: '70px', width: '600px', backgroundColor:'whitesmoke'}} />
+            <input onClick={()=> postRef.current?.click()} type="text" placeholder='start a post' style={{borderRadius:'10px', height: '70px', width: '600px', backgroundColor:'whitesmoke'}} />
+            <Posts ref={postRef}/>
           </div>
           <div style={{height:'50px', marginTop:'10px', display:'flex', flexDirection:'row', justifyContent:'space-evenly'}}>
             <div style={{display:'flex', flexDirection:'row', justifyContent:'center'}}>
@@ -57,22 +81,30 @@ const Middle = () => {
           </div>
         </div>
         <div style={{height: '100%', width:'50vw', marginTop:'20px', backgroundColor:'white', marginBottom:'30px'}}>
-            <div style={{paddingLeft:'20px'}}>
-              <div style={{display:'flex', flexDirection:'row'}}>
-                <img src={profileicon} alt="Icon" style={{height:'80px', width:'80px', borderRadius:'50%', backgroundColor:'gray', marginRight:'20px'}} />
-                <div style={{display:'flex', flexDirection:'column', justifyContent:'center'}}>
-                  <h1>{username}</h1>
-                  <h1>{role}</h1>
+            {posts.map((post)=>{
+              return(
+                <div>
+                  <div style={{paddingLeft:'20px'}}>
+                      <div style={{display:'flex', flexDirection:'row'}}>
+                        <img src={profileicon} alt="Icon" style={{height:'80px', width:'80px', borderRadius:'50%', backgroundColor:'gray', marginRight:'20px'}} />
+                        <div style={{display:'flex', flexDirection:'column', justifyContent:'center'}}>
+                          <h1>{username}</h1>
+                          <h1>{role}</h1>
+                        </div>
+                      </div>
+                      <br />
+                      <h1>{post.textPost}</h1>
+                    </div>
+                    <br />
+                    <br />
+                    {post.photo && 
+                      <div style={{width:'50vw', height:'100%', paddingLeft:'10px', paddingRight:'10px'}}>
+                        <img src={sachin} alt="sachin image" style={{width:'100%'}} />
+                      </div>
+                    }
                 </div>
-              </div>
-              <br />
-              <h1>Sachin is the greatest player of all time. this one shot is enough to prove his strandom <br />Even Kohli is his fan boy and will always be...</h1>
-            </div>
-            <br />
-            <br />
-            <div style={{width:'50vw', height:'100%', paddingLeft:'10px', paddingRight:'10px'}}>
-              <img src={sachin} alt="sachin image" style={{width:'100%'}} />
-            </div>
+              )
+            })}
         </div>
       </div>
     </>

@@ -8,11 +8,12 @@ import { useState, useEffect } from "react";
 import { doc, getDoc } from "firebase/firestore";
 import { auth, database } from "../config/firebase";
 function Home(){
+    const [userData, setuserData]=useState([]);
     const getuser = async ()=>{
         try {
             const userdocument =doc(database, `User-${auth.currentUser?.uid}`, `${auth.currentUser?.uid}`);
             const data = await getDoc(userdocument);
-            console.log(data);
+            setuserData(data);
         } catch (err) {
             console.log(err);
         }
@@ -36,7 +37,7 @@ function Home(){
             <Navbar />
             <div style={{display:'flex', flexDirection: 'row', justifyContent:'space-between'}}>
                 <Sidebar />
-                <Middle />
+                <Middle userData = {userData} />
                 <Rightbar />
             </div>
             <Footer />
