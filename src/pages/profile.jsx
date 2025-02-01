@@ -1,33 +1,48 @@
 import Navbar from '../components/navbar';
 import addprofile from '../assets/profileadd.svg';
-import { useUser } from '../components/UserContext';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { database, auth } from '../config/firebase';
+import { doc, getDoc } from 'firebase/firestore';
+import Loading from '../components/Loading';
 
 const Profile = () => {
-    const { userDetails } = useUser();
     const [username, setUsername] = useState('');
     const [role, setRole] = useState('');
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        if (userDetails) {
-            setUsername(userDetails.username);
-            setRole(userDetails.selectedOption);  // Use selectedOption here
-            localStorage.setItem("username", userDetails.username);
-            localStorage.setItem("role", userDetails.selectedOption); // Store selectedOption as role
-        } else {
-            const storedUsername = localStorage.getItem("username");
-            const storedRole = localStorage.getItem("role");
+        const timer = setTimeout(() => {
+            setLoading(false);
+        }, 3000);
 
-            if (storedUsername && storedRole) {
-                setUsername(storedUsername);
-                setRole(storedRole);
+        const fetchUserData = async () => {
+            const currentUser = auth.currentUser;
+
+            if (currentUser) {
+                const userRef = doc(database, "users", currentUser.uid);
+                const userSnap = await getDoc(userRef);
+                if (userSnap.exists()) {
+                    const userData = userSnap.data();
+                    setUsername(userData.username || 'No Username');
+                    setRole(userData.role || 'No Role');
+                } else {
+                    navigate("/signin");
+                }
             } else {
                 navigate("/signin");
             }
-        }
-    }, [userDetails, navigate]);
+        };
+
+        fetchUserData();
+
+        return () => clearTimeout(timer);
+    }, [navigate]);
+
+    if (loading) {
+        return <Loading />;
+    }
 
     return (
         <div>
@@ -40,7 +55,7 @@ const Profile = () => {
                             <img src={addprofile} alt="add a profile pic" style={{ height: '50px', width: '50px', borderRadius: '25%' }} />
                         </div>
                         <h1>{username}</h1>
-                        <p>Role: {role}</p> {/* Display the role */}
+                        <p>Role: {role}</p>
                     </div>
                 </nav>
             </div>
