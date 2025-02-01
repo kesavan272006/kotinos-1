@@ -31,7 +31,7 @@ const Loading = () => {
             <Lottie options={options} height={400} width={400} />
             <div style={styles.textContainer}>
                 <h1 style={styles.title}> <span style={{color: 'rgb(43, 206, 244)'}}>K</span>otinos</h1>
-                <h1 style={styles.subtitle}>Your dream, our code</h1>
+                <h1 style={styles.subtitle}>Your dream, our Platform</h1>
             </div>
         </div>
     );

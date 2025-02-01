@@ -48,7 +48,7 @@ const Signin = () => {
     };
 
     const addUser = async () => {
-        const userRef = collection(database, `User-${auth.currentUser?.uid}`);
+        const userRef = collection(database, "Users");
         const userDocRef = doc(userRef, auth.currentUser.uid);
     
         try {

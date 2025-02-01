@@ -9,14 +9,16 @@ import { doc, getDoc } from "firebase/firestore";
 import { auth, database } from "../config/firebase";
 function Home(){
     const [userData, setuserData]=useState([]);
-    const getuser = async ()=>{
-        try {
-            const userdocument =doc(database, `User-${auth.currentUser?.uid}`, `${auth.currentUser?.uid}`);
-            const data = await getDoc(userdocument);
-            setuserData(data);
-        } catch (err) {
-            console.log(err);
-        }
+    const getuser =  ()=>{
+        setTimeout(async() => {
+            try {
+                const userdocument =doc(database, "Users", `${auth.currentUser?.uid}`);
+                const data = await getDoc(userdocument);
+                setuserData(data);
+            } catch (err) {
+                console.log(err);
+            }
+        }, 1000);
     }
     const [loading, setLoading] = useState(true);
     

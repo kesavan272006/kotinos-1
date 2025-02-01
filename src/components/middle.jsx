@@ -8,7 +8,6 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { database, auth } from '../config/firebase';
 import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
-import { Database } from 'firebase/database'
 import Posts from './posts'
 const Middle = ({userData}) => {
   const [username, setUsername] = useState('');
@@ -21,7 +20,7 @@ const Middle = ({userData}) => {
       const currentUser = auth.currentUser;
 
       if (currentUser) {
-          const userRef = doc(database, `User-${auth.currentUser?.uid}`, currentUser.uid);
+          const userRef = doc(database, "Users", currentUser.uid);
           const userSnap = await getDoc(userRef);
           if (userSnap.exists()) {
               const userData = userSnap.data();
@@ -39,7 +38,7 @@ const Middle = ({userData}) => {
   }, [navigate]);
   const getPost =  ()=>{
     setTimeout(async() => {
-      const postDocument = doc(database, `User-${auth.currentUser?.uid}`, `${auth.currentUser?.uid}`)
+      const postDocument = doc(database, "Users", `${auth.currentUser?.uid}`)
       const postRef = collection(postDocument, "Posts")
       try {
         const data = await getDocs(postRef );
@@ -80,16 +79,16 @@ const Middle = ({userData}) => {
             </div>
           </div>
         </div>
-        <div style={{height: '100%', width:'50vw', marginTop:'20px', backgroundColor:'white', marginBottom:'30px'}}>
+        <div style={{height: '100%', width:'50vw', marginTop:'20px', marginBottom:'30px'}}>
             {posts.map((post)=>{
               return(
-                <div>
+                <div style={{backgroundColor:'white',borderBottomWidth:'1px', borderBottomStyle:'solid', borderBottomColor:'black', marginBottom:'20px'}}>
                   <div style={{paddingLeft:'20px'}}>
                       <div style={{display:'flex', flexDirection:'row'}}>
                         <img src={profileicon} alt="Icon" style={{height:'80px', width:'80px', borderRadius:'50%', backgroundColor:'gray', marginRight:'20px'}} />
                         <div style={{display:'flex', flexDirection:'column', justifyContent:'center'}}>
-                          <h1>{username}</h1>
-                          <h1>{role}</h1>
+                          <h1>{post.username}</h1>
+                          <h1>{post.role}</h1>
                         </div>
                       </div>
                       <br />
@@ -102,6 +101,8 @@ const Middle = ({userData}) => {
                         <img src={sachin} alt="sachin image" style={{width:'100%'}} />
                       </div>
                     }
+                    <br />
+                    <br />
                 </div>
               )
             })}

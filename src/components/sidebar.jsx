@@ -6,22 +6,24 @@ import { auth } from '../config/firebase';
 import { doc } from 'firebase/firestore';
 import { database } from '../config/firebase';
 import { getDoc } from 'firebase/firestore';
+import { Link } from 'react-router-dom';
 const Sidebar = () => {
   const [username, setUsername] = useState('');
   const [role, setRole] = useState('');
   const navigate = useNavigate();
-
+  const [email, setemail] = useState('');
   useEffect(() => {
       const fetchUserData = async () => {
           const currentUser = auth.currentUser;
 
           if (currentUser) {
-              const userRef = doc(database, `User-${auth.currentUser?.uid}`, currentUser.uid);
+              const userRef = doc(database, "Users", currentUser.uid);
               const userSnap = await getDoc(userRef);
               if (userSnap.exists()) {
                   const userData = userSnap.data();
                   setUsername(userData.username || 'No Username');
                   setRole(userData.role || 'No Role');
+                  setemail(userData.email || 'No email found');
               } else {
                   navigate("/signin");
               }
@@ -43,8 +45,8 @@ const Sidebar = () => {
       </div>
       <br />
       <div style={{borderWidth: '1px', borderStyle:'solid', borderColor:'black'}}>
-        <h4>friends</h4>
-        <h4>Invitations</h4>
+        <Link to='/connection' state={{username: username, role: role, email: email}}><h4>friends</h4></Link>
+        <Link to='/invitation'>Invitations</Link>
       </div>
     </div>
   )

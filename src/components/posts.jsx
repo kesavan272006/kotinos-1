@@ -1,9 +1,10 @@
-import React, { forwardRef, useRef, useState } from 'react';
+import React, { forwardRef, useEffect, useRef, useState } from 'react';
 import Modal from 'react-modal';
 import { Button } from '@mui/material';
 import { TextField } from '@mui/material';
 import { doc, setDoc } from 'firebase/firestore';
 import { auth, database } from '../config/firebase';
+import { getDoc } from 'firebase/firestore';
 const customStyles = {
   content: {
     top: '50%',
@@ -23,6 +24,17 @@ const customStyles = {
 Modal.setAppElement('#root');
 
 const Posts = (props, ref) => {
+    const getuser =  ()=>{
+        setTimeout(async() => {
+            try {
+                const userdocument =doc(database, "Users", `${auth.currentUser?.uid}`);
+                const data = await getDoc(userdocument);
+                setuserData(data);
+            } catch (err) {
+                console.log(err);
+            }
+        }, 1000);
+    }
   let subtitle;
   const [modalIsOpen, setIsOpen] = React.useState(false);
 
@@ -38,19 +50,24 @@ const Posts = (props, ref) => {
     setIsOpen(false);
   }
   const [text, setText]=useState("");
+  const [userData, setuserData]=useState([]);
   const addPost = async ()=>{
-    const postDocument = doc(database, `User-${auth.currentUser?.uid}`, `${auth.currentUser?.uid}`)
+    const postDocument = doc(database, "Users", `${auth.currentUser?.uid}`)
     const postRef = doc(postDocument, "Posts", `${Math.random()}`)
     try {
         await setDoc(postRef, {
             textPost: text,
-            
+            username: userData._document?.data?.value.mapValue.fields.username.stringValue,
+            role: userData._document?.data?.value.mapValue.fields.role.stringValue,
         });
     } catch (err) {
         console.log(err);
     }
     setIsOpen(false);
   }
+  useEffect(()=>{
+    getuser();
+  }, [])
   return (
     <div>
       <button ref={ref} style={{ display: 'none' }} onClick={openModal}>
