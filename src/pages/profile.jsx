@@ -21,7 +21,7 @@ const Profile = () => {
             const currentUser = auth.currentUser;
 
             if (currentUser) {
-                const userRef = doc(database, "users", currentUser.uid);
+                const userRef = doc(database, `User-${auth.currentUser?.uid}`, currentUser.uid);
                 const userSnap = await getDoc(userRef);
                 if (userSnap.exists()) {
                     const userData = userSnap.data();

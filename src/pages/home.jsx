@@ -1,17 +1,33 @@
+import Footer from "../components/footer";
 import Loading from "../components/Loading";
 import Middle from "../components/middle"
 import Navbar from "../components/navbar"
 import Rightbar from "../components/rightbar"
 import Sidebar from "../components/sidebar"
 import { useState, useEffect } from "react";
+import { doc, getDoc } from "firebase/firestore";
+import { auth, database } from "../config/firebase";
 function Home(){
+    const getuser = async ()=>{
+        try {
+            const userdocument =doc(database, `User-${auth.currentUser?.uid}`, `${auth.currentUser?.uid}`);
+            const data = await getDoc(userdocument);
+            console.log(data);
+        } catch (err) {
+            console.log(err);
+        }
+    }
     const [loading, setLoading] = useState(true);
     
         useEffect(() => {
             const timer = setTimeout(() => {
                 setLoading(false);
             }, 3000);
+
         });
+        useEffect(()=>{
+            getuser();
+        }, []);
         if(loading){
             return <Loading />
         }
@@ -23,6 +39,7 @@ function Home(){
                 <Middle />
                 <Rightbar />
             </div>
+            <Footer />
         </div>
     )
 }
