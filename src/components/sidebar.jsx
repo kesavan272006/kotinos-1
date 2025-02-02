@@ -46,7 +46,7 @@ const Sidebar = () => {
       <br />
       <div style={{borderWidth: '1px', borderStyle:'solid', borderColor:'black'}}>
         <Link to='/connection' state={{username: username, role: role, email: email}}><h4>friends</h4></Link>
-        <Link to='/invitation'>Invitations</Link>
+        <Link to='/invitation' state={{username: username, role: role, email: email}}>Invitations</Link>
       </div>
     </div>
   )

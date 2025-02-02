@@ -9,6 +9,7 @@ import chaticon from '../assets/chaticon.svg'
 import notificationicon from '../assets/notificationsicon.svg'
 import profileicon from '../assets/profileicon.svg'
 import logouticon from '../assets/logouticon.svg'
+import networkicon from '../assets/network.svg'
 function Navbar(){
     const navigate = useNavigate();
     const logout = async () => {
@@ -33,8 +34,8 @@ function Navbar(){
                 <div className="ul">
                     <ul className='flex mr-4 md:text-2xl text-l mt-4 md:pr-10 md:mt-5'>
                         <Link to='/home' className='md:ml-10 ml-4 russo hover:scale-110 transition-all cursor-pointer'><img src={homeicon} alt="Home" /></Link>
+                        <Link to='/network' className='md:ml-10 ml-4 russo hover:scale-110 transition-all cursor-pointer'><img src={networkicon} alt="Network" /></Link>
                         <Link to={'/messages'} className='md:ml-10 ml-4 russo hover:scale-110 transition-all cursor-pointer'><img src={chaticon} alt="Messages" /></Link>
-                        <Link to='/notification' className='md:ml-10 ml-4 russo hover:scale-110 transition-all cursor-pointer'><img src={notificationicon} alt="Notifications" /></Link>
                         <Link to='/profile' className='md:ml-10 ml-4 russo hover:scale-110 transition-all cursor-pointer'><img src={profileicon} alt="Profile" /></Link>
                         <button onClick={logout} className='md:ml-10 ml-4 russo hover:scale-110 transition-all cursor-pointer'><img src={logouticon} alt="Logout" /></button>
                     </ul>

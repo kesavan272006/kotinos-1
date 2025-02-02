@@ -19,6 +19,7 @@ import Middle from './components/middle';
 import Rightbar from './components/rightbar';
 import Connection from './components/connection';
 import Invitation from './components/invitation';
+import Network from './components/network';
 function App() {
   return (
     <div>
@@ -43,6 +44,7 @@ function App() {
           <Route path="/rightbar" element={<Rightbar />} />
           <Route path="/connection" element={<Connection />} />
           <Route path="/invitation" element={<Invitation />} />
+          <Route path="/network" element={<Network />} />
         </Routes>
       </UserProvider>
     </div>
