@@ -49,7 +49,7 @@ function Navbar() {
                         <NavLink to='/messages' className={({ isActive }) => isActive ? 'active-link md:ml-10 ml-4 russo hover:scale-110 transition-all cursor-pointer' : 'md:ml-10 ml-4 russo hover:scale-110 transition-all cursor-pointer'}><TiMessages className='scale-[160%]' /></NavLink>
                         <NavLink to='/notification' className={({ isActive }) => isActive ? 'active-link md:ml-10 ml-4 russo hover:scale-110 transition-all cursor-pointer' : 'md:ml-10 ml-4 russo hover:scale-110 transition-all cursor-pointer'}><IoIosNotifications className='scale-[160%]' /></NavLink>
                         <NavLink to='/profile' className={({ isActive }) => isActive ? 'active-link md:ml-10 ml-4 russo hover:scale-110 transition-all cursor-pointer' : 'md:ml-10 ml-4 russo hover:scale-110 transition-all cursor-pointer'}><IoPersonSharp className='scale-[160%]' /></NavLink>
-                        
+                        <NavLink to='/network' className={({ isActive }) => isActive ? 'active-link md:ml-10 ml-4 russo hover:scale-110 transition-all cursor-pointer' : 'md:ml-10 ml-4 russo hover:scale-110 transition-all cursor-pointer'}><IoIosPeople className='scale-[160%]' /></NavLink>
                         <button onClick={logout} className='md:ml-10 ml-4 russo hover:scale-110 transition-all cursor-pointer'><MdLogout className='scale-[160%]'/></button>
                     </ul>
                 </div>

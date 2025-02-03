@@ -1,26 +1,39 @@
 import profilepic from '../assets/profileicon.svg'
 import { useUser } from '../components/UserContext';
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { auth } from '../config/firebase';
+import { doc } from 'firebase/firestore';
+import { database } from '../config/firebase';
+import { getDoc } from 'firebase/firestore';
+import { Link } from 'react-router-dom';
 const Sidebar = () => {
-    const { userDetails } = useUser();
-    const [username, setUsername] = useState('');
-    const [role, setRole] = useState('');
-    useEffect(() => {
-            if (userDetails) {
-                setUsername(userDetails.username);
-                setRole(userDetails.selectedOption); 
-                localStorage.setItem("username", userDetails.username);
-                localStorage.setItem("role", userDetails.selectedOption);
-            } else {
-                const storedUsername = localStorage.getItem("username");
-                const storedRole = localStorage.getItem("role");
-    
-                if (storedUsername && storedRole) {
-                    setUsername(storedUsername);
-                    setRole(storedRole);
-                }
-            }
-        }, [userDetails]);
+  const [username, setUsername] = useState('');
+  const [role, setRole] = useState('');
+  const navigate = useNavigate();
+  const [email, setemail] = useState('');
+  useEffect(() => {
+      const fetchUserData = async () => {
+          const currentUser = auth.currentUser;
+
+          if (currentUser) {
+              const userRef = doc(database, "Users", currentUser.uid);
+              const userSnap = await getDoc(userRef);
+              if (userSnap.exists()) {
+                  const userData = userSnap.data();
+                  setUsername(userData.username || 'No Username');
+                  setRole(userData.role || 'No Role');
+                  setemail(userData.email || 'No email found');
+              } else {
+                  navigate("/signin");
+              }
+          } else {
+              navigate("/signin");
+          }
+      };
+
+      fetchUserData();
+  }, [navigate]);
   return (
     <div style={{width: '20vw', height:'500px', backgroundColor: 'white', marginTop: '50px', borderWidth: '1px', borderColor: 'black', borderStyle: 'solid'}}>
       <div style={{display:'flex', flexDirection:'row', justifyContent:'space-evenly'}}>
@@ -32,8 +45,8 @@ const Sidebar = () => {
       </div>
       <br />
       <div style={{borderWidth: '1px', borderStyle:'solid', borderColor:'black'}}>
-        <h4>friends</h4>
-        <h4>Invitations</h4>
+        <Link to='/connection' state={{username: username, role: role, email: email}}><h4>friends</h4></Link>
+        <Link to='/invitation' state={{username: username, role: role, email: email}}>Invitations</Link>
       </div>
     </div>
   )

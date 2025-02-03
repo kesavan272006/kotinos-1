@@ -47,47 +47,7 @@ function Athleteinfo(){
         "Uttarakhand",
         "West Bengal",
       ];
-      const sportsArray = [
-        "Running",
-        "Marathon",
-        "Long Jump",
-        "High Jump",
-        "Shot Put",
-        "Discus Throw",
-        "Javelin Throw",
-        "Sprint",
-        "Hurdles",
-        "Pole Vault",
-        "Basketball",
-        "Football",
-        "Cricket",
-        "Hockey",
-        "Badminton",
-        "Tennis",
-        "Table Tennis",
-        "Volleyball",
-        "Swimming",
-        "Boxing",
-        "Wrestling",
-        "Gymnastics",
-        "Cycling",
-        "Rugby",
-        "Skiing",
-        "Archery",
-        "Weightlifting",
-        "Fencing",
-        "Rowing",
-        "Handball",
-        "Golf",
-        "Triathlon",
-        "MMA (Mixed Martial Arts)",
-        "Surfing",
-        "Skateboarding",
-        "Rock Climbing",
-        "Polo",
-        "Badminton",
-        "Kickboxing"
-      ];
+      
         const [selectedOption, setselectedOption]= useState('');
         const [primarysports, setprimarysports]= useState('');
         const handlesportsprim=(e)=>{

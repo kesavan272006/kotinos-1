@@ -47,7 +47,7 @@ const Signin = () => {
     const [username, setusername]= useState("");
     const addUser = async () => {
         const userref = collection(database, "users");
-        const userDocRef = doc(userref, auth.currentUser.uid); // Use the user's unique ID as the document ID
+        const userDocRef = doc(userref, auth.currentUser.uid); 
     
         try {
             const docSnap = await getDoc(userDocRef);
@@ -89,7 +89,7 @@ const Signin = () => {
             <div className="flex justify-center relative z-20 items-center">
             <div className='md:w-[35%] bg-white mt-10 md:mt-4 p-10 rounded-lg shadow-2xl '>
             <h2 className='lexend text-xl'>User name</h2>
-            <input type="text" placeholder='Enter your username here' className='w-full my-2 mb-5 p-1 rounded-lg border' onChange={(e)=>setusername(e.target.value)} />
+            <input type="text" placeholder='Enter your Username here' className='w-full my-2 mb-5 p-1 rounded-lg border' onChange={(e)=>setusername(e.target.value)} />
             <h2 className='lexend'>Which of these best describes you?</h2>
                 <div>
                     <label className='cursor-pointer'>
