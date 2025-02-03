@@ -87,35 +87,35 @@ const Signin = () => {
                 <h2 className='lexend text-5xl mt-10 mb-3'>Sign In</h2>
             </div>
             <div className="flex justify-center relative z-20 items-center">
-            <div className='md:w-1/3 bg-white mt-10 md:mt-4 p-10 rounded-lg shadow-2xl'>
-            <h2>User name</h2>
-            <input type="text" onChange={(e)=>setusername(e.target.value)} />
-            <h2>Which of these best describes you?</h2>
+            <div className='md:w-[35%] bg-white mt-10 md:mt-4 p-10 rounded-lg shadow-2xl '>
+            <h2 className='lexend text-xl'>User name</h2>
+            <input type="text" placeholder='Enter your username here' className='w-full my-2 mb-5 p-1 rounded-lg border' onChange={(e)=>setusername(e.target.value)} />
+            <h2 className='lexend'>Which of these best describes you?</h2>
                 <div>
-                    <label>
+                    <label className='cursor-pointer'>
                         <input type="radio" value='user' checked={selectedOption==='user'} onChange={handleoption} />
                         A general user exploring the app
                     </label>
                 </div>
                 <div>
-                    <label>
+                    <label className='cursor-pointer'>
                         <input type="radio" value='athlete' checked={selectedOption==='athlete'} onChange={handleoption} />
                         An athlete aiming to advance your career
                     </label>
                 </div>
                 <div>
-                    <label>
+                    <label className='cursor-pointer'>
                         <input type="radio" value='organization' checked={selectedOption==='organization'} onChange={handleoption} />
                         An organization finding athletes and hosting events
                     </label>
                 </div>
                 <div>
-                    <label>
+                    <label className='cursor-pointer'>
                         <input type="radio" value='coach' checked={selectedOption==='coach'} onChange={handleoption} />
                         A coach aiming to train talented athletes
                     </label>
                 </div>
-                <div className="buttons flex flex-col justify-center items-center p-5 mt-10">
+                <div className="buttons flex flex-col justify-center items-center mt-10">
                 <button className='text-white bg-black russo w-full rounded-full py-1 text-l md:w-3/4 flex justify-center items-center gap-2 hover:scale-105 transition-all' onClick={signInWithGoogle}><img className='w-10' src={googlepic}/>  Sign in with Google</button>
                 </div>
             </div>

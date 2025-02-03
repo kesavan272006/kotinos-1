@@ -29,6 +29,10 @@ body{
   border: 3px solid gray;
   margin-top: 40px;
 }
+/* NAVBAR */
+.active-link {
+  color: rgb(3, 148, 220); 
+}
 
 
 /*SIGN IN TO KOTINOS*/
