@@ -20,9 +20,11 @@ import Rightbar from './components/rightbar';
 import Connection from './components/connection';
 import Invitation from './components/invitation';
 import Network from './components/network';
+import { RequestProvider } from './context/RequestContext';
 function App() {
   return (
     <div>
+      <RequestProvider>
       <UserProvider>
         <Routes>
           <Route path="/" element={<Getstarted />} />
@@ -47,6 +49,7 @@ function App() {
           <Route path="/network" element={<Network />} />
         </Routes>
       </UserProvider>
+      </RequestProvider>
     </div>
   );
 }

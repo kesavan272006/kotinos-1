@@ -4,12 +4,14 @@ import { auth, database } from '../config/firebase';
 import { Avatar, Button, ListItem, ListItemText, Paper, List } from '@mui/material';
 import profileicon from '../assets/profileicon.svg';
 import { useLocation } from 'react-router-dom';
-
+import { useRequestContext } from '../context/RequestContext';
+import { useNavigate } from 'react-router-dom';
 const Connection = () => {
   const [userData, setuserdata] = useState([]);
+  const navigate = useNavigate();
   const [pendingRequests, setPendingRequests] = useState([]);
   const location = useLocation();
-
+  const { setRequestSenderId } = useRequestContext();
   const getUsers = async () => {
     const userRef = collection(database, "Users");
     try {
@@ -50,6 +52,7 @@ const Connection = () => {
           status: 'pending',
           requestSenderId: auth.currentUser?.uid, 
         });
+        setRequestSenderId(auth.currentUser?.uid);
         alert(`Request sent successfully!`);
         getPendingRequests();
       } catch (err) {

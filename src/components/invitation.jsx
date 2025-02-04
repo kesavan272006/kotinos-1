@@ -6,12 +6,12 @@ import { collection, doc, getDocs, deleteDoc, setDoc } from "firebase/firestore"
 import { auth, database } from "../config/firebase";
 import Loading from "./Loading";
 import { useLocation } from "react-router-dom";
-
+import { useRequestContext } from "../context/RequestContext";
 const Invitation = () => {
   const [user, setuser] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-
+  const { requestSenderId } = useRequestContext();
   const requestref = doc(database, "Users", `${auth.currentUser?.uid}`);
   const requestInRef = collection(requestref, "RequestIn");
 
@@ -77,14 +77,14 @@ const Invitation = () => {
       });
       alert(`Accepted the request from ${user.username}`);
       showrequest();
-      addConnect(user); 
+      addConnect(requestSenderId, user); 
     } catch (err) {
       console.log(err);
     }
   };
   
-  const addConnect = async (user) => {
-    const acceptDoc = doc(database, "Users", `${user.id}`);
+  const addConnect = async (requestSenderId, user) => {
+    const acceptDoc = doc(database, "Users", `${requestSenderId}`);
     const connectionDoc = doc(acceptDoc, "RequestIn", `${auth.currentUser?.uid}`);
   
     try {
