@@ -46,7 +46,7 @@ const Signin = () => {
     } 
     const [username, setusername]= useState("");
     const addUser = async () => {
-        const userref = collection(database, "users");
+        const userref = collection(database, "Users");
         const userDocRef = doc(userref, auth.currentUser.uid); 
     
         try {

@@ -6,12 +6,12 @@ import { collection, doc, getDocs, deleteDoc, setDoc } from "firebase/firestore"
 import { auth, database } from "../config/firebase";
 import Loading from "./Loading";
 import { useLocation } from "react-router-dom";
-
+import { useRequestContext } from '../context/RequestContext';
 const Invitation = () => {
   const [user, setuser] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-
+  const { oppUserId } = useRequestContext();
   const requestref = doc(database, "Users", `${auth.currentUser?.uid}`);
   const requestInRef = collection(requestref, "RequestIn");
 
@@ -66,13 +66,13 @@ const Invitation = () => {
   const location = useLocation();
   const acceptReq = async (user) => {
     const acceptDoc = doc(database, "Users", `${auth.currentUser?.uid}`);
-    const connectionDoc = doc(acceptDoc, "RequestIn", `${user.id}`); 
+    const connectionDoc = doc(acceptDoc, "RequestIn", `${oppUserId}`); 
   
     try {
       await setDoc(connectionDoc, {
         role: user.role,
         username: user.username,
-        id: user.id,
+        id: oppUserId,
         status: 'connected',
       });
       alert(`Accepted the request from ${user.username}`);
@@ -84,11 +84,12 @@ const Invitation = () => {
   };
   
   const addConnect = async (user) => {
-    const acceptDoc = doc(database, "Users", `${user.id}`);
+    const acceptDoc = doc(database, "Users", `${oppUserId}`);
     const connectionDoc = doc(acceptDoc, "RequestIn", `${auth.currentUser?.uid}`);
   
     try {
       await setDoc(connectionDoc, {
+        id: oppUserId,
         role: location.state.role,
         username: location.state.username,
         status: 'connected',

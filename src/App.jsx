@@ -20,33 +20,36 @@ import Rightbar from './components/rightbar';
 import Connection from './components/connection';
 import Invitation from './components/invitation';
 import Network from './components/network';
+import { RequestProvider } from './context/RequestContext';
 function App() {
   return (
     <div>
-      <UserProvider>
-        <Routes>
-          <Route path="/" element={<Getstarted />} />
-          <Route path="/signin" element={<Signin />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/generaluser" element={<Generaluser />} />
-          <Route path="/organization" element={<Organization />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/athleteinfo" element={<Athleteinfo />} />
-          <Route path="/emaillogin" element={<Emaillogin />} />
-          <Route path="/coachpage" element={<Coachpage />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/navbar" element={<Navbar />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/messages" element={<Messages />} />
-          <Route path="/notification" element={<Notification />} />
-          <Route path="/sidebar" element={<Sidebar />} />
-          <Route path="/middle" element={<Middle />} />
-          <Route path="/rightbar" element={<Rightbar />} />
-          <Route path="/connection" element={<Connection />} />
-          <Route path="/invitation" element={<Invitation />} />
-          <Route path="/network" element={<Network />} />
-        </Routes>
-      </UserProvider>
+      <RequestProvider>
+        <UserProvider>
+          <Routes>
+            <Route path="/" element={<Getstarted />} />
+            <Route path="/signin" element={<Signin />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/generaluser" element={<Generaluser />} />
+            <Route path="/organization" element={<Organization />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/athleteinfo" element={<Athleteinfo />} />
+            <Route path="/emaillogin" element={<Emaillogin />} />
+            <Route path="/coachpage" element={<Coachpage />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/navbar" element={<Navbar />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/messages" element={<Messages />} />
+            <Route path="/notification" element={<Notification />} />
+            <Route path="/sidebar" element={<Sidebar />} />
+            <Route path="/middle" element={<Middle />} />
+            <Route path="/rightbar" element={<Rightbar />} />
+            <Route path="/connection" element={<Connection />} />
+            <Route path="/invitation" element={<Invitation />} />
+            <Route path="/network" element={<Network />} />
+          </Routes>
+        </UserProvider>
+      </RequestProvider>
     </div>
   );
 }
