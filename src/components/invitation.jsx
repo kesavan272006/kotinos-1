@@ -85,7 +85,7 @@ const Invitation = () => {
   
   const addConnect = async (user) => {
     const acceptDoc = doc(database, "Users", `${oppUserId}`);
-    const connectionDoc = doc(acceptDoc, "RequestIn", `${auth.currentUser?.uid}`);
+    const connectionDoc = doc(acceptDoc, "RequestIn", `${oppUserId}`);
   
     try {
       await setDoc(connectionDoc, {
