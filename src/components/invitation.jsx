@@ -66,13 +66,13 @@ const Invitation = () => {
   const location = useLocation();
   const acceptReq = async (user) => {
     const acceptDoc = doc(database, "Users", `${auth.currentUser?.uid}`);
-    const connectionDoc = doc(acceptDoc, "RequestIn", `${oppUserId}`); 
+    const connectionDoc = doc(acceptDoc, "RequestIn", `${user.id}`); 
   
     try {
       await setDoc(connectionDoc, {
         role: user.role,
         username: user.username,
-        id: oppUserId,
+        id: user.id,
         status: 'connected',
       });
       alert(`Accepted the request from ${user.username}`);
@@ -84,12 +84,12 @@ const Invitation = () => {
   };
   
   const addConnect = async (user) => {
-    const acceptDoc = doc(database, "Users", `${oppUserId}`);
-    const connectionDoc = doc(acceptDoc, "RequestIn", `${oppUserId}`);
+    const acceptDoc = doc(database, "Users", `${user.id}`);
+    const connectionDoc = doc(acceptDoc, "RequestIn", `${auth.currentUser?.uid}`);
   
     try {
       await setDoc(connectionDoc, {
-        id: oppUserId,
+        id: auth.currentUser?.uid,
         role: location.state.role,
         username: location.state.username,
         status: 'connected',
