@@ -21,6 +21,7 @@ import Connection from './components/connection';
 import Invitation from './components/invitation';
 import Network from './components/network';
 import { RequestProvider } from './context/RequestContext';
+import MessageNav from './components/navbar2';
 function App() {
   return (
     <div>
@@ -47,6 +48,7 @@ function App() {
             <Route path="/connection" element={<Connection />} />
             <Route path="/invitation" element={<Invitation />} />
             <Route path="/network" element={<Network />} />
+            <Route path="/messagenav" element={<MessageNav />} />
           </Routes>
         </UserProvider>
       </RequestProvider>
