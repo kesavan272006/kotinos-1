@@ -77,14 +77,14 @@ const Invitation = () => {
       });
       alert(`Accepted the request from ${user.username}`);
       showrequest();
-      addConnect(user); 
+      addConnect(requestSenderId, user); 
     } catch (err) {
       console.log(err);
     }
   };
   
-  const addConnect = async (user) => {
-    const acceptDoc = doc(database, "Users", `${user.id}`);
+  const addConnect = async (requestSenderId, user) => {
+    const acceptDoc = doc(database, "Users", `${requestSenderId}`);
     const connectionDoc = doc(acceptDoc, "RequestIn", `${auth.currentUser?.uid}`);
   
     try {

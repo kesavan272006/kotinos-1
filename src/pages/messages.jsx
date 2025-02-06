@@ -36,7 +36,7 @@ const Messages = () => {
             await addDoc(messageRef, {
                 message: message,
                 timestamp: new Date(),
-                senderId: auth.currentUser?.uid,  // Ensure senderId is included when saving
+                senderId: auth.currentUser?.uid,  
             });
         } catch (err) {
             console.error(err);

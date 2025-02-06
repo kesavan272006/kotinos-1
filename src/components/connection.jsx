@@ -8,6 +8,7 @@ import { useRequestContext } from '../context/RequestContext';
 import { setDoc } from 'firebase/firestore';
 const Connection = () => {
   const [userData, setuserdata] = useState([]);
+  const navigate = useNavigate();
   const [pendingRequests, setPendingRequests] = useState([]);
   const location = useLocation();
   const { setOppId } = useRequestContext();

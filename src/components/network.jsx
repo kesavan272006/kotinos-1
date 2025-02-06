@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Paper, Avatar, ListItem, ListItemText, List, Button } from '@mui/material';
 import profileicon from '../assets/profileicon.svg'; 
 import { collection, doc, getDocs } from 'firebase/firestore';
-import { database, auth } from '../config/firebase'; 
+import { database, auth } from '../config/firebase';
 import Loading from './Loading';
 import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
@@ -15,7 +15,7 @@ const Network = () => {
     }
 
     const requestInRef = collection(database, "Users", auth.currentUser?.uid, "RequestIn");
-
+    const { setOppositeId } = useRequestContext();
     const showRequest = async () => {
         try {
             const data = await getDocs(requestInRef);
@@ -34,21 +34,30 @@ const Network = () => {
             setLoading(false);
         }
     };
-
     useEffect(() => {
-        showRequest();
+        const unsubscribe = auth.onAuthStateChanged((user) => {
+            if (user) {
+                setIsAuthenticated(true);  
+                showRequest();           
+            } else {
+                setIsAuthenticated(false);
+                setLoading(false);        
+            }
+        });
+
+        return () => unsubscribe();
     }, []);
 
     if (loading) {
-        return <Loading />
+        return <Loading />;
     }
 
     return (
         <div>
             {user.length === 0 ? (
                 <div style={{
-                    width: '100%', height: '40vw', backgroundColor: '#F1F8F9', textAlign: 'center', 
-                    justifyContent: 'center', alignItems: 'center', alignSelf: 'center', display: 'flex', 
+                    width: '100%', height: '40vw', backgroundColor: '#F1F8F9', textAlign: 'center',
+                    justifyContent: 'center', alignItems: 'center', alignSelf: 'center', display: 'flex',
                     flexDirection: 'row', fontWeight: 'bolder', fontSize: '40px'
                 }}>
                     <span style={{ color: 'red', marginRight: '10px' }}>No </span>friends available!
