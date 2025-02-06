@@ -6,10 +6,12 @@ import { database, auth } from '../config/firebase';
 import Loading from './Loading';
 import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
+import { useRequestContext } from '../context/RequestContext';
+
 const Network = () => {
     const [user, setUser] = useState([]);
     const [loading, setLoading] = useState(true);
-    
+    const [isAuthenticated, setIsAuthenticated] = useState(false); 
     if (!auth.currentUser) {
         return <Loading /> 
     }
