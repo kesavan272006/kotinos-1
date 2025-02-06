@@ -22,6 +22,7 @@ import Invitation from './components/invitation';
 import Network from './components/network';
 import { RequestProvider } from './context/RequestContext';
 import MessageNav from './components/navbar2';
+import ChatPage from './pages/chatpage';
 function App() {
   return (
     <div>
@@ -49,6 +50,7 @@ function App() {
             <Route path="/invitation" element={<Invitation />} />
             <Route path="/network" element={<Network />} />
             <Route path="/messagenav" element={<MessageNav />} />
+            <Route path="/chatpage" element={<ChatPage />} />
           </Routes>
         </UserProvider>
       </RequestProvider>
