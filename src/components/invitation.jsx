@@ -67,7 +67,7 @@ const Invitation = () => {
   const acceptReq = async (user) => {
     const acceptDoc = doc(database, "Users", `${auth.currentUser?.uid}`);
     const connectionDoc = doc(acceptDoc, "RequestIn", `${user.id}`); 
-  
+    
     try {
       await setDoc(connectionDoc, {
         role: user.role,
@@ -77,16 +77,16 @@ const Invitation = () => {
       });
       alert(`Accepted the request from ${user.username}`);
       showrequest();
-      addConnect(requestSenderId, user); 
+      addConnect(user.id, user); 
     } catch (err) {
       console.log(err);
     }
   };
   
-  const addConnect = async (requestSenderId, user) => {
-    const acceptDoc = doc(database, "Users", `${requestSenderId}`);
+  const addConnect = async (userid, user) => {
+    const acceptDoc = doc(database, "Users", `${userid}`);
     const connectionDoc = doc(acceptDoc, "RequestIn", `${auth.currentUser?.uid}`);
-  
+    
     try {
       await setDoc(connectionDoc, {
         id: auth.currentUser?.uid,
