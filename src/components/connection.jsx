@@ -4,12 +4,15 @@ import { auth, database } from '../config/firebase';
 import { Avatar, Button, ListItem, ListItemText, Paper, List } from '@mui/material';
 import profileicon from '../assets/profileicon.svg';
 import { useLocation } from 'react-router-dom';
-
+import { useRequestContext } from '../context/RequestContext';
+import { setDoc } from 'firebase/firestore';
+import { useNavigate } from 'react-router-dom';
 const Connection = () => {
   const [userData, setuserdata] = useState([]);
+  const navigate = useNavigate();
   const [pendingRequests, setPendingRequests] = useState([]);
   const location = useLocation();
-
+  const { setOppId } = useRequestContext();
   const getUsers = async () => {
     const userRef = collection(database, "Users");
     try {
@@ -38,27 +41,30 @@ const Connection = () => {
   const sendRequest = async (userId) => {
     const requestDoc = doc(database, "Users", `${userId}`);
     const connectRef = collection(requestDoc, "RequestIn");
-  
+
+    const requestDocRef = doc(connectRef, auth.currentUser?.uid);
     const q = query(connectRef, where("username", "==", location.state.username), where("status", "==", "pending"));
     const querySnapshot = await getDocs(q);
-  
+
     if (querySnapshot.empty) {
-      try {
-        await addDoc(connectRef, {
-          username: location.state.username,
-          role: location.state.role,
-          status: 'pending',
-          requestSenderId: auth.currentUser?.uid, 
-        });
-        alert(`Request sent successfully!`);
-        getPendingRequests();
-      } catch (err) {
-        console.error(err);
-      }
+        try {
+            await setDoc(requestDocRef, {
+                username: location.state.username,
+                role: location.state.role,
+                status: 'pending',
+                requestSenderId: auth.currentUser?.uid,
+            });
+            setOppId(auth.currentUser?.uid);
+            alert(`Request sent successfully!`);
+            getPendingRequests();
+        } catch (err) {
+            console.error(err);
+        }
     } else {
-      alert('Request already sent!');
+        alert('Request already sent!');
     }
-  };
+};
+
   
   
 

@@ -55,15 +55,20 @@ const Posts = (props, ref) => {
     const postDocument = doc(database, "Users", `${auth.currentUser?.uid}`)
     const postRef = doc(postDocument, "Posts", `${Math.random()}`)
     try {
-        await setDoc(postRef, {
+        if(text!=""){
+          await setDoc(postRef, {
             textPost: text,
             username: userData._document?.data?.value.mapValue.fields.username.stringValue,
             role: userData._document?.data?.value.mapValue.fields.role.stringValue,
         });
+        }else{
+          alert('Trying to post?? but without adding your thoughts through text??...')
+        }
     } catch (err) {
         console.log(err);
     }
     setIsOpen(false);
+    setText("");
   }
   useEffect(()=>{
     getuser();

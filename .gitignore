@@ -1,3 +1,9 @@
-node_modules
-firebase.js
-config
+# Node modules
+node_modules/
+
+# Firebase config (adjust if you have more than one file)
+src/config/firebase.js
+
+# Optional: Ignore other files/folders you don't want in Git
+.env
+*.log
