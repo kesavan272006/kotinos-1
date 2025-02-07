@@ -3,12 +3,13 @@ import profileicon from '../assets/profileicon.svg';
 import galleryicon from '../assets/gallery.svg';
 import videoicon from '../assets/videoicon.svg';
 import eventicon from '../assets/eventicon.svg';
-import sachin from '../assets/sachin.jpg'; // Placeholder image for posts
+import sachin from '../assets/sachin.jpg';
 import { useNavigate } from 'react-router-dom';
 import { auth, database } from '../config/firebase';
 import { collection, doc, getDoc, getDocs, setDoc } from 'firebase/firestore';
 import Posts from './posts';
 import FilePost from './FilePost';
+import Modal from 'react-modal';
 
 const Middle = ({ userData }) => {
     const [username, setUsername] = useState('');
@@ -18,7 +19,32 @@ const Middle = ({ userData }) => {
     const filePostRef = useRef(null);
     const [posts, setPosts] = useState([]);
     const [text, setText] = useState('');
-    const [file, setFile] = useState(null); // To handle file upload
+    const [file, setFile] = useState(null);
+
+    // Modal setup for image display
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const [imagesToDisplay, setImagesToDisplay] = useState([]);
+
+    const openModal = (images, index) => {
+        setImagesToDisplay(images);
+        setCurrentImageIndex(index);
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
+
+    const nextImage = () => {
+        setCurrentImageIndex((prevIndex) => (prevIndex + 1) % imagesToDisplay.length);
+    };
+
+    const prevImage = () => {
+        setCurrentImageIndex((prevIndex) =>
+            prevIndex === 0 ? imagesToDisplay.length - 1 : prevIndex - 1
+        );
+    };
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -72,13 +98,13 @@ const Middle = ({ userData }) => {
                     textPost: text,
                     username,
                     role,
-                    imageURL: file || '', // Store the Base64 image URL
+                    imageURLs: file || '',
                     timestamp: new Date(),
                 };
                 await setDoc(postRef, postData);
                 setText('');
                 setFile(null);
-                getPost(); // Refresh posts after posting
+                getPost();
             } catch (err) {
                 console.error('Error posting:', err);
             }
@@ -87,15 +113,12 @@ const Middle = ({ userData }) => {
         }
     };
 
-    const handleFileChange = (e) => {
-        const selectedFile = e.target.files[0];
-        if (selectedFile) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setFile(reader.result); // Store the Base64 URL of the file
-            };
-            reader.readAsDataURL(selectedFile);
+    const formatTimestamp = (timestamp) => {
+        if (timestamp && timestamp.seconds) {
+            const date = new Date(timestamp.seconds * 1000);
+            return date.toLocaleString();
         }
+        return '';
     };
 
     return (
@@ -136,7 +159,6 @@ const Middle = ({ userData }) => {
                         <Posts ref={postRef} />
                         <FilePost ref={filePostRef} />
                     </div>
-
                     <div
                         style={{
                             height: '50px',
@@ -214,31 +236,68 @@ const Middle = ({ userData }) => {
                                         }}
                                     />
                                     <div
-                                        style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}
+                                        style={{
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            justifyContent: 'center',
+                                        }}
                                     >
                                         <h1>{post.username}</h1>
                                         <h1>{post.role}</h1>
+                                        <h3>{formatTimestamp(post.timestamp)}</h3>
                                     </div>
                                 </div>
                                 <br />
                                 <h1>{post.textPost}</h1>
                             </div>
+                            <div>
+                                <strong style={{ fontSize: '30px', textAlign: 'center' }}>
+                                    {post.title}
+                                </strong>
+                                <h2>{post.description}</h2>
+                            </div>
                             <br />
                             <br />
-                            {post.imageURL && (
+                            {post.images && post.images.length > 0 && (
                                 <div
                                     style={{
-                                        width: '50vw',
-                                        height: '100%',
+                                        display: 'flex',
+                                        flexWrap: 'wrap',
+                                        gap: '10px',
                                         paddingLeft: '10px',
-                                        paddingRight: '10px',
                                     }}
                                 >
-                                    <img
-                                        src={post.imageURL}
-                                        alt="post image"
-                                        style={{ width: '100%', height: 'auto', objectFit: 'cover' }}
-                                    />
+                                    {post.images.slice(0, 3).map((image, index) => (
+                                        <img
+                                            key={index}
+                                            src={image}
+                                            alt={`Post Image ${index}`}
+                                            style={{
+                                                width: '100px',
+                                                height: '100px',
+                                                objectFit: 'cover',
+                                                cursor: 'pointer',
+                                            }}
+                                            onClick={() => openModal(post.images, index)}
+                                        />
+                                    ))}
+                                    {post.images.length > 3 && (
+                                        <div
+                                            onClick={() => openModal(post.images, 3)}
+                                            style={{
+                                                display: 'flex',
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
+                                                width: '100px',
+                                                height: '100px',
+                                                backgroundColor: '#e0e0e0',
+                                                borderRadius: '5px',
+                                                cursor: 'pointer',
+                                            }}
+                                        >
+                                            <span>+{post.images.length - 3}</span>
+                                        </div>
+                                    )}
                                 </div>
                             )}
                             <br />
@@ -247,6 +306,41 @@ const Middle = ({ userData }) => {
                     ))}
                 </div>
             </div>
+
+            {/* Modal for image display */}
+            <Modal
+                isOpen={isModalOpen}
+                onRequestClose={closeModal}
+                contentLabel="Image Modal"
+                style={{
+                    content: {
+                        top: '50%',
+                        left: '50%',
+                        right: 'auto',
+                        bottom: 'auto',
+                        transform: 'translate(-50%, -50%)',
+                        backgroundColor: 'white',
+                        padding: '20px',
+                        borderRadius: '10px',
+                        maxWidth: '80%',
+                    },
+                }}
+            >
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <img
+                        src={imagesToDisplay[currentImageIndex]}
+                        alt="Full view"
+                        style={{ width: '100%', maxHeight: '500px', objectFit: 'contain' }}
+                    />
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <button onClick={prevImage}>{"<"}</button>
+                    <button onClick={nextImage}>{">"}</button>
+                </div>
+                <button onClick={closeModal} style={{ marginTop: '10px' }}>
+                    Close
+                </button>
+            </Modal>
         </>
     );
 };
