@@ -11,13 +11,13 @@ import { useRequestContext } from '../context/RequestContext';
 const Network = () => {
     const [user, setUser] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [isAuthenticated, setIsAuthenticated] = useState(false); 
+    const [isAuthenticated, setIsAuthenticated]=useState(false);
+
     if (!auth.currentUser) {
         return <Loading /> 
     }
 
     const requestInRef = collection(database, "Users", auth.currentUser?.uid, "RequestIn");
-    const { setOppositeId } = useRequestContext();
     const showRequest = async () => {
         try {
             const data = await getDocs(requestInRef);
