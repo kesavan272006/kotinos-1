@@ -1,18 +1,18 @@
-import { TextField } from "@mui/material";
-import { Button } from "@mui/material";
+import { TextField, Button } from "@mui/material";
 import MessageNav from "../components/navbar2";
 import { useLocation } from "react-router-dom";
 import { addDoc, collection, doc, getDocs } from "firebase/firestore";
 import { database } from "../config/firebase";
 import { auth } from "../config/firebase";
-import { useEffect, useState } from "react";
-import { Paper, Avatar } from '@mui/material';
+import { useEffect, useState, useRef } from "react";
 
 const Messages = () => {
     const location = useLocation();
     const [message, setMessage] = useState('');
     const [messageData, setMessageData] = useState([]);
+    const messagesEndRef = useRef(null);  // Ref to scroll to the bottom
 
+    // Adding a new message to the sender's collection
     const addMessage = async () => {
         const userDoc = doc(database, "Users", `${auth.currentUser?.uid}`);
         const messageDoc = doc(userDoc, "Message", `${auth.currentUser?.uid}`);
@@ -20,14 +20,15 @@ const Messages = () => {
         try {
             await addDoc(messageRef, {
                 message: message,
-                timestamp: new Date(), 
+                timestamp: new Date(),
                 senderId: `${auth.currentUser?.uid}`
-            })
+            });
         } catch (err) {
             console.error(err);
         }
     }
 
+    // Send message and update state
     const sendMessage = async () => {
         const userDoc = doc(database, "Users", `${location.state.id}`);
         const messageDoc = doc(userDoc, "Message", `${location.state.id}`);
@@ -36,7 +37,7 @@ const Messages = () => {
             await addDoc(messageRef, {
                 message: message,
                 timestamp: new Date(),
-                senderId: auth.currentUser?.uid,  
+                senderId: auth.currentUser?.uid,
             });
         } catch (err) {
             console.error(err);
@@ -44,33 +45,37 @@ const Messages = () => {
         addMessage();
         setMessage('');
     };
-    
 
+    // Fetch and display messages from Firestore
     const showMessage = async () => {
         const userDoc = doc(database, "Users", `${auth.currentUser?.uid}`);
         const messageDoc = doc(userDoc, "Message", `${auth.currentUser?.uid}`);
         const messageRef = collection(messageDoc, `Message-${location.state.id}`);
+        
         try {
             const data = await getDocs(messageRef);
             const filteredData = data.docs.map((doc) => ({
                 ...doc.data(),
                 id: doc.id,
             }));
-    
-            console.log(filteredData);
-    
+
+            // Sort messages by timestamp in ascending order (oldest on top, latest at the bottom)
             const sortedMessages = filteredData.sort((a, b) => a.timestamp.toMillis() - b.timestamp.toMillis());
-    
+
             setMessageData(sortedMessages);
         } catch (err) {
             console.error(err);
         }
     };
-    
 
+    // Scroll to the bottom of the messages whenever new messages are added
     useEffect(() => {
         showMessage();
     }, [message]);
+
+    useEffect(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, [messageData]);
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
@@ -82,7 +87,7 @@ const Messages = () => {
                     position: "relative",
                     flex: 1,
                     overflowY: 'scroll',
-                    paddingBottom: '80px', 
+                    paddingBottom: '80px',
                 }}
             >
                 {messageData.map((userMessage, index) => {
@@ -90,11 +95,12 @@ const Messages = () => {
                     return (
                         <div key={index} style={{
                             display: 'flex',
-                            justifyContent: 'flex-start', 
+                            justifyContent: isCurrentUser ? 'flex-end' : 'flex-start', 
                             marginBottom: '15px',
                             paddingLeft: '10px',
                             paddingRight: '10px',
                         }}>
+                            {/* If it's the current user's message, show "You" */}
                             {isCurrentUser && (
                                 <div style={{
                                     fontSize: '12px',
@@ -107,7 +113,8 @@ const Messages = () => {
                                     You
                                 </div>
                             )}
-                            
+
+                            {/* Message container styling */}
                             <div style={{
                                 backgroundColor: isCurrentUser ? '#DCF8C6' : '#FFFFFF', 
                                 padding: '10px',
@@ -121,14 +128,18 @@ const Messages = () => {
                             }}>
                                 <span style={{ fontSize: '14px' }}>{userMessage.message}</span>
                             </div>
+                            {/* Message timestamp */}
                             <div style={{ fontSize: '10px', color: '#999', marginTop: '5px' }}>
                                 {new Date(userMessage.timestamp.seconds * 1000).toLocaleString()}
                             </div>
                         </div>
                     );
                 })}
+                {/* Empty div to scroll to the bottom */}
+                <div ref={messagesEndRef} />
             </div>
 
+            {/* Message input and send button */}
             <div
                 style={{
                     position: 'absolute',
@@ -176,4 +187,5 @@ const Messages = () => {
         </div>
     );
 };
-export default Messages
+
+export default Messages;

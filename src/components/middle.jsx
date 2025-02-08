@@ -21,7 +21,6 @@ const Middle = ({ userData }) => {
     const [text, setText] = useState('');
     const [file, setFile] = useState(null);
 
-    // Modal setup for image display
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [imagesToDisplay, setImagesToDisplay] = useState([]);
@@ -70,20 +69,42 @@ const Middle = ({ userData }) => {
 
     const getPost = async () => {
         setTimeout(async () => {
-            const postDocument = doc(database, 'Users', `${auth.currentUser?.uid}`);
-            const postRef = collection(postDocument, 'Posts');
             try {
-                const data = await getDocs(postRef);
-                const filteredData = data.docs.map((doc) => ({
-                    ...doc.data(),
-                    id: doc.id,
-                }));
-                setPosts(filteredData);
+                const usersRef = collection(database, 'Users');
+                const usersSnapshot = await getDocs(usersRef);
+    
+                let allPosts = [];
+    
+                for (let userDoc of usersSnapshot.docs) {
+                    const userId = userDoc.id;
+                    const postRef = collection(database, 'Users', userId, 'Posts'); // Get posts from each user
+    
+                    const postSnapshot = await getDocs(postRef);
+                    const postsData = postSnapshot.docs.map((doc) => ({
+                        ...doc.data(),
+                        id: doc.id,
+                        userId: userId,
+                    }));
+    
+                    allPosts = allPosts.concat(postsData);
+                }
+    
+                const sortedPosts = allPosts.sort((a, b) => {
+                    const aTimestamp = a.timestamp?.seconds || 0;
+                    const bTimestamp = b.timestamp?.seconds || 0;
+                    return bTimestamp - aTimestamp;
+                });
+    
+                // Set the posts to the state
+                setPosts(sortedPosts);
             } catch (err) {
-                console.error(err);
+                console.error("Error fetching posts:", err);
             }
         }, 1000);
     };
+    
+    
+    
 
     useEffect(() => {
         getPost();
@@ -307,7 +328,6 @@ const Middle = ({ userData }) => {
                 </div>
             </div>
 
-            {/* Modal for image display */}
             <Modal
                 isOpen={isModalOpen}
                 onRequestClose={closeModal}

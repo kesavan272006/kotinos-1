@@ -6,6 +6,7 @@ import profileicon from '../assets/profileicon.svg';
 import { useLocation } from 'react-router-dom';
 import { useRequestContext } from '../context/RequestContext';
 import { setDoc } from 'firebase/firestore';
+import { useNavigate } from 'react-router-dom';
 const Connection = () => {
   const [userData, setuserdata] = useState([]);
   const navigate = useNavigate();
