@@ -7,12 +7,15 @@ import { User, Mail, MapPin, Calendar, Edit, Camera, Trash2 } from 'lucide-react
 import { doc, setDoc, getDoc, deleteDoc } from "firebase/firestore";
 import { database } from "../config/firebase";
 import { getAuth } from "firebase/auth";
+import profileicon from '../assets/profileicon.svg'
+import Loading from '../components/Loading';
 
 const Profile = () => {
     const { userDetails } = useUser();
     const [username, setUsername] = useState('');
     const [role, setRole] = useState('');
     const navigate = useNavigate();
+    const [photourl, setphotourl] = useState(null);
     const indianStates = [
         "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka", "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal"
     ];
@@ -30,80 +33,60 @@ const Profile = () => {
         experience: "",
         profilePic: "",
     });
+    const [loading, setLoading] = useState(true);
+    
+    
     useEffect(() => {
+        const timer = setTimeout(() => {
+            setLoading(false);
+        }, 3000);
         const fetchProfile = async () => {
+            
             if (user) {
                 try {
                     const docRef = doc(database, "Users", user.uid);
-                    const docSnap = await getDoc(docRef);
+                    const doc2Ref = doc(docRef, "profileDetails", "details");
+                    const docSnap = await getDoc(doc2Ref);
                     if (docSnap.exists()) {
                         setProfile(docSnap.data());
+                        const profilepicref = docSnap.data();
+                        setphotourl(profilepicref.profilePic || profileicon);
                     }
                 } catch (error) {
                     console.error('Error fetching profile:', error);
+                    navigate('/signin');
                 }
             }
+            return () => clearTimeout(timer);
         };
-
+        
         fetchProfile();
-    }, [user]);
+    }, [navigate]);
+    
     const sportsArray = [
-        "Running",
-        "Marathon",
-        "Long Jump",
-        "High Jump",
-        "Shot Put",
-        "Discus Throw",
-        "Javelin Throw",
-        "Sprint",
-        "Hurdles",
-        "Pole Vault",
-        "Basketball",
-        "Football",
-        "Cricket",
-        "Hockey",
-        "Badminton",
-        "Tennis",
-        "Table Tennis",
-        "Volleyball",
-        "Swimming",
-        "Boxing",
-        "Wrestling",
-        "Gymnastics",
-        "Cycling",
-        "Rugby",
-        "Skiing",
-        "Archery",
-        "Weightlifting",
-        "Fencing",
-        "Rowing",
-        "Handball",
-        "Golf",
-        "Triathlon",
-        "MMA (Mixed Martial Arts)",
-        "Surfing",
-        "Skateboarding",
-        "Rock Climbing",
-        "Polo",
-        "Badminton",
-        "Kickboxing"
-      ];
-
+        "Running", "Marathon", "Long Jump", "High Jump", "Shot Put", "Discus Throw", "Javelin Throw", "Sprint", "Hurdles", "Pole Vault",
+        "Basketball", "Football", "Cricket", "Hockey", "Badminton", "Tennis", "Table Tennis", "Volleyball", "Swimming", "Boxing", "Wrestling",
+        "Gymnastics", "Cycling", "Rugby", "Skiing", "Archery", "Weightlifting", "Fencing", "Rowing", "Handball", "Golf", "Triathlon", "MMA (Mixed Martial Arts)",
+        "Surfing", "Skateboarding", "Rock Climbing", "Polo", "Badminton", "Kickboxing"
+    ];
+    
     const handleChange = (e) => {
         setProfile({ ...profile, [e.target.name]: e.target.value });
     };
-
-
+    
     const handleSave = async () => {
         if (user) {
             try {
-                await setDoc(doc(database, "Users", user.uid), profile);
+                const documentref = doc(database, "Users", user.uid);
+                const document2ref = doc(documentref, "profileDetails", "details");
+                await setDoc(document2ref, profile);
                 setIsEditing(false);
             } catch (error) {
                 console.error("Error saving profile:", error);
             }
         }
     };
+    
     const handleImageUpload = (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -114,10 +97,13 @@ const Profile = () => {
             reader.readAsDataURL(file);
         }
     };
+    
     const handleDelete = async () => {
         if (user) {
             try {
-                await deleteDoc(doc(database, "Users", user.uid));
+                const docref = doc(database, "Users", user.uid);
+                const doc2ref = doc(docref, "profileDetails", "details");
+                await deleteDoc(doc2ref);
                 setProfile({
                     fullName: "",
                     dob: "",
@@ -134,7 +120,10 @@ const Profile = () => {
             }
         }
     };
-
+    
+    if (loading) {
+        return <Loading />
+    }
     return (
         <>
             <Navbar />
@@ -142,7 +131,7 @@ const Profile = () => {
                 <div className="bg-white p-4 rounded-lg relative shadow-sm">
                     <div className="flex flex-col items-center mb-4">
                         <label className="relative cursor-pointer">
-                            <img src={profile.profilePic || "/default-avatar.png"} alt="Profile" className="w-24 h-24 rounded-full object-cover border-2 border-blue-300" />
+                            <img src={profile.profilePic || profileicon} alt="Profile" className="w-24 h-24 rounded-full object-cover border-2 border-blue-300" />
                             <span className="absolute bottom-0 right-0 bg-gray-200 p-1 rounded-full shadow-md">
                                 <Camera size={16} />
                             </span>

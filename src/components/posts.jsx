@@ -5,7 +5,8 @@ import { TextField } from '@mui/material';
 import { doc, setDoc, collection, getDocs, query, orderBy } from 'firebase/firestore';
 import { auth, database } from '../config/firebase';
 import { getDoc } from 'firebase/firestore';
-
+import profileicon from '../assets/profileicon.svg';
+import { useNavigate } from 'react-router-dom';
 const customStyles = {
   content: {
     top: '50%',
@@ -25,6 +26,7 @@ const customStyles = {
 Modal.setAppElement('#root');
 
 const Posts = (props, ref) => {
+  const navigate = useNavigate();
   const [modalIsOpen, setIsOpen] = useState(false);
   const [text, setText] = useState('');
   const [userData, setUserData] = useState({});
@@ -43,12 +45,41 @@ const Posts = (props, ref) => {
       const userDoc = doc(database, 'Users', `${auth.currentUser?.uid}`);
       const data = await getDoc(userDoc);
       setUserData(data.data());
-      getAllPosts(data.data().connections); // Get posts from all users including connections
+      getAllPosts(data.data().connections); 
     } catch (err) {
       console.log(err);
     }
   };
-
+  const [username, setUsername]=useState('');
+  const [role, setRole]=useState('');
+  const [profilepic, setprofilepic]=useState(null);
+  useEffect(() => {
+          const fetchUserData = async () => {
+              const currentUser = auth.currentUser;
+  
+              if (currentUser) {
+                  const userRef = doc(database, 'Users', currentUser.uid);
+                  const userprofilepicref = doc(userRef, 'profileDetails', 'details');
+                  const userprofilesnap = await getDoc(userprofilepicref);
+                  const userSnap = await getDoc(userRef);
+                  if (userSnap.exists()) {
+                      const userData = userSnap.data();
+                      setUsername(userData.username || 'No Username');
+                      setRole(userData.role || 'No Role');
+                  } else {
+                      navigate('/signin');
+                  };
+                  if(userprofilesnap.exists()){
+                      const profile = userprofilesnap.data();
+                      setprofilepic(profile.profilePic || profileicon)
+                  }
+              } else {
+                  navigate('/signin');
+              }
+          };
+  
+          fetchUserData();
+      }, [navigate]);
   const getAllPosts = async (connections) => {
     try {
       const postsQuery = query(collection(database, 'Posts'), orderBy('timestamp', 'desc'));
@@ -57,7 +88,7 @@ const Posts = (props, ref) => {
 
       querySnapshot.forEach((doc) => {
         const post = doc.data();
-        const isConnection = connections.includes(post.username); // Check if the post is from a connection
+        const isConnection = connections.includes(post.username);
         allPosts.push({ ...post, id: doc.id, isConnection });
       });
       setPosts(allPosts);
@@ -76,8 +107,9 @@ const Posts = (props, ref) => {
           username: userData.username,
           role: userData.role,
           timestamp: new Date(),
+          profilepic: profilepic,
         });
-        getAllPosts(userData.connections); // Refresh the posts after adding a new one
+        getAllPosts(userData.connections);
       } else {
         alert('Trying to post?? but without adding your thoughts through text??...');
       }

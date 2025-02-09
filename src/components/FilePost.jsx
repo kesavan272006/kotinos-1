@@ -6,7 +6,7 @@ import { auth, database } from '../config/firebase';
 import { getDoc } from 'firebase/firestore';
 import addicon from '../assets/addicon.svg';
 import deleteicon from '../assets/deleteicon.svg';
-
+import profileicon from '../assets/profileicon.svg'
 const customStyles = {
   content: {
     top: '50%',
@@ -35,11 +35,15 @@ const FilePost = (props, ref) => {
   const [imageModalIsOpen, setImageModalIsOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [imageToDelete, setImageToDelete] = useState(null);
-
+  const [profiledata, setprofiledata]=useState('');
   const getUserData = async () => {
     try {
       const userDocument = doc(database, 'Users', `${auth.currentUser?.uid}`);
       const data = await getDoc(userDocument);
+      const userprofiledata = doc(userDocument, "profileDetails", "details");
+      const profiledatas = await getDoc(userprofiledata);
+      const profilesnap = profiledatas.data();
+      setprofiledata(profilesnap.profilePic || profileicon);
       setUserData(data);
     } catch (err) {
       console.log(err);
@@ -115,6 +119,7 @@ const FilePost = (props, ref) => {
           description: description,
           images: files,
           timestamp: new Date(),
+          profilepic: `${profiledata}`,
         });
         setIsOpen(false);
         setTitle('');

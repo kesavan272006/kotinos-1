@@ -24,7 +24,7 @@ const Middle = ({ userData }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [imagesToDisplay, setImagesToDisplay] = useState([]);
-
+    const [profilepic, setprofilepic]=useState(null);
     const openModal = (images, index) => {
         setImagesToDisplay(images);
         setCurrentImageIndex(index);
@@ -51,6 +51,8 @@ const Middle = ({ userData }) => {
 
             if (currentUser) {
                 const userRef = doc(database, 'Users', currentUser.uid);
+                const userprofilepicref = doc(userRef, 'profileDetails', 'details');
+                const userprofilesnap = await getDoc(userprofilepicref);
                 const userSnap = await getDoc(userRef);
                 if (userSnap.exists()) {
                     const userData = userSnap.data();
@@ -58,6 +60,10 @@ const Middle = ({ userData }) => {
                     setRole(userData.role || 'No Role');
                 } else {
                     navigate('/signin');
+                };
+                if(userprofilesnap.exists()){
+                    const profile = userprofilesnap.data();
+                    setprofilepic(profile.profilePic || profileicon)
                 }
             } else {
                 navigate('/signin');
@@ -66,7 +72,6 @@ const Middle = ({ userData }) => {
 
         fetchUserData();
     }, [navigate]);
-
     const getPost = async () => {
         setTimeout(async () => {
             try {
@@ -77,7 +82,7 @@ const Middle = ({ userData }) => {
     
                 for (let userDoc of usersSnapshot.docs) {
                     const userId = userDoc.id;
-                    const postRef = collection(database, 'Users', userId, 'Posts'); // Get posts from each user
+                    const postRef = collection(database, 'Users', userId, 'Posts');
     
                     const postSnapshot = await getDocs(postRef);
                     const postsData = postSnapshot.docs.map((doc) => ({
@@ -95,7 +100,6 @@ const Middle = ({ userData }) => {
                     return bTimestamp - aTimestamp;
                 });
     
-                // Set the posts to the state
                 setPosts(sortedPosts);
             } catch (err) {
                 console.error("Error fetching posts:", err);
@@ -155,8 +159,8 @@ const Middle = ({ userData }) => {
                         }}
                     >
                         <img
-                            src={profileicon}
-                            alt="Profile"
+                            src={profilepic||profileicon}
+                            alt='profilepic'
                             style={{
                                 height: '70px',
                                 width: '70px',
@@ -246,8 +250,8 @@ const Middle = ({ userData }) => {
                             <div style={{ paddingLeft: '20px' }}>
                                 <div style={{ display: 'flex', flexDirection: 'row' }}>
                                     <img
-                                        src={profileicon}
-                                        alt="Icon"
+                                        src={post.profilepic||profileicon}
+                                        alt={profileicon}
                                         style={{
                                             height: '80px',
                                             width: '80px',
