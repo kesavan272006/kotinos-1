@@ -138,14 +138,7 @@ const Profile = () => {
     return (
         <>
             <Navbar />
-            <style>
-                {`
-                body{
-                
-                }
-                `}
-            </style>
-            <div className="flex flex-col gap-6 w-3/4">
+            <div className="grid md:grid-cols-2 gap-6 m-5">
                 <div className="bg-white p-4 rounded-lg relative shadow-sm">
                     <div className="flex flex-col items-center mb-4">
                         <label className="relative cursor-pointer">
