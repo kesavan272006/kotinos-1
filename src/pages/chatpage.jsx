@@ -54,9 +54,8 @@ const ChatPage = () => {
     }
 
     const sendMessage = async () => {
-        if (!selectedUser || !message) return; // Ensure there's a selected user and message
+        if (!selectedUser || !message) return;
     
-        // Sender message collection
         const userDocSender = doc(database, "Users", `${auth.currentUser?.uid}`);
         const messageDocSender = doc(userDocSender, "Message", `${auth.currentUser?.uid}`);
         const messageRefSender = collection(messageDocSender, `Message-${selectedUser.id}`);
@@ -68,7 +67,6 @@ const ChatPage = () => {
                 senderId: auth.currentUser?.uid,
             });
     
-            // Receiver message collection
             const userDocReceiver = doc(database, "Users", `${selectedUser.id}`);
             const messageDocReceiver = doc(userDocReceiver, "Message", `${selectedUser.id}`);
             const messageRefReceiver = collection(messageDocReceiver, `Message-${auth.currentUser?.uid}`);
@@ -79,8 +77,8 @@ const ChatPage = () => {
                 senderId: auth.currentUser?.uid,
             });
     
-            setMessage(''); // Clear input field after sending
-            showMessage();  // Re-fetch the messages to display new message
+            setMessage(''); 
+            showMessage();  
         } catch (err) {
             console.error("Error sending message:", err);
         }

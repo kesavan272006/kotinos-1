@@ -77,15 +77,25 @@ const Profile = () => {
     const handleSave = async () => {
         if (user) {
             try {
-                const documentref = doc(database, "Users", user.uid);
-                const document2ref = doc(documentref, "profileDetails", "details");
-                await setDoc(document2ref, profile);
+                const documentRef = doc(database, "Users", user.uid);
+                const profileDetailsRef = doc(documentRef, "profileDetails", "details");
+    
+                const updatedProfile = { ...profile };
+                if (profile.profilePic !== "") {
+                    await setDoc(documentRef, { profilePic: profile.profilePic }, { merge: true });
+                    await setDoc(profileDetailsRef, { profilePic: profile.profilePic }, { merge: true });
+                }
+    
+                await setDoc(profileDetailsRef, updatedProfile, { merge: true });
+    
+                console.log('Profile saved successfully!');
                 setIsEditing(false);
             } catch (error) {
                 console.error("Error saving profile:", error);
             }
         }
     };
+    
     
     const handleImageUpload = (e) => {
         const file = e.target.files[0];

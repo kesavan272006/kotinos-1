@@ -145,7 +145,17 @@ const Middle = ({ userData }) => {
         }
         return '';
     };
+    const [isModalOpened, setIsModalOpened] = useState(false);
+    const [modalImages, setModalImages] = useState('');
 
+    const openModals = (imageUrl) => {
+        setModalImages(imageUrl);
+        setIsModalOpened(true);
+    };
+
+    const closeModals = () => {
+        setIsModalOpened(false);
+    };
     return (
         <>
             <div style={{ width: '50vw', height: '100%', marginTop: '50px' }}>
@@ -160,6 +170,7 @@ const Middle = ({ userData }) => {
                     >
                         <img
                             src={profilepic||profileicon}
+                            onClick={() => openModals(profilepic||profileicon)}
                             alt='profilepic'
                             style={{
                                 height: '70px',
@@ -259,7 +270,62 @@ const Middle = ({ userData }) => {
                                             backgroundColor: 'gray',
                                             marginRight: '20px',
                                         }}
+                                        onClick={() => openModals(post.profilepic||profileicon)}
                                     />
+                                    {isModalOpened && (
+                                            <div
+                                            style={{
+                                                position: 'fixed',
+                                                top: 0,
+                                                left: 0,
+                                                right: 0,
+                                                bottom: 0,
+                                                backgroundColor: 'rgba(86, 84, 84, 0.7)',
+                                                display: 'flex',
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
+                                                zIndex: 9999,
+                                            }}
+                                            onClick={closeModals}
+                                            >
+                                            <div
+                                                style={{
+                                                position: 'relative',
+                                                maxWidth: '90%',
+                                                maxHeight: '90%',
+                                                }}
+                                                onClick={(e) => e.stopPropagation()} 
+                                            >
+                                                <img
+                                                src={modalImages}
+                                                alt={profileicon}
+                                                style={{
+                                                    width: '100%',
+                                                    height: 'auto',
+                                                    borderRadius: '8px',
+                                                }}
+                                                />
+                                                <button
+                                                onClick={closeModals}
+                                                style={{
+                                                    position: 'absolute',
+                                                    top: '10px',
+                                                    right: '10px',
+                                                    background: 'red',
+                                                    color: 'white',
+                                                    border: 'none',
+                                                    borderRadius: '50%',
+                                                    width: '30px',
+                                                    height: '30px',
+                                                    fontSize: '18px',
+                                                    cursor: 'pointer',
+                                                }}
+                                                >
+                                                X
+                                                </button>
+                                            </div>
+                                            </div>
+                                        )}
                                     <div
                                         style={{
                                             display: 'flex',

@@ -10,9 +10,8 @@ const Messages = () => {
     const location = useLocation();
     const [message, setMessage] = useState('');
     const [messageData, setMessageData] = useState([]);
-    const messagesEndRef = useRef(null);  // Ref to scroll to the bottom
+    const messagesEndRef = useRef(null);
 
-    // Adding a new message to the sender's collection
     const addMessage = async () => {
         const userDoc = doc(database, "Users", `${auth.currentUser?.uid}`);
         const messageDoc = doc(userDoc, "Message", `${auth.currentUser?.uid}`);
@@ -28,7 +27,6 @@ const Messages = () => {
         }
     }
 
-    // Send message and update state
     const sendMessage = async () => {
         const userDoc = doc(database, "Users", `${location.state.id}`);
         const messageDoc = doc(userDoc, "Message", `${location.state.id}`);
@@ -46,7 +44,6 @@ const Messages = () => {
         setMessage('');
     };
 
-    // Fetch and display messages from Firestore
     const showMessage = async () => {
         const userDoc = doc(database, "Users", `${auth.currentUser?.uid}`);
         const messageDoc = doc(userDoc, "Message", `${auth.currentUser?.uid}`);
@@ -59,7 +56,6 @@ const Messages = () => {
                 id: doc.id,
             }));
 
-            // Sort messages by timestamp in ascending order (oldest on top, latest at the bottom)
             const sortedMessages = filteredData.sort((a, b) => a.timestamp.toMillis() - b.timestamp.toMillis());
 
             setMessageData(sortedMessages);
@@ -68,7 +64,6 @@ const Messages = () => {
         }
     };
 
-    // Scroll to the bottom of the messages whenever new messages are added
     useEffect(() => {
         showMessage();
     }, [message]);
@@ -100,7 +95,6 @@ const Messages = () => {
                             paddingLeft: '10px',
                             paddingRight: '10px',
                         }}>
-                            {/* If it's the current user's message, show "You" */}
                             {isCurrentUser && (
                                 <div style={{
                                     fontSize: '12px',
@@ -114,7 +108,6 @@ const Messages = () => {
                                 </div>
                             )}
 
-                            {/* Message container styling */}
                             <div style={{
                                 backgroundColor: isCurrentUser ? '#DCF8C6' : '#FFFFFF', 
                                 padding: '10px',
@@ -128,18 +121,15 @@ const Messages = () => {
                             }}>
                                 <span style={{ fontSize: '14px' }}>{userMessage.message}</span>
                             </div>
-                            {/* Message timestamp */}
                             <div style={{ fontSize: '10px', color: '#999', marginTop: '5px' }}>
                                 {new Date(userMessage.timestamp.seconds * 1000).toLocaleString()}
                             </div>
                         </div>
                     );
                 })}
-                {/* Empty div to scroll to the bottom */}
                 <div ref={messagesEndRef} />
             </div>
 
-            {/* Message input and send button */}
             <div
                 style={{
                     position: 'absolute',
