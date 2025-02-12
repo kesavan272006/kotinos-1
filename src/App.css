@@ -29,6 +29,10 @@ body{
   border: 3px solid gray;
   margin-top: 40px;
 }
+/* NAVBAR */
+.active-link {
+  color: rgb(3, 148, 220); 
+}
 
 
 /*SIGN IN TO KOTINOS*/
@@ -36,6 +40,30 @@ body{
   border: 2px solid rgb(178, 174, 174);
   border-radius: 10px;
   padding: 4px;
+}
+
+
+
+.typewriter{
+  overflow: hidden; /* Ensures the content is not revealed until the animation */
+  border-right: .15em solid white; /* The typwriter cursor */
+  white-space: nowrap;
+  margin: 0 auto; 
+  animation: 
+    typing 3.5s steps(40, end),
+    blink-caret .75s step-end infinite;
+}
+
+/* The typing effect */
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+/* The typewriter cursor effect */
+@keyframes blink-caret {
+  from, to { border-color: transparent }
+  50% { border-color: white; }
 }
 
 ::-webkit-scrollbar {

@@ -16,7 +16,7 @@ import Notification from './pages/notification';
 import { UserProvider } from '../src/components/UserContext';
 import Sidebar from './components/sidebar';
 import Middle from './components/middle';
-import Rightbar from './components/rightbar';
+// import Rightbar from './components/rightbar';
 import Connection from './components/connection';
 import Invitation from './components/invitation';
 import Network from './components/network';
@@ -45,7 +45,7 @@ function App() {
             <Route path="/notification" element={<Notification />} />
             <Route path="/sidebar" element={<Sidebar />} />
             <Route path="/middle" element={<Middle />} />
-            <Route path="/rightbar" element={<Rightbar />} />
+            {/* <Route path="/rightbar" element={<Rightbar />} /> */}
             <Route path="/connection" element={<Connection />} />
             <Route path="/invitation" element={<Invitation />} />
             <Route path="/network" element={<Network />} />

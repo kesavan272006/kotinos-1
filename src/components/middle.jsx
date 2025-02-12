@@ -123,125 +123,69 @@ const Middle = ({ userData }) => {
 
     return (
         <>
-            <div style={{ width: '50vw', height: '100%', marginTop: '50px' }}>
-                <div style={{ backgroundColor: 'white' }}>
-                    <div
-                        style={{
-                            display: 'flex',
-                            paddingTop: '20px',
-                            flexDirection: 'row',
-                            justifyContent: 'space-evenly',
-                        }}
-                    >
+            <div className='w-full mt-4 md:w-[50vw] h-full'>
+                <div className='bg-white'>
+                    <div className='flex justify-evenly pt-4'>
                         <img
                             src={profileicon}
                             alt="Profile"
-                            style={{
-                                height: '70px',
-                                width: '70px',
-                                borderRadius: '50%',
-                                backgroundColor: 'gray',
-                            }}
+                            className='h-[70px] w-[70px] rounded-full bg-gray-500'
                         />
                         <input
                             onClick={() => postRef.current?.click()}
                             type="text"
                             placeholder="start a post"
-                            style={{
-                                borderRadius: '10px',
-                                height: '70px',
-                                width: '600px',
-                                backgroundColor: 'whitesmoke',
-                            }}
+                            className='rounded-lg h-[70px] w-[600px] bg-whitesmoke'
                             value={text}
                             onChange={(e) => setText(e.target.value)}
                         />
                         <Posts ref={postRef} />
                         <FilePost ref={filePostRef} />
                     </div>
-                    <div
-                        style={{
-                            height: '50px',
-                            marginTop: '10px',
-                            display: 'flex',
-                            flexDirection: 'row',
-                            justifyContent: 'space-evenly',
-                        }}
-                    >
-                        <div
-                            style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}
-                        >
+                    <div className='h-[50px] mt-2 flex flex-row justify-evenly'>
+                        <div className='flex flex-row justify-center'>
                             <img
                                 onClick={() => filePostRef.current?.click()}
                                 src={galleryicon}
                                 alt="photos"
-                                style={{ height: '30px', width: '30px', borderRadius: '50%' }}
+                                className='h-[30px] w-[30px] rounded-full'
                             />
                             <h3>Photo</h3>
                         </div>
-                        <div
-                            style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}
-                        >
+                        <div className='flex flex-row justify-center'>
                             <img
                                 onClick={() => filePostRef.current?.click()}
                                 src={videoicon}
                                 alt="videos"
-                                style={{ height: '30px', width: '30px', borderRadius: '50%' }}
+                                className='h-[30px] w-[30px] rounded-full'
                             />
                             <h3>Video</h3>
                         </div>
-                        <div
-                            style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}
-                        >
+                        <div className='flex flex-row justify-center'>
                             <img
                                 src={eventicon}
                                 alt="events"
-                                style={{ height: '30px', width: '30px', borderRadius: '50%' }}
+                                className='h-[30px] w-[30px] rounded-full'
                             />
                             <h3>Events</h3>
                         </div>
                     </div>
                 </div>
 
-                <div
-                    style={{
-                        height: '100%',
-                        width: '50vw',
-                        marginTop: '20px',
-                        marginBottom: '30px',
-                    }}
-                >
+                <div className='w-full mt-5 mb-7'>
                     {posts.map((post) => (
                         <div
                             key={post.id}
-                            style={{
-                                backgroundColor: 'white',
-                                borderBottomWidth: '1px',
-                                borderBottomStyle: 'solid',
-                                borderBottomColor: 'black',
-                                marginBottom: '20px',
-                            }}
+                            className='bg-white border-b border-black mb-5'
                         >
-                            <div style={{ paddingLeft: '20px' }}>
-                                <div style={{ display: 'flex', flexDirection: 'row' }}>
+                            <div className='pl-5'>
+                                <div className='flex flex-row'>
                                     <img
                                         src={profileicon}
                                         alt="Icon"
-                                        style={{
-                                            height: '80px',
-                                            width: '80px',
-                                            borderRadius: '50%',
-                                            backgroundColor: 'gray',
-                                            marginRight: '20px',
-                                        }}
+                                        className='h-[80px] w-[80px] rounded-full bg-gray-500 mr-5'
                                     />
-                                    <div
-                                        style={{
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            justifyContent: 'center',
-                                        }}
-                                    >
+                                    <div className='flex flex-col justify-center'>
                                         <h1>{post.username}</h1>
                                         <h1>{post.role}</h1>
                                         <h3>{formatTimestamp(post.timestamp)}</h3>
@@ -251,7 +195,7 @@ const Middle = ({ userData }) => {
                                 <h1>{post.textPost}</h1>
                             </div>
                             <div>
-                                <strong style={{ fontSize: '30px', textAlign: 'center' }}>
+                                <strong className='text-2xl text-center'>
                                     {post.title}
                                 </strong>
                                 <h2>{post.description}</h2>
@@ -259,41 +203,20 @@ const Middle = ({ userData }) => {
                             <br />
                             <br />
                             {post.images && post.images.length > 0 && (
-                                <div
-                                    style={{
-                                        display: 'flex',
-                                        flexWrap: 'wrap',
-                                        gap: '10px',
-                                        paddingLeft: '10px',
-                                    }}
-                                >
+                                <div className='flex flex-wrap gap-2 pl-2'>
                                     {post.images.slice(0, 3).map((image, index) => (
                                         <img
                                             key={index}
                                             src={image}
                                             alt={`Post Image ${index}`}
-                                            style={{
-                                                width: '100px',
-                                                height: '100px',
-                                                objectFit: 'cover',
-                                                cursor: 'pointer',
-                                            }}
+                                            className='w-[100px] h-[100px] object-cover cursor-pointer'
                                             onClick={() => openModal(post.images, index)}
                                         />
                                     ))}
                                     {post.images.length > 3 && (
                                         <div
                                             onClick={() => openModal(post.images, 3)}
-                                            style={{
-                                                display: 'flex',
-                                                justifyContent: 'center',
-                                                alignItems: 'center',
-                                                width: '100px',
-                                                height: '100px',
-                                                backgroundColor: '#e0e0e0',
-                                                borderRadius: '5px',
-                                                cursor: 'pointer',
-                                            }}
+                                            className='flex justify-center items-center w-[100px] h-[100px] bg-gray-300 rounded cursor-pointer'
                                         >
                                             <span>+{post.images.length - 3}</span>
                                         </div>
@@ -326,18 +249,18 @@ const Middle = ({ userData }) => {
                     },
                 }}
             >
-                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                <div className='flex justify-center'>
                     <img
                         src={imagesToDisplay[currentImageIndex]}
                         alt="Full view"
-                        style={{ width: '100%', maxHeight: '500px', objectFit: 'contain' }}
+                        className='w-full max-h-[500px] object-contain'
                     />
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <div className='flex justify-between'>
                     <button onClick={prevImage}>{"<"}</button>
                     <button onClick={nextImage}>{">"}</button>
                 </div>
-                <button onClick={closeModal} style={{ marginTop: '10px' }}>
+                <button onClick={closeModal} className='mt-2'>
                     Close
                 </button>
             </Modal>
