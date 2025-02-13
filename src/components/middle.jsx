@@ -158,8 +158,10 @@ const Middle = ({ userData }) => {
     };
     return (
         <>
-            <div className='w-full mt-4 md:w-[50vw] h-full'>
-                <div className='bg-white'>
+            <h1 className='russo text-center mt-2 text-4xl'>POSTS</h1>
+            <div className='w-full  md:mt-3 md:w-[50vw] h-[100vh] overflow-y-auto'>
+                
+                <div className='bg-white rounded-xl'>
                     <div className='flex justify-evenly pt-4'>
                         <img
                             src={profilepic||profileicon}
@@ -218,7 +220,7 @@ const Middle = ({ userData }) => {
                     {posts.map((post) => (
                         <div
                             key={post.id}
-                            className='bg-white border-b border-black mb-5'
+                            className='bg-white rounded-xl mb-5'
                         >
                             <div className='pl-5'>
                                 <div className='flex flex-row'>

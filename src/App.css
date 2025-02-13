@@ -34,7 +34,9 @@ body{
   color: rgb(3, 148, 220); 
 }
 
-
+/* .shadoww{
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+} */
 /*SIGN IN TO KOTINOS*/
 .input-box-signin{
   border: 2px solid rgb(178, 174, 174);
@@ -72,6 +74,8 @@ body{
 
 ::-webkit-scrollbar-track {
   background-color: #f1f1f1;
+  margin-top: 4px;
+  
 }
 
 ::-webkit-scrollbar-thumb {
