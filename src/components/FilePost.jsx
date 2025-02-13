@@ -64,6 +64,7 @@ const FilePost = (props, ref) => {
   };
 
   const closeModal = () => {
+    setFiles([]);
     setIsOpen(false);
   };
 
