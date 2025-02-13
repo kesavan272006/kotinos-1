@@ -10,7 +10,7 @@ import { collection, doc, getDoc, getDocs, setDoc } from 'firebase/firestore';
 import Posts from './posts';
 import FilePost from './FilePost';
 import Modal from 'react-modal';
-
+import LikeButton from './LikeButton';
 const Middle = ({ userData }) => {
     const [username, setUsername] = useState('');
     const [role, setRole] = useState('');
@@ -391,6 +391,7 @@ const Middle = ({ userData }) => {
                                     )}
                                 </div>
                             )}
+                            <LikeButton />
                             <br />
                             <br />
                         </div>
