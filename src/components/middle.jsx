@@ -10,7 +10,7 @@ import { collection, doc, getDoc, getDocs, setDoc } from 'firebase/firestore';
 import Posts from './posts';
 import FilePost from './FilePost';
 import Modal from 'react-modal';
-
+import LikeButton from './LikeButton';
 const Middle = ({ userData }) => {
     const [username, setUsername] = useState('');
     const [role, setRole] = useState('');
@@ -21,11 +21,10 @@ const Middle = ({ userData }) => {
     const [text, setText] = useState('');
     const [file, setFile] = useState(null);
 
-    // Modal setup for image display
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [imagesToDisplay, setImagesToDisplay] = useState([]);
-
+    const [profilepic, setprofilepic]=useState(null);
     const openModal = (images, index) => {
         setImagesToDisplay(images);
         setCurrentImageIndex(index);
@@ -52,6 +51,8 @@ const Middle = ({ userData }) => {
 
             if (currentUser) {
                 const userRef = doc(database, 'Users', currentUser.uid);
+                const userprofilepicref = doc(userRef, 'profileDetails', 'details');
+                const userprofilesnap = await getDoc(userprofilepicref);
                 const userSnap = await getDoc(userRef);
                 if (userSnap.exists()) {
                     const userData = userSnap.data();
@@ -59,6 +60,10 @@ const Middle = ({ userData }) => {
                     setRole(userData.role || 'No Role');
                 } else {
                     navigate('/signin');
+                };
+                if(userprofilesnap.exists()){
+                    const profile = userprofilesnap.data();
+                    setprofilepic(profile.profilePic || profileicon)
                 }
             } else {
                 navigate('/signin');
@@ -67,23 +72,43 @@ const Middle = ({ userData }) => {
 
         fetchUserData();
     }, [navigate]);
-
     const getPost = async () => {
         setTimeout(async () => {
-            const postDocument = doc(database, 'Users', `${auth.currentUser?.uid}`);
-            const postRef = collection(postDocument, 'Posts');
             try {
-                const data = await getDocs(postRef);
-                const filteredData = data.docs.map((doc) => ({
-                    ...doc.data(),
-                    id: doc.id,
-                }));
-                setPosts(filteredData);
+                const usersRef = collection(database, 'Users');
+                const usersSnapshot = await getDocs(usersRef);
+    
+                let allPosts = [];
+    
+                for (let userDoc of usersSnapshot.docs) {
+                    const userId = userDoc.id;
+                    const postRef = collection(database, 'Users', userId, 'Posts');
+    
+                    const postSnapshot = await getDocs(postRef);
+                    const postsData = postSnapshot.docs.map((doc) => ({
+                        ...doc.data(),
+                        id: doc.id,
+                        userId: userId,
+                    }));
+    
+                    allPosts = allPosts.concat(postsData);
+                }
+    
+                const sortedPosts = allPosts.sort((a, b) => {
+                    const aTimestamp = a.timestamp?.seconds || 0;
+                    const bTimestamp = b.timestamp?.seconds || 0;
+                    return bTimestamp - aTimestamp;
+                });
+    
+                setPosts(sortedPosts);
             } catch (err) {
-                console.error(err);
+                console.error("Error fetching posts:", err);
             }
         }, 1000);
     };
+    
+    
+    
 
     useEffect(() => {
         getPost();
@@ -120,16 +145,33 @@ const Middle = ({ userData }) => {
         }
         return '';
     };
+    const [isModalOpened, setIsModalOpened] = useState(false);
+    const [modalImages, setModalImages] = useState('');
 
+    const openModals = (imageUrl) => {
+        setModalImages(imageUrl);
+        setIsModalOpened(true);
+    };
+
+    const closeModals = () => {
+        setIsModalOpened(false);
+    };
     return (
         <>
             <div className='w-full mt-4 md:w-[50vw] h-full'>
                 <div className='bg-white'>
                     <div className='flex justify-evenly pt-4'>
                         <img
-                            src={profileicon}
-                            alt="Profile"
+                            src={profilepic||profileicon}
+                            onClick={() => openModals(profilepic||profileicon)}
+                            alt='profilepic'
                             className='h-[70px] w-[70px] rounded-full bg-gray-500'
+                            style={{
+                                height: '70px',
+                                width: '70px',
+                                borderRadius: '50%',
+                                backgroundColor: 'gray',
+                            }}
                         />
                         <input
                             onClick={() => postRef.current?.click()}
@@ -181,11 +223,78 @@ const Middle = ({ userData }) => {
                             <div className='pl-5'>
                                 <div className='flex flex-row'>
                                     <img
-                                        src={profileicon}
-                                        alt="Icon"
-                                        className='h-[80px] w-[80px] rounded-full bg-gray-500 mr-5'
+                                        src={post.profilepic||profileicon}
+                                        alt={profileicon}
+                                        style={{
+                                            height: '80px',
+                                            width: '80px',
+                                            borderRadius: '50%',
+                                            backgroundColor: 'gray',
+                                            marginRight: '20px',
+                                        }}
+                                        onClick={() => openModals(post.profilepic||profileicon)}
                                     />
-                                    <div className='flex flex-col justify-center'>
+                                    {isModalOpened && (
+                                            <div
+                                            style={{
+                                                position: 'fixed',
+                                                top: 0,
+                                                left: 0,
+                                                right: 0,
+                                                bottom: 0,
+                                                backgroundColor: 'rgba(86, 84, 84, 0.7)',
+                                                display: 'flex',
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
+                                                zIndex: 9999,
+                                            }}
+                                            onClick={closeModals}
+                                            >
+                                            <div
+                                                style={{
+                                                position: 'relative',
+                                                maxWidth: '90%',
+                                                maxHeight: '90%',
+                                                }}
+                                                onClick={(e) => e.stopPropagation()} 
+                                            >
+                                                <img
+                                                src={modalImages}
+                                                alt={profileicon}
+                                                style={{
+                                                    width: '100%',
+                                                    height: 'auto',
+                                                    borderRadius: '8px',
+                                                }}
+                                                />
+                                                <button
+                                                onClick={closeModals}
+                                                style={{
+                                                    position: 'absolute',
+                                                    top: '10px',
+                                                    right: '10px',
+                                                    background: 'red',
+                                                    color: 'white',
+                                                    border: 'none',
+                                                    borderRadius: '50%',
+                                                    width: '30px',
+                                                    height: '30px',
+                                                    fontSize: '18px',
+                                                    cursor: 'pointer',
+                                                }}
+                                                >
+                                                X
+                                                </button>
+                                            </div>
+                                            </div>
+                                        )}
+                                    <div
+                                        style={{
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            justifyContent: 'center',
+                                        }}
+                                    >
                                         <h1>{post.username}</h1>
                                         <h1>{post.role}</h1>
                                         <h3>{formatTimestamp(post.timestamp)}</h3>
@@ -223,6 +332,7 @@ const Middle = ({ userData }) => {
                                     )}
                                 </div>
                             )}
+                            <LikeButton />
                             <br />
                             <br />
                         </div>
@@ -230,7 +340,6 @@ const Middle = ({ userData }) => {
                 </div>
             </div>
 
-            {/* Modal for image display */}
             <Modal
                 isOpen={isModalOpen}
                 onRequestClose={closeModal}

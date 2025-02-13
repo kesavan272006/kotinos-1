@@ -24,7 +24,7 @@ function Home() {
         const timer = setTimeout(() => {
             setLoading(false);
         }, 3000);
-        return () => clearTimeout(timer); // Clear timeout if component unmounts
+        return () => clearTimeout(timer); 
     }, []);
 
     useEffect(() => {

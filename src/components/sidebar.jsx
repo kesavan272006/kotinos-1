@@ -63,7 +63,6 @@ const Sidebar = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const newsList = news.slice(0, 15);
 
   const toggleVisibility = () => {
     setIsVisible(!isVisible);
@@ -121,9 +120,9 @@ const Sidebar = () => {
           </div>
           <div className="md:w-[40vw] w-[90vw]  h-[80vh] bg-white border rounded-lg max-h-screen overflow-y-scroll p-2  px-6 m-2">
             <h1 className='russo text-3xl text-center py-2'>Sports News</h1>
-            {newsList && newsList.length > 0 ? (
+            {news && news.length > 0 ? (
               <ul>
-                {newsList.map((article, index) => (
+                {news.map((article, index) => (
                   <li key={index} className='py-2 '>
                     <a href={article.url} target="_blank" rel="noopener noreferrer">
                       {article.urlToImage && <img src={article.urlToImage} alt={article.title} className="w-full h-auto rounded-xl" />}
