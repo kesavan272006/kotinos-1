@@ -20,8 +20,11 @@ const customStyles = {
     boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.1)',
     padding: '30px',
     minWidth: '400px',
+    maxHeight: '90vh',  
+    overflowY: 'auto', 
   },
 };
+
 
 Modal.setAppElement('#root');
 

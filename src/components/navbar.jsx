@@ -23,7 +23,6 @@ function Navbar() {
             console.error("Error signing out:", error);
         }
     };
-    console.log(Searchicon);
     return (
         <div className="bg-white border border-gray-100 border-x-0 border-t-0 w-full py-3">
             <style>
