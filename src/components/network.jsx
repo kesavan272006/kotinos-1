@@ -78,7 +78,7 @@ const Network = () => {
                                         />
                                     </div>
                                 </div>
-                                <Link to='/messages' state={{username: eachuser.username, role:eachuser.role, id: eachuser.id}}>
+                                {/* <Link to='/messages' state={{username: eachuser.username, role:eachuser.role, id: eachuser.id}}>
                                 <Button style={{
                                     backgroundColor: '#28a745',
                                     color: '#fff',
@@ -93,7 +93,7 @@ const Network = () => {
                                     }}>
                                     Message
                                     </Button>
-                                </Link>
+                                </Link> */}
                             </ListItem>
                         </List>
                     </Paper>

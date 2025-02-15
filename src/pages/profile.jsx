@@ -262,7 +262,7 @@ const Profile = () => {
                 <div className="bg-white p-4 rounded-lg relative shadow-sm">
                     <div className="flex flex-col items-center mb-4">
                         <label className="relative cursor-pointer">
-                            <img src={profile.profilePic || profileicon} alt="Profile" className="w-24 h-24 rounded-full object-cover border-2 border-blue-300" />
+                            <img src={profile.profilePic || profileicon} alt="Profile" onClick={()=>openModals(profile.profilePic || profileicon)} className="w-24 h-24 rounded-full object-cover border-2 border-blue-300" />
                         </label>
                     </div>
                     <h2 className="text-xl font-semibold mb-4 flex justify-between items-center">

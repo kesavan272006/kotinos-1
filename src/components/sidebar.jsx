@@ -27,6 +27,7 @@ const Sidebar = () => {
   const [isNewsVisible, setIsNewsVisible] = useState(false);
   const [news, setNews] = useState([]);
   const navigate = useNavigate();
+  const [profiles, setprofiles]=useState('');
       const logout = async () => {
           try {
               await signOut(auth);
@@ -48,6 +49,7 @@ const Sidebar = () => {
           setUsername(userData.username || 'No Username');
           setRole(userData.role || 'No Role');
           setEmail(userData.email || 'No email found');
+          setprofiles(userData.profilePic);
         } else {
           navigate("/signin");
         }
@@ -90,11 +92,13 @@ const Sidebar = () => {
 
       <div className={`shadoww border border-r-slate-200 border-y-0 absolute z-0 md:w-[20vw] md:h-[99%] w-[50vw] h-screen bg-white transition-transform duration-300 ${isVisible ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="flex flex-row justify-evenly absolute top-[90vh]">
-          <img src={profilepic} alt="Profile" className="h-[30%] w-[30%] rounded-full bg-gray-500 mt-[20px]" />
-          <div className="flex flex-col justify-center">
-            <h1>{username}</h1>
-            <h3>Logged in as {role}</h3>
-          </div>
+          <img src={profiles} alt="Profile" className="h-[30%] w-[30%] rounded-full bg-gray-500 mt-[20px]" style={{height:'70px', width:'70px', borderRadius:'50%'}} />
+          <Link to='/profile'>
+            <div className="flex flex-col justify-center">
+              <h1> {username}</h1>
+              <h3>Logged in as {role}</h3>
+            </div>
+          </Link>
           <button onClick={logout} className='md:ml-10 ml-4 russo hover:scale-110 transition-all cursor-pointer'><MdLogout className='scale-[160%]'/></button>
 
         </div>
