@@ -1,24 +1,99 @@
-import React, { useEffect, useState } from 'react';
-import { Paper, Avatar, ListItem, ListItemText, List, Button, TextField } from '@mui/material';
+import React, { useEffect, useState, useRef } from 'react';
+import { Paper, Avatar, ListItem, ListItemText, List, Button, TextField, Modal, Box } from '@mui/material';
 import profileicon from '../assets/profileicon.svg';
-import { collection, doc, getDocs } from 'firebase/firestore';
+import { collection, doc, getDocs, addDoc, deleteDoc } from 'firebase/firestore';
 import { database, auth } from '../config/firebase';
-import { Link, useLocation } from 'react-router-dom';
 import Loading from '../components/Loading';
-import { addDoc } from 'firebase/firestore';
+import addphoto from '../assets/addphoto.svg';
+import deleteIcon from '../assets/deleteicon.svg'
+
 const ChatPage = () => {
     const [user, setUser] = useState([]);
     const [loading, setLoading] = useState(true);
     const [message, setMessage] = useState('');
     const [messageData, setMessageData] = useState([]);
     const [selectedUser, setSelectedUser] = useState(null);
+    const [images, setImages] = useState([]);
+    const [previewImages, setPreviewImages] = useState([]);
+    const [openModal, setOpenModal] = useState(false);
+
+    const fileInputRef = useRef(null);
 
     if (!auth.currentUser) {
         return <Loading />;
     }
 
-    const requestInRef = collection(database, "Users", auth.currentUser?.uid, "RequestIn");
+    const handleImageClick = () => {
+        fileInputRef.current.click();
+    };
 
+    const handleFileChange = (e) => {
+        const files = Array.from(e.target.files);
+        if (files.length + images.length > 3) {
+            alert("You can select a maximum of 3 images.");
+            return;
+        }
+        const newImages = [...images, ...files];
+        setImages(newImages);
+
+        const previewUrls = newImages.map((file) => URL.createObjectURL(file));
+        setPreviewImages(previewUrls);
+    };
+
+    const handleDeletePreviewImage = (imageUrl) => {
+        const updatedPreviewImages = previewImages.filter(image => image !== imageUrl);
+        setPreviewImages(updatedPreviewImages);
+
+        const updatedImages = images.filter(image => URL.createObjectURL(image) !== imageUrl);
+        setImages(updatedImages);
+    };
+
+    const sendMessage = async () => {
+        if (!selectedUser || (!message && images.length === 0)) return;
+
+        const imageUrls = await Promise.all(images.map(async (file) => {
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    resolve(reader.result);
+                };
+                reader.readAsDataURL(file);
+            });
+        }));
+
+        const userDocSender = doc(database, "Users", `${auth.currentUser?.uid}`);
+        const messageDocSender = doc(userDocSender, "Message", `${auth.currentUser?.uid}`);
+        const messageRefSender = collection(messageDocSender, `Message-${selectedUser.id}`);
+
+        try {
+            await addDoc(messageRefSender, {
+                message: message,
+                images: imageUrls,
+                timestamp: new Date(),
+                senderId: auth.currentUser?.uid,
+            });
+
+            const userDocReceiver = doc(database, "Users", `${selectedUser.id}`);
+            const messageDocReceiver = doc(userDocReceiver, "Message", `${selectedUser.id}`);
+            const messageRefReceiver = collection(messageDocReceiver, `Message-${auth.currentUser?.uid}`);
+
+            await addDoc(messageRefReceiver, {
+                message: message,
+                images: imageUrls,
+                timestamp: new Date(),
+                senderId: auth.currentUser?.uid,
+            });
+
+            setMessage('');
+            setImages([]);
+            setPreviewImages([]);
+            setOpenModal(false);
+            showMessage();
+        } catch (err) {
+            console.error("Error sending message:", err);
+        }
+    };
+    const requestInRef = collection(database, "Users", auth.currentUser?.uid, "RequestIn");
     const showRequest = async () => {
         try {
             const data = await getDocs(requestInRef);
@@ -38,54 +113,6 @@ const ChatPage = () => {
         }
     };
 
-    const addMessage = async () => {
-        const userDoc = doc(database, "Users", `${auth.currentUser?.uid}`);
-        const messageDoc = doc(userDoc, "Message", `${auth.currentUser?.uid}`);
-        const messageRef = collection(messageDoc, `Message-${selectedUser.id}`);
-        try {
-            await addDoc(messageRef, {
-                message: message,
-                timestamp: new Date(), 
-                senderId: `${auth.currentUser?.uid}`
-            })
-        } catch (err) {
-            console.error(err);
-        }
-    }
-
-    const sendMessage = async () => {
-        if (!selectedUser || !message) return;
-    
-        const userDocSender = doc(database, "Users", `${auth.currentUser?.uid}`);
-        const messageDocSender = doc(userDocSender, "Message", `${auth.currentUser?.uid}`);
-        const messageRefSender = collection(messageDocSender, `Message-${selectedUser.id}`);
-        
-        try {
-            await addDoc(messageRefSender, {
-                message: message,
-                timestamp: new Date(),
-                senderId: auth.currentUser?.uid,
-            });
-    
-            const userDocReceiver = doc(database, "Users", `${selectedUser.id}`);
-            const messageDocReceiver = doc(userDocReceiver, "Message", `${selectedUser.id}`);
-            const messageRefReceiver = collection(messageDocReceiver, `Message-${auth.currentUser?.uid}`);
-            
-            await addDoc(messageRefReceiver, {
-                message: message,
-                timestamp: new Date(),
-                senderId: auth.currentUser?.uid,
-            });
-    
-            setMessage(''); 
-            showMessage();  
-        } catch (err) {
-            console.error("Error sending message:", err);
-        }
-    };
-    
-    
-
     const showMessage = async () => {
         if (!selectedUser) return;
         const userDoc = doc(database, "Users", `${auth.currentUser?.uid}`);
@@ -97,9 +124,9 @@ const ChatPage = () => {
                 ...doc.data(),
                 id: doc.id,
             }));
-    
+
             const sortedMessages = filteredData.sort((a, b) => a.timestamp.toMillis() - b.timestamp.toMillis());
-    
+
             setMessageData(sortedMessages);
         } catch (err) {
             console.error(err);
@@ -119,7 +146,24 @@ const ChatPage = () => {
     if (loading) {
         return <Loading />;
     }
-
+    const deleteMessage = async (messageId, selecteduserId) => {
+        const userDocSender = doc(database, "Users", `${auth.currentUser?.uid}`);
+        const messageDocSender = doc(userDocSender, "Message", `${auth.currentUser?.uid}`);
+        const messageRefSender = collection(messageDocSender, `Message-${selecteduserId}`);
+        const messageToDeleteSender = doc(messageRefSender, messageId);
+    
+        const userDocReceiver = doc(database, "Users", `${selecteduserId}`);
+        const messageDocReceiver = doc(userDocReceiver, "Message", `${selecteduserId}`);
+        const messageRefReceiver = collection(messageDocReceiver, `Message-${auth.currentUser?.uid}`);
+        const messageToDeleteReceiver = doc(messageRefReceiver, messageId);
+    
+        try {
+            await deleteDoc(messageToDeleteSender);
+            await deleteDoc(messageToDeleteReceiver);
+        } catch (err) {
+            console.error("Error deleting message:", err);
+        }
+    }; 
     return (
         <div style={{ display: 'flex', height: '100vh' }}>
             <div style={{ width: '25%', borderRight: '1px solid #ddd', padding: '10px' }}>
@@ -129,7 +173,7 @@ const ChatPage = () => {
                         return (
                             <Paper key={eachuser.id} style={{ marginBottom: '10px' }}>
                                 <ListItem button onClick={() => setSelectedUser(eachuser)}>
-                                    <Avatar src={profileicon} />
+                                    <Avatar src={eachuser.profilePic} />
                                     <div style={{ marginLeft: "10px" }}>
                                         <ListItemText
                                             primary={eachuser.username}
@@ -153,7 +197,7 @@ const ChatPage = () => {
                             padding: '10px',
                             borderBottom: '1px solid #ddd'
                         }}>
-                            <Avatar src={profileicon} />
+                            <Avatar src={selectedUser.profilePic} />
                             <div style={{ marginLeft: '10px' }}>
                                 <div style={{ fontSize: '18px', fontWeight: 'bold' }}>
                                     {selectedUser.username}
@@ -192,8 +236,43 @@ const ChatPage = () => {
                                             marginLeft: isCurrentUser ? '10px' : '0',
                                             marginRight: isCurrentUser ? '0' : '10px',
                                         }}>
-                                            <span style={{ fontSize: '14px' }}>{userMessage.message}</span>
+                                            {userMessage.images && userMessage.images.map((img, index) => (
+                                                <img
+                                                    key={index}
+                                                    src={img}
+                                                    alt={`Image-${index}`}
+                                                    style={{
+                                                        width: '100px',
+                                                        height: '100px',
+                                                        marginTop: '5px',
+                                                        borderRadius: '10px',
+                                                        display: 'block',
+                                                        marginBottom: '5px'
+                                                    }}
+                                                />
+                                            ))}
+                                            {userMessage.message && <span style={{ fontSize: '14px' }}>{userMessage.message}</span>}
                                         </div>
+                                        {isCurrentUser && (
+                                            <button
+                                                onClick={() => {
+                                                    deleteMessage(userMessage.id, selectedUser.id)
+                                                    alert('The message is deleted only for you!');
+                                                    showMessage();
+                                                }}
+                                                style={{
+                                                    cursor: 'pointer',
+                                                    background: 'transparent',
+                                                    border: 'none',
+                                                    marginTop: '5px',
+                                                    marginLeft: '5px',
+                                                    fontSize: '16px',
+                                                    color: 'red'
+                                                }}
+                                            >
+                                                <img src={deleteIcon} alt="❌" />
+                                            </button>
+                                        )}
                                     </div>
                                 );
                             })}
@@ -212,6 +291,24 @@ const ChatPage = () => {
                             justifyContent: 'space-between',
                             alignItems: 'center',
                         }}>
+                            <div>
+                                <input
+                                    type="file"
+                                    ref={fileInputRef}
+                                    style={{ display: 'none' }}
+                                    onChange={handleFileChange}
+                                    multiple
+                                />
+                                <img
+                                    src={addphoto}
+                                    alt="Img"
+                                    onClick={()=>{
+                                        handleImageClick
+                                        setOpenModal(true)
+                                    }}
+                                    style={{ cursor: 'pointer' }}
+                                />
+                            </div>
                             <TextField
                                 value={message}
                                 onChange={(e) => setMessage(e.target.value)}
@@ -244,6 +341,64 @@ const ChatPage = () => {
                     </>
                 )}
             </div>
+
+            <Modal
+                open={openModal}
+                onClose={() => setOpenModal(false)}
+            >
+                <Box sx={{
+                    position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
+                    backgroundColor: 'white', padding: '20px', borderRadius: '8px', boxShadow: 24,
+                    width: 400, textAlign: 'center'
+                }}>
+                    <h3>Choose Images (Max 3)</h3>
+                    <input
+                        type="file"
+                        ref={fileInputRef}
+                        style={{ display: 'none' }}
+                        onChange={handleFileChange}
+                        multiple
+                    />
+                    <Button onClick={handleImageClick}>Choose Files</Button>
+                    <div style={{ marginTop: '10px' }}>
+                        {previewImages.map((imageUrl, index) => (
+                            <div key={index} style={{ marginBottom: '10px' }}>
+                                <img src={imageUrl} alt={`Preview-${index}`} style={{ width: '100px', height: '100px', margin: '0 10px' }} />
+                                <Button onClick={() => handleDeletePreviewImage(imageUrl)} style={{ color: 'red' }}>
+                                    <img src={deleteIcon} alt="Delete" style={{ width: '20px' }} />
+                                </Button>
+                            </div>
+                        ))}
+                    </div>
+                    <TextField
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
+                        label="Start a conversation"
+                        style={{
+                            width: '85%',
+                            marginRight: '10px',
+                            backgroundColor: '#f1f1f1',
+                            borderRadius: '15px',
+                        }}
+                    />
+                    <Button
+                        onClick={sendMessage}
+                        style={{
+                            backgroundColor: '#28a745',
+                            color: '#fff',
+                            padding: '12px 24px',
+                            fontSize: '16px',
+                            fontWeight: 'bold',
+                            borderRadius: '8px',
+                            border: 'none',
+                            cursor: 'pointer',
+                            marginTop: '20px',
+                        }}
+                    >
+                        Send
+                    </Button>
+                </Box>
+            </Modal>
         </div>
     );
 };
