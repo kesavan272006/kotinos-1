@@ -1,6 +1,6 @@
 import { auth, database, googleprovider } from '../config/firebase';
 import { useState, useEffect, useRef } from "react";
-import { signInWithPopup, onAuthStateChanged, fetchSignInMethodsForEmail, linkWithPopup } from "firebase/auth";
+import { signInWithPopup, onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import bg from '../assets/signin_bg.jpg';
 import googlepic from '../assets/Googlepic.png';

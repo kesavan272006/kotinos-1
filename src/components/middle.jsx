@@ -44,7 +44,7 @@ const Middle = ({ userData }) => {
             prevIndex === 0 ? imagesToDisplay.length - 1 : prevIndex - 1
         );
     };
-
+  
     useEffect(() => {
         const fetchUserData = async () => {
             const currentUser = auth.currentUser;
@@ -181,6 +181,7 @@ const Middle = ({ userData }) => {
                             placeholder="start a post"
                             className='rounded-lg h-[70px] w-[600px] bg-whitesmoke'
                             value={text}
+                            style={{border:'1px solid black'}}
                             onChange={(e) => setText(e.target.value)}
                         />
                         <Posts ref={postRef} />
