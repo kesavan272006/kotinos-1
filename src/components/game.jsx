@@ -17,7 +17,7 @@ function Game() {
   };
 
   useEffect(() => {
-    if (!isopened) return; // Don't run the game logic if it's not opened
+    if (!isopened) return;
 
     const isAlive = setInterval(function () {
       const dinoTop = parseInt(
@@ -30,18 +30,18 @@ function Game() {
       if (cactusLeft < 40 && cactusLeft > 0 && dinoTop >= 140) {
         alert("Game Over! Your Score : " + score);
         setScore(0);
-        setIsOpened(false); // Game over, close the game
+        setIsOpened(false); 
       } else {
-        setScore(score + 1); // Increase the score
+        setScore(score + 1);
       }
     }, 10);
 
-    return () => clearInterval(isAlive); // Clean up interval on component unmount or when isopened changes
+    return () => clearInterval(isAlive);
   }, [isopened, score]);
 
   useEffect(() => {
     document.addEventListener("keydown", jump);
-    return () => document.removeEventListener("keydown", jump); // Cleanup on component unmount
+    return () => document.removeEventListener("keydown", jump);
   }, []);
 
   return (
