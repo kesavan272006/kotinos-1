@@ -23,6 +23,7 @@ import Network from './components/network';
 import { RequestProvider } from './context/RequestContext';
 import MessageNav from './components/navbar2';
 import ChatPage from './pages/chatpage';
+import Game from './components/game';
 function App() {
   return (
     <div>
@@ -51,6 +52,7 @@ function App() {
             <Route path="/network" element={<Network />} />
             <Route path="/messagenav" element={<MessageNav />} />
             <Route path="/chatpage" element={<ChatPage />} />
+            <Route path="/game" element={<Game />} />
           </Routes>
         </UserProvider>
       </RequestProvider>
