@@ -122,6 +122,8 @@ const Sidebar = () => {
 
           <Link to='/connection' state={{ username: username, role: role, email: email }}><h4>friends</h4></Link>
           <Link to='/invitation' state={{ username: username, role: role, email: email }}>Invitations</Link>
+          <br />
+          <Link to='/game'>Play a Game</Link>
           <div className="cursor-pointer" onClick={toggleNewsVisibility}>
             <h4>News</h4>
           </div>
