@@ -14,7 +14,7 @@ const Signin = () => {
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (user) {
-                navigate("/profile");
+                navigate("/home");
             }
         });
 
@@ -33,7 +33,7 @@ const Signin = () => {
             await signInWithPopup(auth, googleprovider);
             addUser();
             setUserDetails({ username, selectedOption });
-            navigate("/profile");
+            navigate("/home");
         } catch (error) {
             console.error("Error signing in with Google:", error.message);
             alert("Error signing in with Google. Please try again.");
@@ -46,20 +46,39 @@ const Signin = () => {
     } 
     const [username, setusername]= useState("");
     const addUser = async () => {
-        const userref = collection(database, "Users");
-        const userDocRef = doc(userref, auth.currentUser.uid); 
-    
+        const userRef = collection(database, "Users");
+        const userDocRef = doc(userRef, auth.currentUser.uid);
+
         try {
             const docSnap = await getDoc(userDocRef);
+
             if (!docSnap.exists()) {
                 await setDoc(userDocRef, {
                     username: username,
                     role: selectedOption,
                     email: auth.currentUser.email,
+                    profilePic: "",
                 });
             }
+
+            const profileDocRef = doc(userDocRef, "profileDetails", "details");
+            const profileDocSnap = await getDoc(profileDocRef);
+
+            if (!profileDocSnap.exists()) {
+                await setDoc(profileDocRef, {
+                    fullName: username,
+                    dob: "Not provided", 
+                    gender:"Not provided",
+                    state:"Not provided",
+                    profilePic:"",
+                    primarySport: "Not provided",
+                    secondarySport: "Not provided",
+                    experience: "Not provided",
+                });
+                console.log("Profile details created with default values.");
+            }
         } catch (err) {
-            console.error(err);
+            console.error("Error adding user:", err);
         }
     };
     return (
