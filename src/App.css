@@ -56,6 +56,10 @@ body{
     blink-caret .75s step-end infinite;
 }
 
+.inverter{
+  filter: invert(1);
+}
+
 /* The typing effect */
 @keyframes typing {
   from { width: 0 }

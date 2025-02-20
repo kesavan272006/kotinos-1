@@ -158,8 +158,8 @@ const Middle = ({ userData }) => {
     };
     return (
         <>
-            <h1 className='russo text-center mt-2 text-4xl'>POSTS</h1>
-            <div className='w-full  md:mt-3 md:w-[50vw] h-[100vh] overflow-y-auto'>
+            <h1 className='russo text-center mt-2 text-4xl w-full'>POSTS</h1>
+            <div className='w-full md:mt-1 md:w-[50vw] h-[100vh] overflow-y-auto'>
                 
                 <div className='bg-white rounded-xl'>
                     <div className='flex justify-evenly pt-4'>
