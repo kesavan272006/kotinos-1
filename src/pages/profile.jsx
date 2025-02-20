@@ -275,7 +275,7 @@ const Profile = () => {
                     </h2>
                     <div className="space-y-3">
                         <p><strong>User Name:</strong> {username || "Not provided"}</p>
-                        <p><strong>Full Name:</strong> {profile.fullName || "Not provided"}</p>
+                        {/* <p><strong>Full Name:</strong> {profile.fullName || "Not provided"}</p> */}
                         <p><strong>Logged in as:</strong> {role || "Not provided"}</p>
                         <p><strong>Your emailId: </strong> {email || "Not provided"}</p>
                         <p><strong>Date of Birth:</strong> {profile.dob || "Not provided"}</p>
@@ -327,7 +327,7 @@ const Profile = () => {
                             <div className="space-y-3">
                                 <label>Upload Profile Picture</label>
                                 <input type="file" accept="image/*" onChange={handleImageUpload} className="border p-2 rounded w-full" />
-                                <input type="text" name="fullName" placeholder="Full Name" value={profile.fullName} onChange={handleChange} className="border p-2 rounded w-full" />
+                                {/* <input type="text" name="fullName" placeholder="Full Name" value={profile.fullName} onChange={handleChange} className="border p-2 rounded w-full" /> */}
                                 <input type="date" name="dob" value={profile.dob} onChange={handleChange} className="border p-2 rounded w-full" />
                                 <select name="gender" value={profile.gender} onChange={handleChange} className="border p-2 rounded w-full">
                                     <option value="">Select Gender</option>
