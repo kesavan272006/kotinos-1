@@ -158,11 +158,11 @@ const Posts = (props, ref) => {
             },
           }}
         />
-        <div className="modal-buttons">
-          <Button variant="outlined" className="closeButton" onClick={closeModal}>
+        <div className="modal-buttons mt-5 ml-1 mr-1">
+          <Button variant="outlined" className="closeButton " onClick={closeModal}>
             Close
           </Button>
-          <Button variant="contained" className="postButton" onClick={addPost}>
+          <Button variant="contained" className="postButton bg-gradient-to-r from-blue-900 via-blue-700 to-cyan-500 " onClick={addPost}>
             Post
           </Button>
         </div>
@@ -175,7 +175,7 @@ const Posts = (props, ref) => {
               <div style={{ color: 'green', fontWeight: 'bold', marginBottom: '10px' }}>Connection Post</div>
             )}
             <h3 style={{ marginBottom: '10px' }}>{post.username}</h3>
-            <p>{post.textPost}</p>
+            <p>{post.textPost} </p>
             <p style={{ fontSize: '12px', color: '#888' }}>
               {new Date(post.timestamp.seconds * 1000).toLocaleString()}
             </p>

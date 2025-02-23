@@ -8,11 +8,11 @@ import { doc, setDoc, getDoc, deleteDoc, collection } from "firebase/firestore";
 import { database } from "../config/firebase";
 import { getAuth } from "firebase/auth";
 import profileicon from '../assets/profileicon.svg'
+import { FaRegHeart } from "react-icons/fa";
 import Loading from '../components/Loading';
 import { TextField } from '@mui/material';
 import Footer from '../components/footer';
 import { getDocs } from 'firebase/firestore';
-import LikeButton from '../components/LikeButton';
 import Modal from 'react-modal';
 const Profile = () => {
     const { userDetails } = useUser();
@@ -526,7 +526,8 @@ const Profile = () => {
                                     )}
                                 </div>
                             )}
-                            <LikeButton />
+                            <FaRegHeart />
+
                             <br />
                             <br />
                         </div>

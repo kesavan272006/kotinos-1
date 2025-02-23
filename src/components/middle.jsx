@@ -1,16 +1,22 @@
 import React, { useRef, useState, useEffect } from 'react';
+
+import { MdOutlineInsertPhoto } from "react-icons/md";
+import { RiMovieLine } from "react-icons/ri";
+import { MdEvent } from "react-icons/md";
+import { FaRegHeart } from "react-icons/fa";
+
+
 import profileicon from '../assets/profileicon.svg';
-import galleryicon from '../assets/gallery.svg';
-import videoicon from '../assets/videoicon.svg';
-import eventicon from '../assets/eventicon.svg';
-import sachin from '../assets/sachin.jpg';
+// import galleryicon from '../assets/gallery.svg';
+// import videoicon from '../assets/videoicon.svg';
+// import eventicon from '../assets/eventicon.svg';
+// import sachin from '../assets/sachin.jpg';
 import { useNavigate } from 'react-router-dom';
 import { auth, database } from '../config/firebase';
 import { collection, doc, getDoc, getDocs, setDoc } from 'firebase/firestore';
 import Posts from './posts';
 import FilePost from './FilePost';
 import Modal from 'react-modal';
-import LikeButton from './LikeButton';
 const Middle = ({ userData }) => {
     const [username, setUsername] = useState('');
     const [role, setRole] = useState('');
@@ -158,85 +164,43 @@ const Middle = ({ userData }) => {
     };
     return (
         <>
-            <h1 className='russo text-center mt-2 text-4xl w-full'>POSTS</h1>
-            <div className='w-full md:mt-1 md:w-[50vw] h-[100vh] overflow-y-auto'>
+            <h1 className='russo text-center mt-2 text-4xl w-full '>POSTS</h1>
+            <div className='w-[92%] ml-3 md:ml-5 md:mt-1 md:w-[50vw] h-[100vh] overflow-y-auto scrollbar-hide'>
+            <div className="relative p-[2px]  bg-gradient-to-r from-blue-900 via-blue-700 to-cyan-500">
                 
-                <div className='bg-white rounded-xl'>
+                <div className='bg-white  p-4'>
                     <div className='flex justify-evenly pt-4'>
-                        <img
-                            src={profilepic||profileicon}
-                            onClick={() => openModals(profilepic||profileicon)}
-                            alt='profilepic'
-                            className='h-[70px] w-[70px] rounded-full bg-gray-500'
-                            style={{
-                                height: '70px',
-                                width: '70px',
-                                borderRadius: '50%',
-                                backgroundColor: 'gray',
-                            }}
-                        />
-                        <input
-                            onClick={() => postRef.current?.click()}
-                            type="text"
-                            placeholder="start a post"
-                            className='rounded-lg h-[70px] w-[600px] bg-whitesmoke'
-                            value={text}
-                            style={{border:'1px solid black'}}
-                            onChange={(e) => setText(e.target.value)}
-                        />
+                        
+                        <img src={profilepic||profileicon} onClick={() => openModals(profilepic||profileicon)} alt='profilepic' className='h-14 w-14 md:mt-4 rounded-full ml-1 bg-gray-300'/>
+                        <input onClick={() => postRef.current?.click()} type="text" placeholder="What's on your mind?" className='rounded-lg md:rounded-full border bg-[#1E3A8A] hover:bg-gradient-to-r hover:from-blue-900/5 hover:via-blue-700/5 hover:to-cyan-500/5 bg-opacity-[0.03] border-[#1E3A8A] mt-4 h-[3vh] md:h-[6vh] w-[90%] md:w-[80%] pl-3 ml-3' value={text} onChange={(e) => setText(e.target.value)}/>
                         <Posts ref={postRef} />
                         <FilePost ref={filePostRef} />
+                        
                     </div>
-                    <div className='h-[50px] mt-2 flex flex-row justify-evenly'>
-                        <div className='flex flex-row justify-center'>
-                            <img
-                                onClick={() => filePostRef.current?.click()}
-                                src={galleryicon}
-                                alt="photos"
-                                className='h-[30px] w-[30px] rounded-full'
-                            />
-                            <h3>Photo</h3>
+                    <hr className='w-[77.5%] ml-28 mb-4 mt-6 hidden md:block' />
+                    <div className='h-[50px] flex flex-row justify-evenly md:mt-0 mt-3 md:ml-8'>
+                        <div className='flex flex-row justify-center items-center mb-4 cursor-pointer rounded-full transition-all p-2 hover:bg-gradient-to-r hover:from-blue-900/15 hover:via-blue-700/15 hover:to-cyan-500/15' onClick={() => filePostRef.current?.click()}>
+                            <MdOutlineInsertPhoto  alt="photos" className='h-[30px] w-[30px] rounded-full ' />
+                            <h3 className='font-bold mt-1 ml-1 '>Photos</h3>
                         </div>
-                        <div className='flex flex-row justify-center'>
-                            <img
-                                onClick={() => filePostRef.current?.click()}
-                                src={videoicon}
-                                alt="videos"
-                                className='h-[30px] w-[30px] rounded-full'
-                            />
-                            <h3>Video</h3>
+                        <div className='flex flex-row justify-center items-center mb-4 cursor-pointer rounded-full transition-all hover:bg-opacity-10 p-2 hover:bg-gradient-to-r hover:from-blue-900/15 hover:via-blue-700/15 hover:to-cyan-500/15' onClick={() => filePostRef.current?.click()}>
+                            <RiMovieLine  alt="photos" className='h-[30px] w-[30px] rounded-full' />
+                            <h3 className='font-bold mt-1 ml-1 '>Videos</h3>
                         </div>
-                        <div className='flex flex-row justify-center'>
-                            <img
-                                src={eventicon}
-                                alt="events"
-                                className='h-[30px] w-[30px] rounded-full'
-                            />
-                            <h3>Events</h3>
+                        <div className='flex flex-row justify-center items-center mb-4 cursor-pointer rounded-full transition-all hover:bg-opacity-10 p-2 hover:bg-gradient-to-r hover:from-blue-900/15 hover:via-blue-700/15 hover:to-cyan-500/15' onClick={() => filePostRef.current?.click()}>
+                            <MdEvent  alt="photos" className='h-[30px] w-[30px] rounded-full' />
+                            <h3 className='font-bold mt-1 ml-1 '>Events</h3>
                         </div>
                     </div>
+                </div>
                 </div>
 
                 <div className='w-full mt-5 mb-7'>
                     {posts.map((post) => (
-                        <div
-                            key={post.id}
-                            className='bg-white rounded-xl mb-5'
-                        >
-                            <div className='pl-5'>
+                        <div key={post.id} className='bg-white rounded-xl border  mb-5'>
+                            <div className='pl-5 pt-3'>
                                 <div className='flex flex-row'>
-                                    <img
-                                        src={post.profilepic||profileicon}
-                                        alt={profileicon}
-                                        style={{
-                                            height: '80px',
-                                            width: '80px',
-                                            borderRadius: '50%',
-                                            backgroundColor: 'gray',
-                                            marginRight: '20px',
-                                        }}
-                                        onClick={() => openModals(post.profilepic||profileicon)}
-                                    />
+                                    <img src={post.profilepic||profileicon} alt={profileicon} className='mr-5 h-14 w-14 rounded-full bg-gray-300' onClick={() => openModals(post.profilepic||profileicon)}/>
                                     {isModalOpened && (
                                             <div
                                             style={{
@@ -245,7 +209,7 @@ const Middle = ({ userData }) => {
                                                 left: 0,
                                                 right: 0,
                                                 bottom: 0,
-                                                backgroundColor: 'rgba(86, 84, 84, 0.7)',
+                                                backgroundColor: 'rgba(92, 91, 91, 0.01)',
                                                 display: 'flex',
                                                 justifyContent: 'center',
                                                 alignItems: 'center',
@@ -267,7 +231,7 @@ const Middle = ({ userData }) => {
                                                 style={{
                                                     width: '100%',
                                                     height: 'auto',
-                                                    borderRadius: '8px',
+                                                    borderRadius: '4px',
                                                 }}
                                                 />
                                                 <button
@@ -276,13 +240,14 @@ const Middle = ({ userData }) => {
                                                     position: 'absolute',
                                                     top: '10px',
                                                     right: '10px',
-                                                    background: 'red',
+                                                    background: 'black',
                                                     color: 'white',
                                                     border: 'none',
                                                     borderRadius: '50%',
                                                     width: '30px',
                                                     height: '30px',
                                                     fontSize: '18px',
+                                                    fontWeight: 'bold',
                                                     cursor: 'pointer',
                                                 }}
                                                 >
@@ -298,10 +263,11 @@ const Middle = ({ userData }) => {
                                             justifyContent: 'center',
                                         }}
                                     >
-                                        <h1>{post.username}</h1>
+                                        <h1 className='font-bold'>{post.username}</h1>
                                         <h1>{post.role}</h1>
-                                        <h3>{formatTimestamp(post.timestamp)}</h3>
+                                        
                                     </div>
+                                    <h3 className='ml-6 mt-1 text-sm text-gray-400'>{formatTimestamp(post.timestamp)}</h3>
                                 </div>
                                 <br />
                                 <h1>{post.textPost}</h1>
@@ -335,9 +301,8 @@ const Middle = ({ userData }) => {
                                     )}
                                 </div>
                             )}
-                            <LikeButton />
-                            <br />
-                            <br />
+                            <FaRegHeart className='ml-6 mb-4'/>
+
                         </div>
                     ))}
                 </div>
