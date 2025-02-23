@@ -1,3 +1,4 @@
+import Navbar from '../components/navbar';
 import React, { useEffect, useState, useRef } from 'react';
 import { Paper, Avatar, ListItem, ListItemText, List, Button, TextField, Modal, Box } from '@mui/material';
 import profileicon from '../assets/profileicon.svg';
@@ -151,255 +152,259 @@ const ChatPage = () => {
         const messageDocSender = doc(userDocSender, "Message", `${auth.currentUser?.uid}`);
         const messageRefSender = collection(messageDocSender, `Message-${selecteduserId}`);
         const messageToDeleteSender = doc(messageRefSender, messageId);
-    
+
         const userDocReceiver = doc(database, "Users", `${selecteduserId}`);
         const messageDocReceiver = doc(userDocReceiver, "Message", `${selecteduserId}`);
         const messageRefReceiver = collection(messageDocReceiver, `Message-${auth.currentUser?.uid}`);
         const messageToDeleteReceiver = doc(messageRefReceiver, messageId);
-    
+
         try {
             await deleteDoc(messageToDeleteSender);
             await deleteDoc(messageToDeleteReceiver);
         } catch (err) {
             console.error("Error deleting message:", err);
         }
-    }; 
+    };
     return (
-        <div style={{ display: 'flex', height: '100vh' }}>
-            <div style={{ width: '25%', borderRight: '1px solid #ddd', padding: '10px' }}>
-                <h3>Friends</h3>
-                <List>
-                    {user.filter(user => user.status === 'connected').map((eachuser) => {
-                        return (
-                            <Paper key={eachuser.id} style={{ marginBottom: '10px' }}>
-                                <ListItem button onClick={() => setSelectedUser(eachuser)}>
-                                    <Avatar src={eachuser.profilePic} />
-                                    <div style={{ marginLeft: "10px" }}>
-                                        <ListItemText
-                                            primary={eachuser.username}
-                                            secondary={eachuser.role}
-                                        />
-                                    </div>
-                                </ListItem>
-                            </Paper>
-                        );
-                    })}
-                </List>
-            </div>
+        <>
+            <Navbar />
+            <div className='flex h-[90vh]'>
 
-            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', position: 'relative' }}>
-                {selectedUser && (
-                    <>
-                        <div style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            marginBottom: '20px',
-                            padding: '10px',
-                            borderBottom: '1px solid #ddd'
-                        }}>
-                            <Avatar src={selectedUser.profilePic} />
-                            <div style={{ marginLeft: '10px' }}>
-                                <div style={{ fontSize: '18px', fontWeight: 'bold' }}>
-                                    {selectedUser.username}
-                                </div>
-                                <div style={{ fontSize: '14px', color: '#888' }}>
-                                    {selectedUser.role}
-                                </div>
-                            </div>
-                        </div>
-
-                        <div style={{
-                            display: "flex",
-                            flexDirection: "column",
-                            flex: 1,
-                            overflowY: 'scroll',
-                            paddingBottom: '80px',
-                        }}>
-                            {messageData.map((userMessage, index) => {
-                                const isCurrentUser = userMessage.senderId === auth.currentUser?.uid;
-                                return (
-                                    <div key={index} style={{
-                                        display: 'flex',
-                                        justifyContent: isCurrentUser ? 'flex-end' : 'flex-start',
-                                        marginBottom: '15px',
-                                        paddingLeft: '10px',
-                                        paddingRight: '10px',
-                                    }}>
-                                        <div style={{
-                                            backgroundColor: isCurrentUser ? '#DCF8C6' : '#FFFFFF',
-                                            padding: '10px',
-                                            borderRadius: '15px',
-                                            maxWidth: '80%',
-                                            display: 'inline-block',
-                                            boxShadow: '0px 0px 6px rgba(0, 0, 0, 0.1)',
-                                            wordBreak: 'break-word',
-                                            marginLeft: isCurrentUser ? '10px' : '0',
-                                            marginRight: isCurrentUser ? '0' : '10px',
-                                        }}>
-                                            {userMessage.images && userMessage.images.map((img, index) => (
-                                                <img
-                                                    key={index}
-                                                    src={img}
-                                                    alt={`Image-${index}`}
-                                                    style={{
-                                                        width: '100px',
-                                                        height: '100px',
-                                                        marginTop: '5px',
-                                                        borderRadius: '10px',
-                                                        display: 'block',
-                                                        marginBottom: '5px'
-                                                    }}
-                                                />
-                                            ))}
-                                            {userMessage.message && <span style={{ fontSize: '14px' }}>{userMessage.message}</span>}
+                <div style={{ width: '25%', borderRight: '1px solid #ddd' }}>
+                    <h3 className='font-bold pl-1'>Friends</h3>
+                    <List>
+                        {user.filter(user => user.status === 'connected').map((eachuser) => {
+                            return (
+                                <Paper key={eachuser.id} style={{ marginBottom: '10px' }}>
+                                    <ListItem button onClick={() => setSelectedUser(eachuser)}>
+                                        <Avatar src={eachuser.profilePic} />
+                                        <div style={{ marginLeft: "10px" }}>
+                                            <ListItemText
+                                                primary={eachuser.username}
+                                                secondary={eachuser.role}
+                                            />
                                         </div>
-                                        {isCurrentUser && (
-                                            <button
-                                                onClick={() => {
-                                                    deleteMessage(userMessage.id, selectedUser.id)
-                                                    alert('The message is deleted only for you!');
-                                                    showMessage();
-                                                }}
-                                                style={{
-                                                    cursor: 'pointer',
-                                                    background: 'transparent',
-                                                    border: 'none',
-                                                    marginTop: '5px',
-                                                    marginLeft: '5px',
-                                                    fontSize: '16px',
-                                                    color: 'red'
-                                                }}
-                                            >
-                                                <img src={deleteIcon} alt="❌" />
-                                            </button>
-                                        )}
+                                    </ListItem>
+                                </Paper>
+                            );
+                        })}
+                    </List>
+                </div>
+
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', position: 'relative' }}>
+                    {selectedUser && (
+                        <>
+                            <div style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                marginBottom: '20px',
+                                padding: '10px',
+                                borderBottom: '1px solid #ddd'
+                            }}>
+                                <Avatar src={selectedUser.profilePic} />
+                                <div style={{ marginLeft: '10px' }}>
+                                    <div style={{ fontSize: '18px', fontWeight: 'bold' }}>
+                                        {selectedUser.username}
                                     </div>
-                                );
-                            })}
-                        </div>
-
-                        <div style={{
-                            position: 'absolute',
-                            bottom: '0',
-                            left: '0',
-                            width: '100%',
-                            padding: '10px',
-                            backgroundColor: '#fff',
-                            boxShadow: '0 -2px 10px rgba(0, 0, 0, 0.1)',
-                            display: 'flex',
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                        }}>
-                            <div>
-                                <input
-                                    type="file"
-                                    ref={fileInputRef}
-                                    style={{ display: 'none' }}
-                                    onChange={handleFileChange}
-                                    multiple
-                                />
-                                <img
-                                    src={addphoto}
-                                    alt="Img"
-                                    onClick={()=>{
-                                        handleImageClick
-                                        setOpenModal(true)
-                                    }}
-                                    style={{ cursor: 'pointer' }}
-                                />
+                                    <div style={{ fontSize: '14px', color: '#888' }}>
+                                        {selectedUser.role}
+                                    </div>
+                                </div>
                             </div>
-                            <TextField
-                                value={message}
-                                onChange={(e) => setMessage(e.target.value)}
-                                label="Start a conversation"
-                                style={{
-                                    width: '85%',
-                                    marginRight: '10px',
-                                    backgroundColor: '#f1f1f1',
-                                    borderRadius: '15px',
-                                }}
-                            />
-                            <Button
-                                onClick={sendMessage}
-                                style={{
-                                    backgroundColor: '#28a745',
-                                    color: '#fff',
-                                    padding: '12px 24px',
-                                    fontSize: '16px',
-                                    fontWeight: 'bold',
-                                    borderRadius: '8px',
-                                    border: 'none',
-                                    cursor: 'pointer',
-                                    textAlign: 'center',
-                                    transition: 'background-color 0.3s ease',
-                                }}
-                            >
-                                Send
-                            </Button>
-                        </div>
-                    </>
-                )}
-            </div>
 
-            <Modal
-                open={openModal}
-                onClose={() => setOpenModal(false)}
-            >
-                <Box sx={{
-                    position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
-                    backgroundColor: 'white', padding: '20px', borderRadius: '8px', boxShadow: 24,
-                    width: 400, textAlign: 'center'
-                }}>
-                    <h3>Choose Images (Max 3)</h3>
-                    <input
-                        type="file"
-                        ref={fileInputRef}
-                        style={{ display: 'none' }}
-                        onChange={handleFileChange}
-                        multiple
-                    />
-                    <Button onClick={handleImageClick}>Choose Files</Button>
-                    <div style={{ marginTop: '10px' }}>
-                        {previewImages.map((imageUrl, index) => (
-                            <div key={index} style={{ marginBottom: '10px' }}>
-                                <img src={imageUrl} alt={`Preview-${index}`} style={{ width: '100px', height: '100px', margin: '0 10px' }} />
-                                <Button onClick={() => handleDeletePreviewImage(imageUrl)} style={{ color: 'red' }}>
-                                    <img src={deleteIcon} alt="Delete" style={{ width: '20px' }} />
+                            <div style={{
+                                display: "flex",
+                                flexDirection: "column",
+                                flex: 1,
+                                overflowY: 'scroll',
+                                paddingBottom: '80px',
+                            }}>
+                                {messageData.map((userMessage, index) => {
+                                    const isCurrentUser = userMessage.senderId === auth.currentUser?.uid;
+                                    return (
+                                        <div key={index} style={{
+                                            display: 'flex',
+                                            justifyContent: isCurrentUser ? 'flex-end' : 'flex-start',
+                                            marginBottom: '15px',
+                                            paddingLeft: '10px',
+                                            paddingRight: '10px',
+                                        }}>
+                                            <div style={{
+                                                backgroundColor: isCurrentUser ? '#375ecc' : '#FFFFFF',
+                                                color: isCurrentUser ? '#FFFFFF' : '#000',
+                                                padding: '10px',
+                                                borderRadius: '15px',
+                                                maxWidth: '80%',
+                                                display: 'inline-block',
+                                                wordBreak: 'break-word',
+                                                marginLeft: isCurrentUser ? '10px' : '0',
+                                                marginRight: isCurrentUser ? '0' : '10px',
+                                            }}>
+                                                {userMessage.images && userMessage.images.map((img, index) => (
+                                                    <img
+                                                        key={index}
+                                                        src={img}
+                                                        alt={`Image-${index}`}
+                                                        style={{
+                                                            width: '100px',
+                                                            height: '100px',
+                                                            marginTop: '5px',
+                                                            borderRadius: '10px',
+                                                            display: 'block',
+                                                            marginBottom: '5px'
+                                                        }}
+                                                    />
+                                                ))}
+                                                {userMessage.message && <span style={{ fontSize: '14px' }}>{userMessage.message}</span>}
+                                            </div>
+                                            {isCurrentUser && (
+                                                <button
+                                                    onClick={() => {
+                                                        deleteMessage(userMessage.id, selectedUser.id)
+                                                        alert('The message is deleted only for you!');
+                                                        showMessage();
+                                                    }}
+                                                    style={{
+                                                        cursor: 'pointer',
+                                                        background: 'transparent',
+                                                        border: 'none',
+                                                        marginTop: '5px',
+                                                        marginLeft: '5px',
+                                                        fontSize: '16px',
+                                                        color: 'red'
+                                                    }}
+                                                >
+                                                    <img src={deleteIcon} className='w-5 h-5' alt="❌" />
+                                                </button>
+                                            )}
+                                        </div>
+                                    );
+                                })}
+                            </div>
+
+                            <div style={{
+                                position: 'absolute',
+                                bottom: '0',
+                                left: '0',
+                                width: '100%',
+                                padding: '10px',
+                                backgroundColor: '#fff',
+                                boxShadow: '0 -2px 10px rgba(0, 0, 0, 0.1)',
+                                display: 'flex',
+                                flexDirection: 'row',
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                            }}>
+                                <div>
+                                    <input
+                                        type="file"
+                                        ref={fileInputRef}
+                                        style={{ display: 'none' }}
+                                        onChange={handleFileChange}
+                                        multiple
+                                    />
+                                    <img
+                                        src={addphoto}
+                                        alt="Img"
+                                        onClick={() => {
+                                            handleImageClick
+                                            setOpenModal(true)
+                                        }}
+                                        style={{ cursor: 'pointer' }}
+                                    />
+                                </div>
+                                <TextField
+                                    value={message}
+                                    onChange={(e) => setMessage(e.target.value)}
+                                    label="Start a conversation"
+                                    style={{
+                                        width: '85%',
+                                        marginRight: '10px',
+                                        backgroundColor: '#f1f1f1',
+                                        borderRadius: '15px',
+                                    }}
+                                />
+                                <Button
+                                    onClick={sendMessage}
+                                    style={{
+                                        backgroundColor: '#28a745',
+                                        color: '#fff',
+                                        padding: '12px 24px',
+                                        fontSize: '16px',
+                                        fontWeight: 'bold',
+                                        borderRadius: '8px',
+                                        border: 'none',
+                                        cursor: 'pointer',
+                                        textAlign: 'center',
+                                        transition: 'background-color 0.3s ease',
+                                    }}
+                                >
+                                    Send
                                 </Button>
                             </div>
-                        ))}
-                    </div>
-                    <TextField
-                        value={message}
-                        onChange={(e) => setMessage(e.target.value)}
-                        label="Start a conversation"
-                        style={{
-                            width: '85%',
-                            marginRight: '10px',
-                            backgroundColor: '#f1f1f1',
-                            borderRadius: '15px',
-                        }}
-                    />
-                    <Button
-                        onClick={sendMessage}
-                        style={{
-                            backgroundColor: '#28a745',
-                            color: '#fff',
-                            padding: '12px 24px',
-                            fontSize: '16px',
-                            fontWeight: 'bold',
-                            borderRadius: '8px',
-                            border: 'none',
-                            cursor: 'pointer',
-                            marginTop: '20px',
-                        }}
-                    >
-                        Send
-                    </Button>
-                </Box>
-            </Modal>
-        </div>
+                        </>
+                    )}
+                </div>
+
+                <Modal
+                    open={openModal}
+                    onClose={() => setOpenModal(false)}
+                >
+                    <Box sx={{
+                        position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
+                        backgroundColor: 'white', padding: '20px', borderRadius: '8px', boxShadow: 24,
+                        width: 400, textAlign: 'center'
+                    }}>
+                        <h3>Choose Images (Max 3)</h3>
+                        <input
+                            type="file"
+                            ref={fileInputRef}
+                            style={{ display: 'none' }}
+                            onChange={handleFileChange}
+                            multiple
+                        />
+                        <Button onClick={handleImageClick}>Choose Files</Button>
+                        <div style={{ marginTop: '10px' }}>
+                            {previewImages.map((imageUrl, index) => (
+                                <div key={index} style={{ marginBottom: '10px' }} className=' bg-blue-50 p-2 w-fit rounded-xl'>
+                                    <img src={imageUrl} alt={`Preview-${index}`} style={{ width: '100px', height: '100px', margin: '0 10px' }} />
+                                    <Button onClick={() => handleDeletePreviewImage(imageUrl)} className='' style={{ color: 'red' }}>
+                                        <img src={deleteIcon} className='' alt="Delete" style={{ width: '20px' }} />
+                                    </Button>
+                                </div>
+                            ))}
+                        </div>
+                        <TextField
+                            value={message}
+                            onChange={(e) => setMessage(e.target.value)}
+                            label="Add a Descreption"
+                            className=''
+                            style={{
+                                width: '85%',
+                                marginRight: '10px',
+                            }}
+                        />
+                        <Button
+                            onClick={sendMessage}
+                            className='bg-gradient-to-r from-blue-900/80 via-blue-700/80 to-cyan-500/80'
+                            style={{
+                                
+                                color: '#fff',
+                                padding: '12px 24px',
+                                fontSize: '16px',
+                                fontWeight: 'bold',
+                                borderRadius: '8px',
+                                border: 'none',
+                                cursor: 'pointer',
+                                marginTop: '20px',
+                            }}
+                        >
+                            Send
+                        </Button>
+                    </Box>
+                </Modal>
+            </div>
+        </>
     );
 };
 
