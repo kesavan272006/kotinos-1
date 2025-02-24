@@ -73,7 +73,7 @@ const Messages = () => {
     }, [messageData]);
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+        <div className="flex flex-col h-[100vh]">
             <MessageNav username={location.state.username} role={location.state.role} />
             <div
                 style={{
@@ -82,7 +82,7 @@ const Messages = () => {
                     position: "relative",
                     flex: 1,
                     overflowY: 'scroll',
-                    paddingBottom: '80px',
+                    paddingBottom: '100',
                 }}
             >
                 {messageData.map((userMessage, index) => {

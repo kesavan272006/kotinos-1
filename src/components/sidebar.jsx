@@ -21,6 +21,7 @@ import { MdLogout } from "react-icons/md";
 import { IoIosPeople } from "react-icons/io";
 import { ImNewspaper } from "react-icons/im";
 import { IoGameController } from "react-icons/io5";
+import { MdKeyboardArrowLeft } from "react-icons/md";
 import { signOut } from 'firebase/auth';
 
 const Sidebar = () => {
@@ -91,7 +92,7 @@ const Sidebar = () => {
   return (
     <div className="relative z-10">
       <div className="cursor-pointer absolute z-10 top-2 left-2 m-2" onClick={toggleVisibility}>
-        {isVisible ? <IoClose className="relative left-48 md:left-64 text-2xl rounded-full bg-gray-200" /> : <FaBars className="text-2xl bg-white" />}
+        {isVisible ? <MdKeyboardArrowLeft className="relative left-56 md:left-64 text-2xl rounded-full inverter mt-2 scale-[130%] hover:scale-150 transition-all" /> : <FaBars className="text-2xl " />}
       </div>
 
       <div className={`absolute z-0 md:w-[20vw] md:h-[100%] w-[70vw] h-full bg-gradient-to-b from-[#1E3A8A] to-[#3B82F6]  transition-transform duration-300 ${isVisible ? 'translate-x-0' : '-translate-x-full'}`}>
