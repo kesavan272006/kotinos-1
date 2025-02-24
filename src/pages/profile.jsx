@@ -14,6 +14,7 @@ import { TextField } from '@mui/material';
 import Footer from '../components/footer';
 import { getDocs } from 'firebase/firestore';
 import Modal from 'react-modal';
+import { signOut } from 'firebase/auth';
 const Profile = () => {
     const { userDetails } = useUser();
     const [username, setUsername] = useState('');
@@ -223,37 +224,36 @@ const Profile = () => {
       const blurStyle = {
         border: '2px solid #4CAF50',
       };
-      
+        const logout = async () => {
+            try {
+                await signOut(auth);
+                navigate("/");
+            } catch (error) {
+                console.error("Error signing out:", error);
+            }
+        };
     const handleDelete = async () => {
         if (user) {
             try {
+                const docref = doc(database, "Users", user.uid);
+                const doc2ref = doc(docref, "profileDetails", "details");
+                await deleteDoc(doc2ref);
                 setProfile({
-                    fullName: "Not provided",
-                    dob: "Not provided",
-                    gender: "Not provided",
-                    state: "Not provided",
-                    primarySport: "Not provided",
-                    secondarySport: "Not provided",
-                    userPrimarySport: "Not provided",
-                    userSecondarySport: "Not provided",
-                    experience: "Not provided",
-                    profilePic: "Not provided",
-                    teamName: "Not provided",
-                    achievements: "Not provided",
+                    fullName: "",
+                    dob: "",
+                    gender: "",
+                    state: "",
+                    primarySport: "",
+                    secondarySport: "",
+                    userPrimarySport: "",
+                    userSecondarySport: "",
+                    experience: "",
+                    profilePic: "",
+                    teamName: "",
+                    achievements: "",
                 });
-                const documentRef = doc(database, "Users", user.uid);
-                const profileDetailsRef = doc(documentRef, "profileDetails", "details");
-    
-                const updatedProfile = { ...profile };
-                if (profile.profilePic !== "") {
-                    await setDoc(documentRef, { profilePic: profile.profilePic }, { merge: true });
-                    await setDoc(profileDetailsRef, { profilePic: profile.profilePic }, { merge: true });
-                }
-    
-                await setDoc(profileDetailsRef, updatedProfile, { merge: true });
-    
-                console.log('Profile saved successfully!');
                 setIsEditing(false);
+                logout();
             } catch (error) {
                 console.error('Error deleting profile:', error);
             }
