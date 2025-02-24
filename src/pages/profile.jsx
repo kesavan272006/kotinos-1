@@ -426,7 +426,7 @@ const Profile = () => {
                             <div className='pl-5'>
                                 <div className='flex flex-row'>
                                     <img
-                                        src={post.profilepic||profileicon}
+                                        src={profile.profilePic||profileicon}
                                         alt={profileicon}
                                         style={{
                                             height: '80px',
