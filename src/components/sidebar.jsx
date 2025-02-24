@@ -9,14 +9,18 @@ import { Link } from 'react-router-dom';
 import { FaBars, FaNewspaper } from 'react-icons/fa';
 import { IoClose } from 'react-icons/io5';
 import Loading from "../components/Loading";
-
+import logo from '../assets/logo.png';
 
 import { GoHomeFill } from "react-icons/go";
-import { TiMessages } from "react-icons/ti";
+import { IoChatbubbleEllipses } from "react-icons/io5";
+import { MdPersonSearch } from "react-icons/md";
+import { IoMailUnread } from "react-icons/io5";
 import { IoIosNotifications } from "react-icons/io";
 import { IoPersonSharp } from "react-icons/io5";
 import { MdLogout } from "react-icons/md";
 import { IoIosPeople } from "react-icons/io";
+import { ImNewspaper } from "react-icons/im";
+import { IoGameController } from "react-icons/io5";
 import { signOut } from 'firebase/auth';
 
 const Sidebar = () => {
@@ -27,15 +31,15 @@ const Sidebar = () => {
   const [isNewsVisible, setIsNewsVisible] = useState(false);
   const [news, setNews] = useState([]);
   const navigate = useNavigate();
-  const [profiles, setprofiles]=useState('');
-      const logout = async () => {
-          try {
-              await signOut(auth);
-              navigate("/");
-          } catch (error) {
-              console.error("Error signing out:", error);
-          }
-      };
+  const [profiles, setprofiles] = useState('');
+  const logout = async () => {
+    try {
+      await signOut(auth);
+      navigate("/");
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
+  };
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -86,47 +90,99 @@ const Sidebar = () => {
 
   return (
     <div className="relative z-10">
-      <div className="cursor-pointer absolute z-10 top-0 left-0 m-2" onClick={toggleVisibility}>
-        {isVisible ? <IoClose className="relative left-40 md:left-64 text-2xl rounded-full bg-gray-200" /> : <FaBars className="text-2xl bg-white" />}
+      <div className="cursor-pointer absolute z-10 top-2 left-2 m-2" onClick={toggleVisibility}>
+        {isVisible ? <IoClose className="relative left-48 md:left-64 text-2xl rounded-full bg-gray-200" /> : <FaBars className="text-2xl bg-white" />}
       </div>
 
-      <div className={`shadoww border border-r-slate-200 border-y-0 absolute z-0 md:w-[20vw] md:h-[99%] w-[50vw] h-screen bg-white transition-transform duration-300 ${isVisible ? 'translate-x-0' : '-translate-x-full'}`}>
-        <div className="flex flex-row justify-evenly absolute top-[90vh]">
-          <img src={profiles} alt="Profile" className="h-[30%] w-[30%] rounded-full bg-gray-500 mt-[20px]" style={{height:'70px', width:'70px', borderRadius:'50%'}} />
+      <div className={`absolute z-0 md:w-[20vw] md:h-[100%] w-[70vw] h-full bg-gradient-to-b from-[#1E3A8A] to-[#3B82F6]  transition-transform duration-300 ${isVisible ? 'translate-x-0' : '-translate-x-full'}`}>
+        <div className="flex items-center ">
+          {/* <div><img src={logo} className='w-16 rounded-full' alt="" /></div> */}
+          <div className="heading russo text-white pl-8 text-4xl pt-5">KOTINOS</div>
+        </div>
+        <div className="flex flex-row items-center justify-center gap-3 absolute top-[89vh] md:top-[87vh] p-2 bg-gray-300 w-full hover:bg-opacity-10 bg-opacity-5">
+          <div><img src={profiles} alt="Profile" className=" h-10 w-10 md:w-14 md:h-14 rounded-full bg-gray-500 mt-[20px]" /></div>
           <Link to='/profile'>
             <div className="flex flex-col justify-center">
-              <h1> {username}</h1>
-              <h3>Logged in as {role}</h3>
+              <h1 className='russo text-white md:text-lg'> {username}</h1>
+              <h3 className=' text-white md:text-sm'>Logged in as {role}</h3>
             </div>
           </Link>
-          <button onClick={logout} className='md:ml-10 ml-4 russo hover:scale-110 transition-all cursor-pointer'><MdLogout className='scale-[160%]'/></button>
+          <button onClick={logout} className='inverter md:ml-10 ml-4 russo hover:scale-110 transition-all cursor-pointer '><MdLogout className='scale-[160%]' /></button>
 
         </div>
         <br />
         <div className="px-4">
-          <Link to='/home' className=' md:ml-10 ml-4 russo hover:scale-110 transition-all cursor-pointer'>
-            <GoHomeFill className='scale-[160%]' />
+          <Link to='/home' className=' russo inverter'>
+            <div className="flex items-center hover:scale-105 hover:bg-black hover:bg-opacity-5 rounded-full p-1 my-3 transition-all cursor-pointer gap-5 md:gap-5 pl-4">
+              <div>
+                <GoHomeFill className='scale-[160%]' />
+              </div>
+              <div className='russo mt-1 text-xl'>Home</div>
+            </div>
           </Link>
-          <Link to='/chatpage' className=' md:ml-10 ml-4 russo hover:scale-110 transition-all cursor-pointer'>
-            <TiMessages className='scale-[160%]' />
+          <Link to='/chatpage' className=' russo inverter'>
+            <div className="flex items-center hover:scale-105 hover:bg-black hover:bg-opacity-5 rounded-full p-1 my-3 transition-all cursor-pointer gap-5 md:gap-5 pl-4">
+              <div>
+                <IoChatbubbleEllipses className='scale-[160%]' />
+              </div>
+              <div className='russo mt-1 text-xl'>Messages</div>
+            </div>
           </Link>
-          <Link to='/notification' className=' md:ml-10 ml-4 russo hover:scale-110 transition-all cursor-pointer'>
-            <IoIosNotifications className='scale-[160%]' />
+          <Link to='/notification' className=' russo inverter'>
+            <div className="flex items-center hover:scale-105 hover:bg-black hover:bg-opacity-5 rounded-full p-1 my-3 transition-all cursor-pointer gap-5 md:gap-5 pl-4">
+              <div>
+                <IoIosNotifications className='scale-[180%]' />
+              </div>
+              <div className='russo mt-1 text-xl'>Notifications</div>
+            </div>
           </Link>
-          <Link to='/profile' className=' md:ml-10 ml-4 russo hover:scale-110 transition-all cursor-pointer'>
-            <IoPersonSharp className='scale-[160%]' />
+          <Link to='/profile' className=' russo inverter'>
+            <div className="flex items-center hover:scale-105 hover:bg-black hover:bg-opacity-5 rounded-full p-1 my-3 transition-all cursor-pointer gap-5 md:gap-5 pl-4">
+              <div>
+                <IoPersonSharp className='scale-[160%]' />
+              </div>
+              <div className='russo mt-1 text-xl'>Profile</div>
+            </div>
           </Link>
-          <Link to='/network' className=' md:ml-10 ml-4 russo hover:scale-110 transition-all cursor-pointer'>
-            <IoIosPeople className='scale-[160%]' />
+          <Link to='/network' className=' russo inverter' state={{ username: username, role: role, email: email }}>
+            <div className="flex items-center hover:scale-105 hover:bg-black hover:bg-opacity-5 rounded-full p-1 my-3 transition-all cursor-pointer gap-5 md:gap-5 pl-4">
+              <div>
+                <IoIosPeople className='scale-[180%]' />
+              </div>
+              <div className='russo mt-1 text-xl'>Friends</div>
+            </div>
           </Link>
-
-          <Link to='/connection' state={{ username: username, role: role, email: email }}><h4>friends</h4></Link>
-          <Link to='/invitation' state={{ username: username, role: role, email: email }}>Invitations</Link>
-          <br />
-          <Link to='/game'>Play a Game</Link>
-          <div className="cursor-pointer" onClick={toggleNewsVisibility}>
-            <h4>News</h4>
-          </div>
+          <Link to='/connection' className=' russo inverter'>
+            <div className="flex items-center hover:scale-105 hover:bg-black hover:bg-opacity-5 rounded-full p-1 my-3 transition-all cursor-pointer gap-5 md:gap-5 pl-4">
+              <div>
+                <MdPersonSearch className='scale-[180%]' />
+              </div>
+              <div className='russo mt-1 text-xl'>Find People</div>
+            </div>
+          </Link>
+          
+          <Link to='/invitation' className=' russo inverter' state={{ username: username, role: role, email: email }}>
+            <div className="flex items-center hover:scale-105 hover:bg-black hover:bg-opacity-5 rounded-full p-1 my-3 transition-all cursor-pointer gap-5 md:gap-5 pl-4">
+              <div>
+                <IoMailUnread className='scale-[180%]' />
+              </div>
+              <div className='russo mt-1 text-xl'>Invites</div>
+            </div>
+          </Link>
+            <div className="flex items-center inverter hover:scale-105 hover:bg-black hover:bg-opacity-5 rounded-full p-1 my-1 transition-all cursor-pointer gap-5 md:gap-5 pl-4" onClick={toggleNewsVisibility}>
+              <div>
+                <ImNewspaper className='scale-[180%]' />
+              </div>
+              <div className='russo mt-1 text-xl'>News</div>
+            </div>
+            <Link to='/game' className=' russo inverter' state={{ username: username, role: role, email: email }}>
+            <div className="flex items-center hover:scale-105 hover:bg-black hover:bg-opacity-5 rounded-full p-1 my-3 transition-all cursor-pointer gap-5 md:gap-5 pl-4">
+              <div>
+                <IoGameController className='scale-[180%]' />
+              </div>
+              <div className='russo mt-1 text-xl'>Game</div>
+            </div>
+          </Link>
         </div>
       </div>
 

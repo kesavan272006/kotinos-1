@@ -43,7 +43,7 @@ function Home() {
                     <Middle userData={userData} />
                 </div>
             </div>
-            <Footer />
+            <Footer className="relative z-[100]" />
         </div>
     );
 }
