@@ -227,23 +227,32 @@ const Profile = () => {
     const handleDelete = async () => {
         if (user) {
             try {
-                const docref = doc(database, "Users", user.uid);
-                const doc2ref = doc(docref, "profileDetails", "details");
-                await deleteDoc(doc2ref);
                 setProfile({
-                    fullName: "",
-                    dob: "",
-                    gender: "",
-                    state: "",
-                    primarySport: "",
-                    secondarySport: "",
-                    userPrimarySport: "",
-                    userSecondarySport: "",
-                    experience: "",
-                    profilePic: "",
-                    teamName: "",
-                    achievements: "",
+                    fullName: "Not provided",
+                    dob: "Not provided",
+                    gender: "Not provided",
+                    state: "Not provided",
+                    primarySport: "Not provided",
+                    secondarySport: "Not provided",
+                    userPrimarySport: "Not provided",
+                    userSecondarySport: "Not provided",
+                    experience: "Not provided",
+                    profilePic: "Not provided",
+                    teamName: "Not provided",
+                    achievements: "Not provided",
                 });
+                const documentRef = doc(database, "Users", user.uid);
+                const profileDetailsRef = doc(documentRef, "profileDetails", "details");
+    
+                const updatedProfile = { ...profile };
+                if (profile.profilePic !== "") {
+                    await setDoc(documentRef, { profilePic: profile.profilePic }, { merge: true });
+                    await setDoc(profileDetailsRef, { profilePic: profile.profilePic }, { merge: true });
+                }
+    
+                await setDoc(profileDetailsRef, updatedProfile, { merge: true });
+    
+                console.log('Profile saved successfully!');
                 setIsEditing(false);
             } catch (error) {
                 console.error('Error deleting profile:', error);
