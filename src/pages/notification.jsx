@@ -4,6 +4,7 @@ function Notification(){
     return(
         <div>
             <Navbar />
+            <h1>Notifications page</h1>
         </div>
     )
 }
