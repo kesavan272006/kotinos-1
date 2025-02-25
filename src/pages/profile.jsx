@@ -14,6 +14,7 @@ import { TextField } from '@mui/material';
 import Footer from '../components/footer';
 import { getDocs } from 'firebase/firestore';
 import Modal from 'react-modal';
+import { signOut } from 'firebase/auth';
 const Profile = () => {
     const { userDetails } = useUser();
     const [username, setUsername] = useState('');
@@ -223,7 +224,14 @@ const Profile = () => {
       const blurStyle = {
         border: '2px solid #4CAF50',
       };
-      
+        const logout = async () => {
+            try {
+                await signOut(auth);
+                navigate("/");
+            } catch (error) {
+                console.error("Error signing out:", error);
+            }
+        };
     const handleDelete = async () => {
         if (user) {
             try {
@@ -245,6 +253,7 @@ const Profile = () => {
                     achievements: "",
                 });
                 setIsEditing(false);
+                logout();
             } catch (error) {
                 console.error('Error deleting profile:', error);
             }
@@ -417,7 +426,7 @@ const Profile = () => {
                             <div className='pl-5'>
                                 <div className='flex flex-row'>
                                     <img
-                                        src={post.profilepic||profileicon}
+                                        src={profile.profilePic||profileicon}
                                         alt={profileicon}
                                         style={{
                                             height: '80px',

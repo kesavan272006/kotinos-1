@@ -7,12 +7,16 @@ import { useLocation } from 'react-router-dom';
 import { useRequestContext } from '../context/RequestContext';
 import { setDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
+import { getDoc } from 'firebase/firestore';
 const Connection = () => {
   const [userData, setuserdata] = useState([]);
   const navigate = useNavigate();
   const [pendingRequests, setPendingRequests] = useState([]);
   const location = useLocation();
   const { setOppId } = useRequestContext();
+  const [username, setUsername] = useState('');
+  const [role, setRole] = useState('');
+  const [email, setEmail] = useState('');
   const getUsers = async () => {
     const userRef = collection(database, "Users");
     try {
@@ -26,37 +30,58 @@ const Connection = () => {
       console.log(err);
     }
   };
-
-  const getPendingRequests = async () => {
-    const requestOutRef = collection(database, "Users", auth.currentUser?.uid, "RequestOut");
-    try {
-      const data = await getDocs(requestOutRef);
-      const requests = data.docs.map(doc => doc.data());
-      setPendingRequests(requests);
-    } catch (err) {
-      console.error("Error fetching requests:", err);
-    }
-  };
+  useEffect(() => {
+      const fetchUserData = async () => {
+        const currentUser = auth.currentUser;
+  
+        if (currentUser) {
+          const userRef = doc(database, "Users", currentUser.uid);
+          const userSnap = await getDoc(userRef);
+          if (userSnap.exists()) {
+            const userData = userSnap.data();
+            setUsername(userData.username || 'No Username');
+            setRole(userData.role || 'No Role');
+            setEmail(userData.email || 'No email found');
+          } else {
+            navigate("/signin");
+          }
+        } else {
+          navigate("/signin");
+        }
+      };
+  
+      fetchUserData();
+    }, [navigate]);
+  // const getPendingRequests = async () => {
+  //   const requestOutRef = collection(database, "Users", auth.currentUser?.uid, "RequestOut");
+  //   try {
+  //     const data = await getDocs(requestOutRef);
+  //     const requests = data.docs.map(doc => doc.data());
+  //     setPendingRequests(requests);
+  //   } catch (err) {
+  //     console.error("Error fetching requests:", err);
+  //   }
+  // };
 
   const sendRequest = async (userId) => {
     const requestDoc = doc(database, "Users", `${userId}`);
     const connectRef = collection(requestDoc, "RequestIn");
 
     const requestDocRef = doc(connectRef, auth.currentUser?.uid);
-    const q = query(connectRef, where("username", "==", location.state.username), where("status", "==", "pending"));
+    const q = query(connectRef, where("username", "==", username), where("status", "==", "pending"));
     const querySnapshot = await getDocs(q);
 
     if (querySnapshot.empty) {
         try {
             await setDoc(requestDocRef, {
-                username: location.state.username,
-                role: location.state.role,
+                username: username,
+                role: role,
                 status: 'pending',
                 requestSenderId: auth.currentUser?.uid,
             });
             setOppId(auth.currentUser?.uid);
             alert(`Request sent successfully!`);
-            getPendingRequests();
+            // getPendingRequests();
         } catch (err) {
             console.error(err);
         }
@@ -74,7 +99,7 @@ const Connection = () => {
 
   useEffect(() => {
     getUsers();
-    getPendingRequests();
+    // getPendingRequests();
   }, []);
 
   return (
