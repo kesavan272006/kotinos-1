@@ -124,6 +124,7 @@ const FilePost = (props, ref) => {
           images: files,
           timestamp: new Date(),
           profilepic: `${profiledata}`,
+          id: auth.currentUser?.uid,
         });
         setIsOpen(false);
         setTitle('');

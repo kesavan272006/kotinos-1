@@ -121,9 +121,9 @@ const QRUpload = () => {
 
       const userRef = doc(database, "Users", auth.currentUser?.uid, "profileDetails", "details");
 
-      // Update only the qrCode field in the existing document
       await updateDoc(userRef, {
-        qrCode: file, // Update only the qrCode field
+        qrCode: file, 
+        decodedQr: qrData,
       });
 
       setMessage("✅ QR code uploaded successfully!");
@@ -137,22 +137,28 @@ const QRUpload = () => {
   };
 
   return (
-    <div className="qr-upload-container">
-      <h2>Upload QR Code</h2>
-      <div className="upload-section">
-        <input type="file" accept="image/*" onChange={handleFileChange} />
-        <button onClick={handleUpload} disabled={loading} className="upload-btn">
-          {loading ? "Uploading..." : "Upload"}
-        </button>
-        <p>{message}</p>
-      </div>
-      
-      {file && (
-        <div className="qr-preview">
-          <h3>Uploaded QR Code:</h3>
-          <img src={file} alt="QR Code Preview" className="qr-image" />
+    <div style={{display:'flex', flexDirection:'row', justifyContent:'space-evenly'}}>
+      <div className="qr-upload-container">
+        <h2>Upload QR Code</h2>
+        <div className="upload-section">
+          <input type="file" accept="image/*" onChange={handleFileChange} />
+          <button onClick={handleUpload} disabled={loading} className="upload-btn">
+            {loading ? "Uploading..." : "Upload"}
+          </button>
+          <p>{message}</p>
         </div>
-      )}
+        
+        {file && (
+          <div className="qr-preview">
+            <h3>Uploaded QR Code:</h3>
+            <img src={file} alt="QR Code Preview" className="qr-image" />
+          </div>
+        )}
+        </div>
+        <div className="qr-upload-container">
+          <h1 style={{fontSize:'30px'}}><strong>Your qr code</strong></h1>
+          <img src={existingQR} alt="No uploaded qr code" />
+        </div>
     </div>
   );
 };

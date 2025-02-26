@@ -7,10 +7,6 @@ import { FaRegHeart } from "react-icons/fa";
 
 
 import profileicon from '../assets/profileicon.svg';
-// import galleryicon from '../assets/gallery.svg';
-// import videoicon from '../assets/videoicon.svg';
-// import eventicon from '../assets/eventicon.svg';
-// import sachin from '../assets/sachin.jpg';
 import { useNavigate } from 'react-router-dom';
 import { auth, database } from '../config/firebase';
 import { collection, doc, getDoc, getDocs, setDoc } from 'firebase/firestore';
