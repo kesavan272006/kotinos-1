@@ -33,6 +33,7 @@ const Profile = () => {
     const user = auth.currentUser;
     const [posts, setPosts] = useState([]);
     const [profile, setProfile] = useState({
+        username: username,
         fullName: "",
         dob: "",
         gender: "",
@@ -243,6 +244,7 @@ const Profile = () => {
                 const doc2ref = doc(docref, "profileDetails", "details");
                 await deleteDoc(doc2ref);
                 setProfile({
+                    username: username,
                     fullName: "",
                     dob: "",
                     gender: "",

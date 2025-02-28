@@ -24,7 +24,8 @@ import { RequestProvider } from './context/RequestContext';
 import MessageNav from './components/navbar2';
 import ChatPage from './pages/chatpage';
 import Game from './components/game';
-import QRDisplay from './pages/addQr';
+import QRUpload from './pages/addQr';
+import QRDisplay from './pages/QRDisplay';
 function App() {
   return (
     <div>
@@ -54,7 +55,8 @@ function App() {
             <Route path="/messagenav" element={<MessageNav />} />
             <Route path="/chatpage" element={<ChatPage />} />
             <Route path="/game" element={<Game />} />
-            <Route path="/addQr" element={<QRDisplay />} />
+            <Route path="/addQr" element={<QRUpload />} />
+            <Route path="/displayQr/:userId" element={<QRDisplay />} />
           </Routes>
         </UserProvider>
       </RequestProvider>

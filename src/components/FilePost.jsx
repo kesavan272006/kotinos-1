@@ -6,7 +6,10 @@ import { auth, database } from '../config/firebase';
 import { getDoc } from 'firebase/firestore';
 import addicon from '../assets/addicon.svg';
 import deleteicon from '../assets/deleteicon.svg';
-import profileicon from '../assets/profileicon.svg'
+import profileicon from '../assets/profileicon.svg';
+import { alpha, styled } from '@mui/material/styles';
+import { pink } from '@mui/material/colors';
+import Switch from '@mui/material/Switch';
 const customStyles = {
   content: {
     top: '50%',
@@ -25,7 +28,6 @@ const customStyles = {
   },
 };
 
-
 Modal.setAppElement('#root');
 
 const FilePost = (props, ref) => {
@@ -39,6 +41,30 @@ const FilePost = (props, ref) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [imageToDelete, setImageToDelete] = useState(null);
   const [profiledata, setprofiledata]=useState('');
+  const [isfunding, setIsfunding]=useState(false);
+  const [role, setrole]=useState("");
+  const user = auth.currentUser;
+  useEffect(() => {
+    const fetchProfile2 = async () => {
+        
+        if (user) {
+            try {
+                const docRef = doc(database, "Users", auth.currentUser?.uid);
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                    const reference = docSnap.data();
+                    setrole(reference.role);
+                }
+            } catch (error) {
+                console.error('Error fetching profile:', error);
+                navigate('/signin');
+            }
+        }
+        return () => clearTimeout(timer);
+    };
+    
+    fetchProfile2();
+  }, [role]);
   const getUserData = async () => {
     try {
       const userDocument = doc(database, 'Users', `${auth.currentUser?.uid}`);
@@ -52,7 +78,10 @@ const FilePost = (props, ref) => {
       console.log(err);
     }
   };
-
+  const decidingathlete = role === 'athlete'; 
+  const decidingcoach = role === 'coach'; 
+  const decidinguser = role === 'user';
+  const decidingorganization = role === 'organization';
   useEffect(() => {
     getUserData();
   }, []);
@@ -67,6 +96,9 @@ const FilePost = (props, ref) => {
   };
 
   const closeModal = () => {
+    setDescription("");
+    setTitle("");
+    setIsfunding(false);
     setFiles([]);
     setIsOpen(false);
   };
@@ -89,7 +121,13 @@ const FilePost = (props, ref) => {
       prevIndex === 0 ? files.length - 1 : prevIndex - 1
     );
   };
-
+  const handleSwitchChange = (event) => {
+    if (event.target.checked) {
+      setIsfunding(true);
+    } else {
+      setIsfunding(false);  
+    }
+  };
   const handleFileChange = (e) => {
     const selectedFiles = e.target.files;
     if (selectedFiles.length) {
@@ -124,12 +162,14 @@ const FilePost = (props, ref) => {
           images: files,
           timestamp: new Date(),
           profilepic: `${profiledata}`,
-          id: auth.currentUser?.uid,
+          Id: auth.currentUser?.uid,
+          enableCrowdFunding: isfunding,
         });
         setIsOpen(false);
         setTitle('');
         setDescription('');
         setFiles([]);
+        setIsfunding(false);
       } catch (err) {
         console.log(err);
       }
@@ -237,6 +277,27 @@ const FilePost = (props, ref) => {
           </button>
         </div>
         <br />
+        {decidingathlete && (
+          <div>
+          <Switch
+            onChange={handleSwitchChange} 
+          />
+        </div>
+        )}
+        {decidingcoach && (
+          <div>
+          <Switch
+            onChange={handleSwitchChange} 
+          />
+        </div>
+        )}
+        {decidingorganization && (
+          <div>
+          <Switch
+            onChange={handleSwitchChange} 
+          />
+        </div>
+        )}
         <div className="modal-buttons" style={{ display: 'flex', justifyContent: 'space-between' }}>
           <Button variant="outlined" className="closeButton" onClick={closeModal}>
             Close

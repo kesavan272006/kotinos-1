@@ -66,6 +66,7 @@ const Signin = () => {
 
             if (!profileDocSnap.exists()) {
                 await setDoc(profileDocRef, {
+                    username: username,
                     fullName: username,
                     dob: "Not provided", 
                     gender:"Not provided",

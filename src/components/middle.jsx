@@ -1,11 +1,8 @@
 import React, { useRef, useState, useEffect } from 'react';
-
 import { MdOutlineInsertPhoto } from "react-icons/md";
 import { RiMovieLine } from "react-icons/ri";
 import { MdEvent } from "react-icons/md";
 import { FaRegHeart } from "react-icons/fa";
-
-
 import profileicon from '../assets/profileicon.svg';
 import { useNavigate } from 'react-router-dom';
 import { auth, database } from '../config/firebase';
@@ -13,6 +10,7 @@ import { collection, doc, getDoc, getDocs, setDoc } from 'firebase/firestore';
 import Posts from './posts';
 import FilePost from './FilePost';
 import Modal from 'react-modal';
+import { Button } from '@mui/material';
 const Middle = ({ userData }) => {
     const [username, setUsername] = useState('');
     const [role, setRole] = useState('');
@@ -32,7 +30,9 @@ const Middle = ({ userData }) => {
         setCurrentImageIndex(index);
         setIsModalOpen(true);
     };
-
+    const handlenavigation = (userId)=>{
+        navigate(`/displayQr/${userId}`);
+    }
     const closeModal = () => {
         setIsModalOpen(false);
     };
@@ -108,10 +108,6 @@ const Middle = ({ userData }) => {
             }
         }, 1000);
     };
-    
-    
-    
-
     useEffect(() => {
         getPost();
     }, [posts]);
@@ -264,6 +260,9 @@ const Middle = ({ userData }) => {
                                         
                                     </div>
                                     <h3 className='ml-6 mt-1 text-sm text-gray-400'>{formatTimestamp(post.timestamp)}</h3>
+                                    {post.enableCrowdFunding && (
+                                        <Button onClick={()=>handlenavigation(post.Id)}>Click to pay</Button>
+                                    )}
                                 </div>
                                 <br />
                                 <h1>{post.textPost}</h1>
