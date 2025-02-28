@@ -292,10 +292,11 @@ const FilePost = (props, ref) => {
         </div>
         )}
         {decidingorganization && (
-          <div>
+          <div style={{display:'flex',flexDirection:'row', justifyContent:'center'}}>
           <Switch
             onChange={handleSwitchChange} 
           />
+          <h1 style={{color:'black'}}><strong>Enable Crowdfunding for this post</strong></h1>
         </div>
         )}
         <div className="modal-buttons" style={{ display: 'flex', justifyContent: 'space-between' }}>

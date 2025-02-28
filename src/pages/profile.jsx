@@ -259,6 +259,7 @@ const Profile = () => {
                     achievements: "",
                     qrCode: "",
                 });
+                await setDoc(docref, { profilePic: "" }, { merge: true });
                 setIsEditing(false);
                 logout();
             } catch (error) {

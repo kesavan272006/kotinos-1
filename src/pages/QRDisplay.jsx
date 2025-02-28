@@ -48,15 +48,15 @@ const QRDisplay = () => {
   }, []);
 
   return (
-    <div>
-      <h2>Latest Verified QR Code</h2>
-      {message && <p>{message}</p>}
+    <div style={{marginTop:'40px'}} className="qr-display-container">
+      <h2 className="title">Latest Verified QR Code</h2>
+      {message && <p className="error-message">{message}</p>}
       {!qrCodes ? (
         <p>No verified QR code available.</p>
       ) : (
-        <div style={{ marginBottom: "20px" }}>
-          <img src={qrimg} alt="QR Code" width="150" />
-          <p>Uploaded by: {username || "Unknown User"}</p>
+        <div className="qr-content">
+          <img src={qrimg} alt="QR Code" width="150" className="qr-image" />
+          <p className="uploaded-by">Uploaded by: {username || "Unknown User"}</p>
           
           {qrCodes.startsWith("upi://pay") ? (
             <Link
@@ -70,25 +70,22 @@ const QRDisplay = () => {
                 borderRadius: "5px",
                 marginTop: "10px",
               }}
+              className="pay-now-button"
             >
               Pay Now
             </Link>
           ) : (
-            <button onClick={() => window.open(qrCodes.decodedQr, "_blank")}>Scan & Go</button>
+            <button className="scan-go-button" onClick={() => window.open(qrCodes.decodedQr, "_blank")}>Scan & Go</button>
           )}
           
           {qrCodes.startsWith("upi://pay") && (
-            <div style={{ marginTop: "10px" }}>
-              <p>⚠ If the payment app doesn't open, copy & paste the link below manually:</p>
+            <div className="qr-copy-section">
+              <p className="copy-text">⚠ If the payment app doesn't open, copy & paste the link below manually:</p>
               <input
                 type="text"
                 value={qrCodes}
                 readOnly
-                style={{
-                  width: "100%",
-                  padding: "5px",
-                  fontSize: "14px",
-                }}
+                className="qr-link-input"
               />
               <button
                 onClick={() => 
@@ -97,15 +94,7 @@ const QRDisplay = () => {
                         alert("Qr code url copied!")
                     }
                 }
-                style={{
-                  marginTop: "5px",
-                  padding: "5px 10px",
-                  cursor: "pointer",
-                  backgroundColor: "#007bff",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "3px",
-                }}
+                className="copy-button"
               >
                 Copy UPI Link
               </button>

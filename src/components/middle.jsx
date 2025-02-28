@@ -191,7 +191,7 @@ const Middle = ({ userData }) => {
                     {posts.map((post) => (
                         <div key={post.id} className='bg-white rounded-xl border  mb-5'>
                             <div className='pl-5 pt-3'>
-                                <div className='flex flex-row'>
+                                <div style={{position:'relative'}} className='flex flex-row'>
                                     <img src={post.profilepic||profileicon} alt={profileicon} className='mr-5 h-14 w-14 rounded-full bg-gray-300' onClick={() => openModals(post.profilepic||profileicon)}/>
                                     {isModalOpened && (
                                             <div
@@ -261,7 +261,9 @@ const Middle = ({ userData }) => {
                                     </div>
                                     <h3 className='ml-6 mt-1 text-sm text-gray-400'>{formatTimestamp(post.timestamp)}</h3>
                                     {post.enableCrowdFunding && (
-                                        <Button onClick={()=>handlenavigation(post.Id)}>Click to pay</Button>
+                                        <div style={{backgroundColor:'blue', color:'white', position:'absolute', right:10,}}>
+                                            <Button onClick={()=>handlenavigation(post.Id)}> <h1 style={{color:'white'}}>Click to pay</h1> </Button>
+                                        </div>
                                     )}
                                 </div>
                                 <br />
