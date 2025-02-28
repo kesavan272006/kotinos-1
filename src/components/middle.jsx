@@ -166,9 +166,9 @@ const Middle = ({ userData }) => {
         <>
             <h1 className='russo text-center mt-2 text-4xl w-full '>POSTS</h1>
             <div className='w-[92%] ml-3 md:ml-5 md:mt-1 md:w-[50vw] h-[100vh] overflow-y-auto scrollbar-hide'>
-            <div className="relative p-[2px]  bg-gradient-to-r from-blue-900 via-blue-700 to-cyan-500">
+            <div className="relative p-[2px]  rounded-xl bg-gradient-to-r from-blue-900 via-blue-700 to-cyan-500">
                 
-                <div className='bg-white  p-4'>
+                <div className='bg-white  p-4 rounded-xl'>
                     <div className='flex justify-evenly pt-4'>
                         
                         <img src={profilepic||profileicon} onClick={() => openModals(profilepic||profileicon)} alt='profilepic' className='h-14 w-14 md:mt-4 rounded-full ml-1 bg-gray-300'/>
@@ -199,7 +199,7 @@ const Middle = ({ userData }) => {
                     {posts.map((post) => (
                         <div key={post.id} className='bg-white rounded-xl border  mb-5'>
                             <div className='pl-5 pt-3'>
-                                <div className='flex flex-row'>
+                                <div className='flex flex-row pb-6 pt-1'>
                                     <img src={post.profilepic||profileicon} alt={profileicon} className='mr-5 h-14 w-14 rounded-full bg-gray-300' onClick={() => openModals(post.profilepic||profileicon)}/>
                                     {isModalOpened && (
                                             <div
@@ -269,19 +269,18 @@ const Middle = ({ userData }) => {
                                     </div>
                                     <h3 className='ml-6 mt-1 text-sm text-gray-400'>{formatTimestamp(post.timestamp)}</h3>
                                 </div>
-                                <br />
-                                <h1>{post.textPost}</h1>
+                                
+                                <h1 className='pl-4'>{post.textPost}</h1>
                             </div>
                             <div>
-                                <strong className='text-2xl text-center'>
+                                <h1 className='text-2xl pl-6 '>
                                     {post.title}
-                                </strong>
-                                <h2>{post.description}</h2>
+                                </h1>
+                                <h2 className='pt-2 pl-7 pb-2'>{post.description}</h2>
                             </div>
-                            <br />
-                            <br />
+                            
                             {post.images && post.images.length > 0 && (
-                                <div className='flex flex-wrap gap-2 pl-2'>
+                                <div className='flex flex-wrap gap-2 ml-5 mb-5 hover:bg-gray-100 w-fit p-2 rounded-lg'>
                                     {post.images.slice(0, 3).map((image, index) => (
                                         <img
                                             key={index}
@@ -312,34 +311,26 @@ const Middle = ({ userData }) => {
                 isOpen={isModalOpen}
                 onRequestClose={closeModal}
                 contentLabel="Image Modal"
-                style={{
-                    content: {
-                        top: '50%',
-                        left: '50%',
-                        right: 'auto',
-                        bottom: 'auto',
-                        transform: 'translate(-50%, -50%)',
-                        backgroundColor: 'white',
-                        padding: '20px',
-                        borderRadius: '10px',
-                        maxWidth: '80%',
-                    },
-                }}
+                overlayClassName="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center"
+                className="w-[90%] h-[39vh] md:w-[50%] md:h-[75%] bg-white border rounded-lg p-4  "
+                
             >
                 <div className='flex justify-center'>
                     <img
                         src={imagesToDisplay[currentImageIndex]}
                         alt="Full view"
-                        className='w-full max-h-[500px] object-contain'
+                        className='w-full h-[200px] md:h-[400px] object-contain '
                     />
                 </div>
                 <div className='flex justify-between'>
-                    <button onClick={prevImage}>{"<"}</button>
-                    <button onClick={nextImage}>{">"}</button>
+                    <button className='russo ml-5 my-4 hover:scale-125 transition-all' onClick={prevImage}>{"<"}</button>
+                    <button className='russo mr-5 my-4 hover:scale-125 transition-all' onClick={nextImage}>{">"}</button>
                 </div>
-                <button onClick={closeModal} className='mt-2'>
+                <div className='flex justify-center mb-2'>  
+                <button onClick={closeModal} className='mt-7 font-bold text-white bg-black rounded-xl px-4 py-1 text-center hover:scale-105 transition-all'>
                     Close
                 </button>
+                </div>
             </Modal>
         </>
     );

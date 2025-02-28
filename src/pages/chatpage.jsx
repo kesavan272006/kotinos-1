@@ -7,6 +7,7 @@ import { database, auth } from '../config/firebase';
 import Loading from '../components/Loading';
 import addphoto from '../assets/addphoto.svg';
 import deleteIcon from '../assets/deleteicon.svg'
+import { RiDeleteBin6Line } from "react-icons/ri";
 
 const ChatPage = () => {
     const [user, setUser] = useState([]);
@@ -271,10 +272,9 @@ const ChatPage = () => {
                                                         marginTop: '5px',
                                                         marginLeft: '5px',
                                                         fontSize: '16px',
-                                                        color: 'red'
                                                     }}
                                                 >
-                                                    <img src={deleteIcon} className='w-5 h-5' alt="❌" />
+                                                    <RiDeleteBin6Line className='w-5 h-5 hover:bg-blue-100  rounded-full ' alt="❌" />
                                                 </button>
                                             )}
                                         </div>
@@ -317,17 +317,12 @@ const ChatPage = () => {
                                     value={message}
                                     onChange={(e) => setMessage(e.target.value)}
                                     label="Start a conversation"
-                                    style={{
-                                        width: '85%',
-                                        marginRight: '10px',
-                                        backgroundColor: '#f1f1f1',
-                                        borderRadius: '15px',
-                                    }}
+                                    className='w-[85%] '
                                 />
                                 <Button
                                     onClick={sendMessage}
+                                    className='bg-gradient-to-r from-blue-900/80 via-blue-700/80 to-cyan-500/80'
                                     style={{
-                                        backgroundColor: '#28a745',
                                         color: '#fff',
                                         padding: '12px 24px',
                                         fontSize: '16px',
