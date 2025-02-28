@@ -7,7 +7,8 @@ import { database, auth } from '../config/firebase';
 import Loading from '../components/Loading';
 import addphoto from '../assets/addphoto.svg';
 import deleteIcon from '../assets/deleteicon.svg'
-
+import { useNavigate } from 'react-router-dom';
+import currencyicon from '../assets/currencyicon.svg'
 const ChatPage = () => {
     const [user, setUser] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -17,13 +18,15 @@ const ChatPage = () => {
     const [images, setImages] = useState([]);
     const [previewImages, setPreviewImages] = useState([]);
     const [openModal, setOpenModal] = useState(false);
-
+    const navigate = useNavigate();
     const fileInputRef = useRef(null);
 
     if (!auth.currentUser) {
         return <Loading />;
     }
-
+    const handlenavigation = (userId)=>{
+        navigate(`/displayQr/${userId}`);
+    }
     const handleImageClick = () => {
         fileInputRef.current.click();
     };
@@ -324,6 +327,7 @@ const ChatPage = () => {
                                         borderRadius: '15px',
                                     }}
                                 />
+                                <Button onClick={()=>handlenavigation(selectedUser.id)}> <img src={currencyicon} alt="" /> </Button>
                                 <Button
                                     onClick={sendMessage}
                                     style={{
