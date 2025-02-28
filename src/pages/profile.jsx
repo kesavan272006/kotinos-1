@@ -10,12 +10,15 @@ import { getAuth } from "firebase/auth";
 import profileicon from '../assets/profileicon.svg'
 import { FaRegHeart } from "react-icons/fa";
 import Loading from '../components/Loading';
-import { TextField } from '@mui/material';
+import { Button, TextField } from '@mui/material';
 import Footer from '../components/footer';
 import { getDocs } from 'firebase/firestore';
 import Modal from 'react-modal';
 import { signOut } from 'firebase/auth';
 const Profile = () => {
+    const handleNavigation = ()=>{
+        navigate('/addQR');
+    }
     const { userDetails } = useUser();
     const [username, setUsername] = useState('');
     const [role, setRole] = useState('');
@@ -30,6 +33,7 @@ const Profile = () => {
     const user = auth.currentUser;
     const [posts, setPosts] = useState([]);
     const [profile, setProfile] = useState({
+        username: username,
         fullName: "",
         dob: "",
         gender: "",
@@ -38,6 +42,7 @@ const Profile = () => {
         secondarySport: "",
         experience: "",
         profilePic: "",
+        qrCode: "",
     });
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -239,6 +244,7 @@ const Profile = () => {
                 const doc2ref = doc(docref, "profileDetails", "details");
                 await deleteDoc(doc2ref);
                 setProfile({
+                    username: username,
                     fullName: "",
                     dob: "",
                     gender: "",
@@ -251,7 +257,9 @@ const Profile = () => {
                     profilePic: "",
                     teamName: "",
                     achievements: "",
+                    qrCode: "",
                 });
+                await setDoc(docref, { profilePic: "" }, { merge: true });
                 setIsEditing(false);
                 logout();
             } catch (error) {
@@ -302,6 +310,8 @@ const Profile = () => {
                             <p><strong>Years of Experience:</strong> {profile.experience || "None"}</p>
                             <p><strong>Teams You have played for: </strong> <br /> {profile.teamName || "None"}</p>
                             <p><strong>Your achievements as a player: </strong> <br /> {profile.achievements || "None"}</p>
+                            <h1><strong>upload your QR code to receive financial support for your athletic journey</strong></h1>
+                            <Button onClick={handleNavigation}>upload QR code</Button>
                         </div>
                     </div>
                 )}
@@ -314,6 +324,8 @@ const Profile = () => {
                             <p><strong>Years of Experience:</strong> {profile.experience || "None"}</p>
                             <p><strong>Teams You have coached for: </strong> {profile.experience || "None"}</p>
                             <p><strong>Your achievements as a coach: </strong> <br /> {profile.achievements || "None"}</p>
+                            <p><strong>Kindly upload your QR code to facilitate donations for training your students.</strong></p>
+                            <Button onClick={handleNavigation}>upload QR code</Button>
                         </div>
                     </div>
                 )}
@@ -435,7 +447,7 @@ const Profile = () => {
                                             backgroundColor: 'gray',
                                             marginRight: '20px',
                                         }}
-                                        onClick={() => openModals(post.profilepic||profileicon)}
+                                        onClick={() => openModals(profile.profilePic||profileicon)}
                                     />
                                     {isModalOpened && (
                                             <div

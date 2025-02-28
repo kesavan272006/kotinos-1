@@ -10,7 +10,7 @@ import { FaBars, FaNewspaper } from 'react-icons/fa';
 import { IoClose } from 'react-icons/io5';
 import Loading from "../components/Loading";
 import logo from '../assets/logo.png';
-
+import profileicon from '../assets/profileicon.svg'
 import { GoHomeFill } from "react-icons/go";
 import { IoChatbubbleEllipses } from "react-icons/io5";
 import { MdPersonSearch } from "react-icons/md";
@@ -101,7 +101,7 @@ const Sidebar = () => {
           <div className="heading russo text-white pl-8 text-4xl pt-5">KOTINOS</div>
         </div>
         <div className="flex flex-row items-center justify-center gap-3 absolute top-[89vh] md:top-[87vh] p-2 bg-gray-300 w-full hover:bg-opacity-10 bg-opacity-5">
-          <div><img src={profiles} alt="Profile" className=" h-10 w-10 md:w-14 md:h-14 rounded-full bg-gray-500 mt-[20px]" /></div>
+          <div><img src={profiles || profileicon} className=" h-10 w-10 md:w-14 md:h-14 rounded-full bg-gray-500 mt-[20px]" /></div>
           <Link to='/profile'>
             <div className="flex flex-col justify-center">
               <h1 className='russo text-white md:text-lg'> {username}</h1>

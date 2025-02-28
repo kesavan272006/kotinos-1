@@ -1,22 +1,16 @@
 import React, { useRef, useState, useEffect } from 'react';
-
 import { MdOutlineInsertPhoto } from "react-icons/md";
 import { RiMovieLine } from "react-icons/ri";
 import { MdEvent } from "react-icons/md";
 import { FaRegHeart } from "react-icons/fa";
-
-
 import profileicon from '../assets/profileicon.svg';
-// import galleryicon from '../assets/gallery.svg';
-// import videoicon from '../assets/videoicon.svg';
-// import eventicon from '../assets/eventicon.svg';
-// import sachin from '../assets/sachin.jpg';
 import { useNavigate } from 'react-router-dom';
 import { auth, database } from '../config/firebase';
 import { collection, doc, getDoc, getDocs, setDoc } from 'firebase/firestore';
 import Posts from './posts';
 import FilePost from './FilePost';
 import Modal from 'react-modal';
+import { Button } from '@mui/material';
 const Middle = ({ userData }) => {
     const [username, setUsername] = useState('');
     const [role, setRole] = useState('');
@@ -36,7 +30,9 @@ const Middle = ({ userData }) => {
         setCurrentImageIndex(index);
         setIsModalOpen(true);
     };
-
+    const handlenavigation = (userId)=>{
+        navigate(`/displayQr/${userId}`);
+    }
     const closeModal = () => {
         setIsModalOpen(false);
     };
@@ -112,10 +108,6 @@ const Middle = ({ userData }) => {
             }
         }, 1000);
     };
-    
-    
-    
-
     useEffect(() => {
         getPost();
     }, [posts]);
@@ -268,6 +260,9 @@ const Middle = ({ userData }) => {
                                         
                                     </div>
                                     <h3 className='ml-6 mt-1 text-sm text-gray-400'>{formatTimestamp(post.timestamp)}</h3>
+                                    {post.enableCrowdFunding && (
+                                            <Button style={{position:'absolute', right:20}} onClick={()=>handlenavigation(post.Id)} variant="contained" className="postButton bg-gradient-to-r from-blue-900 via-blue-700 to-cyan-500 "><h1>Click to pay</h1></Button>
+                                    )}
                                 </div>
                                 
                                 <h1 className='pl-4'>{post.textPost}</h1>

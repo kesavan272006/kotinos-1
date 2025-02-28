@@ -7,7 +7,6 @@ import { database, auth } from '../config/firebase';
 import Loading from '../components/Loading';
 import addphoto from '../assets/addphoto.svg';
 import deleteIcon from '../assets/deleteicon.svg'
-import { RiDeleteBin6Line } from "react-icons/ri";
 
 const ChatPage = () => {
     const [user, setUser] = useState([]);
@@ -18,13 +17,15 @@ const ChatPage = () => {
     const [images, setImages] = useState([]);
     const [previewImages, setPreviewImages] = useState([]);
     const [openModal, setOpenModal] = useState(false);
-
+    const navigate = useNavigate();
     const fileInputRef = useRef(null);
 
     if (!auth.currentUser) {
         return <Loading />;
     }
-
+    const handlenavigation = (userId)=>{
+        navigate(`/displayQr/${userId}`);
+    }
     const handleImageClick = () => {
         fileInputRef.current.click();
     };
@@ -172,7 +173,7 @@ const ChatPage = () => {
             <div className='flex h-[90vh]'>
 
                 <div style={{ width: '25%', borderRight: '1px solid #ddd' }}>
-                    <h3 className='font-bold pl-1'>Friends</h3>
+                    <h3 className='font-bold pl-1'>Chats</h3>
                     <List>
                         {user.filter(user => user.status === 'connected').map((eachuser) => {
                             return (
@@ -193,12 +194,41 @@ const ChatPage = () => {
                 </div>
 
                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column', position: 'relative' }}>
+                    {!selectedUser && (
+                        <div style={{
+                            display: 'flex',
+                            justifyContent: 'center', 
+                            alignItems: 'center',      
+                            height: '100vh'             
+                        }}>
+                            <div style={{
+                                textAlign: 'center',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                justifyContent: 'center',
+                            }}>
+                                <img src={logo} style={{height:'200px', width:'200px', borderRadius:'50%', alignSelf:'center'}} />
+                                <div style={{
+                                    background: 'linear-gradient(to right, #1e3a8a, #1d4ed8, #22d3ee)', 
+                                    WebkitBackgroundClip: 'text',  
+                                    color: 'transparent',  
+                                    fontSize: '4rem', 
+                                    fontWeight: 'bold', 
+                                }}>
+                                    Kotinos
+                                </div>
+                                <h1 style={{fontSize:'2rem', color:'black', fontWeight:'bold'}}>Your Dream, our Platform</h1>
+                                <h1>Select a chat to start your conversation</h1>
+                            </div>
+                        </div>
+                        
+                        
+                    )}
                     {selectedUser && (
                         <>
                             <div style={{
                                 display: 'flex',
                                 alignItems: 'center',
-                                marginBottom: '20px',
                                 padding: '10px',
                                 borderBottom: '1px solid #ddd'
                             }}>
@@ -219,7 +249,15 @@ const ChatPage = () => {
                                 flex: 1,
                                 overflowY: 'scroll',
                                 paddingBottom: '80px',
-                            }}>
+                                backgroundImage: `url(${chatsystembg})`,
+                                backgroundSize: 'cover',
+                                backgroundPosition: 'center',
+                                backgroundRepeat: 'no-repeat',
+                                backgroundAttachment: 'fixed',
+                                height:'100%',
+                                width:'100%'
+                            }}
+                            >
                                 {messageData.map((userMessage, index) => {
                                     const isCurrentUser = userMessage.senderId === auth.currentUser?.uid;
                                     return (
@@ -230,6 +268,9 @@ const ChatPage = () => {
                                             paddingLeft: '10px',
                                             paddingRight: '10px',
                                         }}>
+                                            <div style={{ fontSize: '10px', color: 'white', marginTop: '5px' }}>
+                                                {new Date(userMessage.timestamp.seconds * 1000).toLocaleString()}
+                                            </div>
                                             <div style={{
                                                 backgroundColor: isCurrentUser ? '#375ecc' : '#FFFFFF',
                                                 color: isCurrentUser ? '#FFFFFF' : '#000',
@@ -319,10 +360,11 @@ const ChatPage = () => {
                                     label="Start a conversation"
                                     className='w-[85%] '
                                 />
+                                <Button onClick={()=>handlenavigation(selectedUser.id)}> <img src={currencyicon} alt="" /> </Button>
                                 <Button
                                     onClick={sendMessage}
-                                    className='bg-gradient-to-r from-blue-900/80 via-blue-700/80 to-cyan-500/80'
                                     style={{
+                                        backgroundColor: '#28a745',
                                         color: '#fff',
                                         padding: '12px 24px',
                                         fontSize: '16px',
