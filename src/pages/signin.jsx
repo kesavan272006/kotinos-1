@@ -66,7 +66,6 @@ const Signin = () => {
 
             if (!profileDocSnap.exists()) {
                 await setDoc(profileDocRef, {
-                    fullName: username,
                     dob: "Not provided", 
                     gender:"Not provided",
                     state:"Not provided",
@@ -74,6 +73,7 @@ const Signin = () => {
                     primarySport: "Not provided",
                     secondarySport: "Not provided",
                     experience: "Not provided",
+                    qrCode: "",
                 });
                 console.log("Profile details created with default values.");
             }

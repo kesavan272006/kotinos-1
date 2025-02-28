@@ -108,6 +108,7 @@ const Posts = (props, ref) => {
           role: userData.role,
           timestamp: new Date(),
           profilepic: profilepic,
+          id: auth.currentUser?.uid,
         });
         getAllPosts(userData.connections);
       } else {

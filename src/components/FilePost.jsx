@@ -6,7 +6,10 @@ import { auth, database } from '../config/firebase';
 import { getDoc } from 'firebase/firestore';
 import addicon from '../assets/addicon.svg';
 import deleteicon from '../assets/deleteicon.svg';
-import profileicon from '../assets/profileicon.svg'
+import profileicon from '../assets/profileicon.svg';
+import { alpha, styled } from '@mui/material/styles';
+import { pink } from '@mui/material/colors';
+import Switch from '@mui/material/Switch';
 const customStyles = {
   content: {
     top: '50%',
@@ -25,7 +28,6 @@ const customStyles = {
   },
 };
 
-
 Modal.setAppElement('#root');
 
 const FilePost = (props, ref) => {
@@ -39,6 +41,30 @@ const FilePost = (props, ref) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [imageToDelete, setImageToDelete] = useState(null);
   const [profiledata, setprofiledata]=useState('');
+  const [isfunding, setIsfunding]=useState(false);
+  const [role, setrole]=useState("");
+  const user = auth.currentUser;
+  useEffect(() => {
+    const fetchProfile2 = async () => {
+        
+        if (user) {
+            try {
+                const docRef = doc(database, "Users", auth.currentUser?.uid);
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                    const reference = docSnap.data();
+                    setrole(reference.role);
+                }
+            } catch (error) {
+                console.error('Error fetching profile:', error);
+                navigate('/signin');
+            }
+        }
+        return () => clearTimeout(timer);
+    };
+    
+    fetchProfile2();
+  }, [role]);
   const getUserData = async () => {
     try {
       const userDocument = doc(database, 'Users', `${auth.currentUser?.uid}`);
@@ -52,7 +78,10 @@ const FilePost = (props, ref) => {
       console.log(err);
     }
   };
-
+  const decidingathlete = role === 'athlete'; 
+  const decidingcoach = role === 'coach'; 
+  const decidinguser = role === 'user';
+  const decidingorganization = role === 'organization';
   useEffect(() => {
     getUserData();
   }, []);
@@ -67,6 +96,9 @@ const FilePost = (props, ref) => {
   };
 
   const closeModal = () => {
+    setDescription("");
+    setTitle("");
+    setIsfunding(false);
     setFiles([]);
     setIsOpen(false);
   };
@@ -89,7 +121,13 @@ const FilePost = (props, ref) => {
       prevIndex === 0 ? files.length - 1 : prevIndex - 1
     );
   };
-
+  const handleSwitchChange = (event) => {
+    if (event.target.checked) {
+      setIsfunding(true);
+    } else {
+      setIsfunding(false);  
+    }
+  };
   const handleFileChange = (e) => {
     const selectedFiles = e.target.files;
     if (selectedFiles.length) {
@@ -124,11 +162,14 @@ const FilePost = (props, ref) => {
           images: files,
           timestamp: new Date(),
           profilepic: `${profiledata}`,
+          Id: auth.currentUser?.uid,
+          enableCrowdFunding: isfunding,
         });
         setIsOpen(false);
         setTitle('');
         setDescription('');
         setFiles([]);
+        setIsfunding(false);
       } catch (err) {
         console.log(err);
       }
@@ -222,7 +263,7 @@ const FilePost = (props, ref) => {
           )}
         </div>
         <br />
-        <div>
+        <div style={{display:'flex', flexDirection:'row', justifyContent:'center'}}>
           <input onChange={handleFileChange} type="file" multiple ref={fileRef} style={{ display: 'none' }} />
           <button
             onClick={() => fileRef.current.click()}
@@ -234,13 +275,38 @@ const FilePost = (props, ref) => {
           >
             <img src={addicon} alt="Add files" style={{ width: '30px', height: '30px' }} />
           </button>
+          <h1><strong>Add Images</strong></h1>
         </div>
         <br />
+        {decidingathlete && (
+          <div style={{display:'flex',flexDirection:'row', justifyContent:'center'}}>
+          <Switch
+            onChange={handleSwitchChange} 
+          />
+          <h1 style={{color:'black'}}><strong>Enable Crowdfunding for this post</strong></h1>
+        </div>
+        )}
+        {decidingcoach && (
+          <div style={{display:'flex',flexDirection:'row', justifyContent:'center'}}>
+          <Switch
+            onChange={handleSwitchChange} 
+          />
+          <h1 style={{color:'black'}}><strong>Enable Crowdfunding for this post</strong></h1>
+        </div>
+        )}
+        {decidingorganization && (
+          <div style={{display:'flex',flexDirection:'row', justifyContent:'center'}}>
+          <Switch
+            onChange={handleSwitchChange} 
+          />
+          <h1 style={{color:'black'}}><strong>Enable Crowdfunding for this post</strong></h1>
+        </div>
+        )}
         <div className="modal-buttons" style={{ display: 'flex', justifyContent: 'space-between' }}>
           <Button variant="outlined" className="closeButton" onClick={closeModal}>
             Close
           </Button>
-          <Button variant="contained" className="postButton" onClick={addPost}>
+          <Button variant="contained" className="postButton bg-gradient-to-r from-blue-900 via-blue-700 to-cyan-500 " onClick={addPost}>
             Post
           </Button>
         </div>
@@ -275,7 +341,7 @@ const FilePost = (props, ref) => {
           <button onClick={prevImage} style={{ padding: '10px' }}>
             {"<"}
           </button>
-          <button
+          <Button
             onClick={() => {
               setImageToDelete(files[currentImageIndex]);
               deleteFile(currentImageIndex);
@@ -284,7 +350,7 @@ const FilePost = (props, ref) => {
             style={{ padding: '10px', backgroundColor: 'red', color: 'white' }}
           >
             Delete
-          </button>
+          </Button>
           <button onClick={nextImage} style={{ padding: '10px' }}>
             {">"}
           </button>

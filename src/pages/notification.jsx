@@ -1,10 +1,7 @@
-import Navbar from "../components/navbar"
 
-function Notification(){
-    return(
-        <div>
-            <Navbar />
-        </div>
+const Notification = ()=>{
+    return (
+        <h1>hello world</h1>
     )
 }
 export default Notification
