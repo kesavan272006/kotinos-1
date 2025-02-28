@@ -10,6 +10,7 @@ import deleteIcon from '../assets/deleteicon.svg'
 import { useNavigate } from 'react-router-dom';
 import currencyicon from '../assets/currencyicon.svg'
 import chatsystembg from '../assets/chatsystembg.webp'
+import logo from '../assets/logo.png'
 const ChatPage = () => {
     const [user, setUser] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -196,6 +197,36 @@ const ChatPage = () => {
                 </div>
 
                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column', position: 'relative' }}>
+                    {!selectedUser && (
+                        <div style={{
+                            display: 'flex',
+                            justifyContent: 'center', 
+                            alignItems: 'center',      
+                            height: '100vh'             
+                        }}>
+                            <div style={{
+                                textAlign: 'center',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                justifyContent: 'center',
+                            }}>
+                                <img src={logo} style={{height:'200px', width:'200px', borderRadius:'50%', alignSelf:'center'}} />
+                                <div style={{
+                                    background: 'linear-gradient(to right, #1e3a8a, #1d4ed8, #22d3ee)', 
+                                    WebkitBackgroundClip: 'text',  
+                                    color: 'transparent',  
+                                    fontSize: '4rem', 
+                                    fontWeight: 'bold', 
+                                }}>
+                                    Kotinos
+                                </div>
+                                <h1 style={{fontSize:'2rem', color:'black', fontWeight:'bold'}}>Your Dream, our Platform</h1>
+                                <h1>Select a chat to start your conversation</h1>
+                            </div>
+                        </div>
+                        
+                        
+                    )}
                     {selectedUser && (
                         <>
                             <div style={{
