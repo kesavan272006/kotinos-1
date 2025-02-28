@@ -263,7 +263,7 @@ const FilePost = (props, ref) => {
           )}
         </div>
         <br />
-        <div>
+        <div style={{display:'flex', flexDirection:'row', justifyContent:'center'}}>
           <input onChange={handleFileChange} type="file" multiple ref={fileRef} style={{ display: 'none' }} />
           <button
             onClick={() => fileRef.current.click()}
@@ -275,20 +275,23 @@ const FilePost = (props, ref) => {
           >
             <img src={addicon} alt="Add files" style={{ width: '30px', height: '30px' }} />
           </button>
+          <h1><strong>Add Images</strong></h1>
         </div>
         <br />
         {decidingathlete && (
-          <div>
+          <div style={{display:'flex',flexDirection:'row', justifyContent:'center'}}>
           <Switch
             onChange={handleSwitchChange} 
           />
+          <h1 style={{color:'black'}}><strong>Enable Crowdfunding for this post</strong></h1>
         </div>
         )}
         {decidingcoach && (
-          <div>
+          <div style={{display:'flex',flexDirection:'row', justifyContent:'center'}}>
           <Switch
             onChange={handleSwitchChange} 
           />
+          <h1 style={{color:'black'}}><strong>Enable Crowdfunding for this post</strong></h1>
         </div>
         )}
         {decidingorganization && (
@@ -303,7 +306,7 @@ const FilePost = (props, ref) => {
           <Button variant="outlined" className="closeButton" onClick={closeModal}>
             Close
           </Button>
-          <Button variant="contained" className="postButton" onClick={addPost}>
+          <Button variant="contained" className="postButton bg-gradient-to-r from-blue-900 via-blue-700 to-cyan-500 " onClick={addPost}>
             Post
           </Button>
         </div>
@@ -338,7 +341,7 @@ const FilePost = (props, ref) => {
           <button onClick={prevImage} style={{ padding: '10px' }}>
             {"<"}
           </button>
-          <button
+          <Button
             onClick={() => {
               setImageToDelete(files[currentImageIndex]);
               deleteFile(currentImageIndex);
@@ -347,7 +350,7 @@ const FilePost = (props, ref) => {
             style={{ padding: '10px', backgroundColor: 'red', color: 'white' }}
           >
             Delete
-          </button>
+          </Button>
           <button onClick={nextImage} style={{ padding: '10px' }}>
             {">"}
           </button>

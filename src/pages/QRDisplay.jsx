@@ -52,7 +52,7 @@ const QRDisplay = () => {
       <h2 className="title">Latest Verified QR Code</h2>
       {message && <p className="error-message">{message}</p>}
       {!qrCodes ? (
-        <p>No verified QR code available.</p>
+        <p>No verified QR code available. <br />{username} has not uploaded any verified qr code.</p>
       ) : (
         <div className="qr-content">
           <img src={qrimg} alt="QR Code" width="150" className="qr-image" />
