@@ -6,11 +6,12 @@ import { FaRegHeart } from "react-icons/fa";
 import profileicon from '../assets/profileicon.svg';
 import { useNavigate } from 'react-router-dom';
 import { auth, database } from '../config/firebase';
-import { collection, doc, getDoc, getDocs, setDoc } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, setDoc, updateDoc, increment, arrayRemove, arrayUnion } from 'firebase/firestore';
 import Posts from './posts';
 import FilePost from './FilePost';
 import Modal from 'react-modal';
 import { Button } from '@mui/material';
+import likebutton from '../assets/likebutton.svg'
 const Middle = ({ userData }) => {
     const [username, setUsername] = useState('');
     const [role, setRole] = useState('');
@@ -154,6 +155,35 @@ const Middle = ({ userData }) => {
     const closeModals = () => {
         setIsModalOpened(false);
     };
+    const handlelikes = async (id, posterId) => {
+        const currentUserId = auth.currentUser?.uid;
+        if (!currentUserId) return;
+    
+        try {
+            const postDocument = doc(database, 'Users', `${posterId}`, 'Posts', id);
+    
+            const postSnapshot = await getDoc(postDocument);
+            if (postSnapshot.exists()) {
+                const postData = postSnapshot.data();
+                const likedBy = postData.likedBy || []; 
+                
+                if (likedBy.includes(currentUserId)) {
+                    await updateDoc(postDocument, {
+                        likes: increment(-1),
+                        likedBy: arrayRemove(currentUserId)
+                    });
+                } else {
+                    await updateDoc(postDocument, {
+                        likes: increment(1), 
+                        likedBy: arrayUnion(currentUserId) 
+                    });
+                }
+            }
+            getPost();
+        } catch (err) {
+            console.error('Error toggling like:', err);
+        }
+    };
     return (
         <>
             <h1 className='russo text-center mt-2 text-4xl w-full '>POSTS</h1>
@@ -296,8 +326,10 @@ const Middle = ({ userData }) => {
                                     )}
                                 </div>
                             )}
-                            <FaRegHeart className='ml-6 mb-4'/>
-
+                            <div style={{display:'flex', flexDirection:'row', justifyContent:'left'}}>
+                                <Button onClick={()=>handlelikes(post.id, post.Id)}><img src={likebutton}/></Button>
+                                <h1 style={{fontSize:'25px'}}><strong>{post.likes}</strong></h1>
+                            </div>
                         </div>
                     ))}
                 </div>
