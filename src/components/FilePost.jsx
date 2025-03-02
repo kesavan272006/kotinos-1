@@ -164,6 +164,8 @@ const FilePost = (props, ref) => {
           profilepic: `${profiledata}`,
           Id: auth.currentUser?.uid,
           enableCrowdFunding: isfunding,
+          likes: 0,
+          likedBy: [],
         });
         setIsOpen(false);
         setTitle('');

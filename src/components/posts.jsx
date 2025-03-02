@@ -7,6 +7,7 @@ import { auth, database } from '../config/firebase';
 import { getDoc } from 'firebase/firestore';
 import profileicon from '../assets/profileicon.svg';
 import { useNavigate } from 'react-router-dom';
+import Switch from '@mui/material/Switch';
 const customStyles = {
   content: {
     top: '50%',
@@ -31,7 +32,7 @@ const Posts = (props, ref) => {
   const [text, setText] = useState('');
   const [userData, setUserData] = useState({});
   const [posts, setPosts] = useState([]);
-
+  const [isfunding, setIsfunding]=useState(false);
   const openModal = () => {
     setIsOpen(true);
   };
@@ -80,6 +81,10 @@ const Posts = (props, ref) => {
   
           fetchUserData();
       }, [navigate]);
+      const decidingathlete = role === 'athlete'; 
+  const decidingcoach = role === 'coach'; 
+  const decidinguser = role === 'user';
+  const decidingorganization = role === 'organization';
   const getAllPosts = async (connections) => {
     try {
       const postsQuery = query(collection(database, 'Posts'), orderBy('timestamp', 'desc'));
@@ -108,7 +113,10 @@ const Posts = (props, ref) => {
           role: userData.role,
           timestamp: new Date(),
           profilepic: profilepic,
-          id: auth.currentUser?.uid,
+          Id: auth.currentUser?.uid,
+          enableCrowdFunding: isfunding,
+          likes: 0,
+          likedBy: [],
         });
         getAllPosts(userData.connections);
       } else {
@@ -120,7 +128,13 @@ const Posts = (props, ref) => {
     setIsOpen(false);
     setText('');
   };
-
+  const handleSwitchChange = (event) => {
+    if (event.target.checked) {
+      setIsfunding(true);
+    } else {
+      setIsfunding(false);  
+    }
+  };
   useEffect(() => {
     getUserData();
   }, []);
@@ -159,6 +173,31 @@ const Posts = (props, ref) => {
             },
           }}
         />
+        <br />
+        {decidingathlete && (
+          <div style={{display:'flex',flexDirection:'row', justifyContent:'center'}}>
+          <Switch
+            onChange={handleSwitchChange} 
+          />
+          <h1 style={{color:'black'}}><strong>Enable Crowdfunding for this post</strong></h1>
+        </div>
+        )}
+        {decidingcoach && (
+          <div style={{display:'flex',flexDirection:'row', justifyContent:'center'}}>
+          <Switch
+            onChange={handleSwitchChange} 
+          />
+          <h1 style={{color:'black'}}><strong>Enable Crowdfunding for this post</strong></h1>
+        </div>
+        )}
+        {decidingorganization && (
+          <div style={{display:'flex',flexDirection:'row', justifyContent:'center'}}>
+          <Switch
+            onChange={handleSwitchChange} 
+          />
+          <h1 style={{color:'black'}}><strong>Enable Crowdfunding for this post</strong></h1>
+        </div>
+        )}
         <div className="modal-buttons mt-5 ml-1 mr-1">
           <Button variant="outlined" className="closeButton " onClick={closeModal}>
             Close
