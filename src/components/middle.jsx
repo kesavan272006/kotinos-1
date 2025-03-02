@@ -12,6 +12,7 @@ import FilePost from './FilePost';
 import Modal from 'react-modal';
 import { Button } from '@mui/material';
 import likebutton from '../assets/likebutton.svg'
+import commenticon from '../assets/comment.svg'
 const Middle = ({ userData }) => {
     const [username, setUsername] = useState('');
     const [role, setRole] = useState('');
@@ -184,6 +185,10 @@ const Middle = ({ userData }) => {
             console.error('Error toggling like:', err);
         }
     };
+    const [isEditing, setIsEditing]=useState(false);
+    const handleediting = ()=>{
+        setIsEditing(!isEditing);
+    }
     return (
         <>
             <h1 className='russo text-center mt-2 text-4xl w-full '>POSTS</h1>
@@ -326,9 +331,16 @@ const Middle = ({ userData }) => {
                                     )}
                                 </div>
                             )}
-                            <div style={{display:'flex', flexDirection:'row', justifyContent:'left'}}>
-                                <Button onClick={()=>handlelikes(post.id, post.Id)}><img src={likebutton}/></Button>
-                                <h1 style={{fontSize:'25px'}}><strong>{post.likes}</strong></h1>
+
+                            <div style={{display:'flex', flexDirection:'row', justifyContent:'flex-start'}}>
+                                <div style={{display:'flex', flexDirection:'row', justifyContent:'left'}}>
+                                    <Button onClick={()=>handlelikes(post.id, post.Id)}><img src={likebutton}/></Button>
+                                    <h1 style={{fontSize:'25px'}}><strong>{post.likes}</strong></h1>
+                                </div>
+                                <div style={{marginLeft:'40%', display:'flex', flexDirection:'row', justifyContent:'start'}}>
+                                    <Button ><img src={commenticon} /></Button>
+                                    <h1 style={{fontSize:'25px'}}><strong>Comments</strong></h1>
+                                </div>
                             </div>
                         </div>
                     ))}

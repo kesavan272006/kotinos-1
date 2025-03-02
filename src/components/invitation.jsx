@@ -106,65 +106,66 @@ const Invitation = () => {
 
   return (
     <div>
-      {user.length === 0 ? (
-        <div
-          style={{
-            width: "100%",
-            height: "40vw",
-            backgroundColor: "#F1F8F9",
-            textAlign: "center",
-            justifyContent: "center",
-            alignItems: "center",
-            alignSelf: "center",
-            display: "flex",
-            flexDirection: "row",
-            fontWeight: "bolder",
-            fontSize: "40px",
-          }}
-        >
-          <span style={{ color: "red", marginRight: "10px" }}>No </span>invitations
-          available!
-        </div>
-      ) : (
-        user
-          .filter((user) => user.status === "pending")
-          .map((eachuser) => (
-            <Paper key={eachuser.id}>
-              <List>
-                <ListItem
-                  style={{ display: "flex", flexDirection: "row", justifyContent: "start" }}
-                >
-                  <Avatar src={profileicon} />
-                  <div style={{ marginLeft: "10px" }}>
-                    <ListItemText primary={eachuser.username} secondary={eachuser.role} />
-                  </div>
-                  <Button
-                    style={{
-                      backgroundColor: "red",
-                      color: "white",
-                      fontSize: "20px",
-                      marginLeft: "auto",
-                    }}
-                    onClick={() => deleteRequest(eachuser.id)}
+      {user.filter((eachuser) => eachuser.status === "pending").length === 0 ? (
+          <div
+            style={{
+              width: "100%",
+              height: "40vw",
+              backgroundColor: "#F1F8F9",
+              textAlign: "center",
+              justifyContent: "center",
+              alignItems: "center",
+              alignSelf: "center",
+              display: "flex",
+              flexDirection: "row",
+              fontWeight: "bolder",
+              fontSize: "40px",
+            }}
+          >
+            <span style={{ color: "red", marginRight: "10px" }}>No </span>invitations
+            available!
+          </div>
+        ) : (
+          user
+            .filter((user) => user.status === "pending")
+            .map((eachuser) => (
+              <Paper key={eachuser.id}>
+                <List>
+                  <ListItem
+                    style={{ display: "flex", flexDirection: "row", justifyContent: "start" }}
                   >
-                    Reject
-                  </Button>
-                  <Button
-                    style={{
-                      backgroundColor: "#01D836",
-                      color: "white",
-                      fontSize: "20px",
-                      marginLeft: "15px",
-                    }}
-                    onClick={() => acceptReq(eachuser)}
-                  >
-                    Connect
-                  </Button>
-                </ListItem>
-              </List>
-            </Paper>
-          ))
-      )}
+                    <Avatar src={profileicon} />
+                    <div style={{ marginLeft: "10px" }}>
+                      <ListItemText primary={eachuser.username} secondary={eachuser.role} />
+                    </div>
+                    <Button
+                      style={{
+                        backgroundColor: "red",
+                        color: "white",
+                        fontSize: "20px",
+                        marginLeft: "auto",
+                      }}
+                      onClick={() => deleteRequest(eachuser.id)}
+                    >
+                      Reject
+                    </Button>
+                    <Button
+                      style={{
+                        backgroundColor: "#01D836",
+                        color: "white",
+                        fontSize: "20px",
+                        marginLeft: "15px",
+                      }}
+                      onClick={() => acceptReq(eachuser)}
+                    >
+                      Connect
+                    </Button>
+                  </ListItem>
+                </List>
+              </Paper>
+            ))
+        )}
+
     </div>
   );
 };
