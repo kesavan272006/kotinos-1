@@ -97,7 +97,9 @@ const Profile = () => {
                     return bTimestamp - aTimestamp;
                 });
     
-                setPosts(sortedPosts);
+                if(postsData){
+                    setPosts(sortedPosts);
+                }
             } catch (err) {
                 console.error("Error fetching posts:", err);
             }
@@ -105,7 +107,7 @@ const Profile = () => {
     };
     useEffect(() => {
         getPost();
-    }, [posts]);
+    }, []);
     const formatTimestamp = (timestamp) => {
         if (timestamp && timestamp.seconds) {
             const date = new Date(timestamp.seconds * 1000);
@@ -120,9 +122,9 @@ const Profile = () => {
     const decidingorganization = role === 'organization';
     useEffect(() => {
         const fetchProfile = async () => {
-            if (user) {
+            if (auth.currentUser) {
                 try {
-                    const docRef = doc(database, "Users", user.uid);
+                    const docRef = doc(database, "Users", auth.currentUser?.uid);
                     const doc2Ref = doc(docRef, "profileDetails", "details");
                     const docSnap = await getDoc(doc2Ref);
                     if (docSnap.exists()) {
@@ -147,7 +149,7 @@ const Profile = () => {
             
             if (user) {
                 try {
-                    const docRef = doc(database, "Users", user.uid);
+                    const docRef = doc(database, "Users", auth.currentUser?.uid);
                     const docSnap = await getDoc(docRef);
                     if (docSnap.exists()) {
                         const reference = docSnap.data();
@@ -179,7 +181,7 @@ const Profile = () => {
     const handleSave = async () => {
         if (user) {
             try {
-                const documentRef = doc(database, "Users", user.uid);
+                const documentRef = doc(database, "Users", auth.currentUser?.uid);
                 const profileDetailsRef = doc(documentRef, "profileDetails", "details");
     
                 const updatedProfile = { ...profile };
@@ -229,18 +231,18 @@ const Profile = () => {
       const blurStyle = {
         border: '2px solid #4CAF50',
       };
-        const logout = async () => {
-            try {
-                await signOut(auth);
-                navigate("/");
-            } catch (error) {
-                console.error("Error signing out:", error);
-            }
-        };
+    const logout = async () => {
+        try {
+            await signOut(auth);
+            navigate("/");
+        } catch (error) {
+            console.error("Error signing out:", error);
+        }
+    };
     const handleDelete = async () => {
         if (user) {
             try {
-                const docref = doc(database, "Users", user.uid);
+                const docref = doc(database, "Users", auth.currentUser?.uid);
                 const doc2ref = doc(docref, "profileDetails", "details");
                 await deleteDoc(doc2ref);
                 setProfile({
@@ -258,6 +260,7 @@ const Profile = () => {
                     teamName: "",
                     achievements: "",
                     qrCode: "",
+                    decodedQr: "",
                 });
                 await setDoc(docref, { profilePic: "" }, { merge: true });
                 setIsEditing(false);
@@ -268,7 +271,7 @@ const Profile = () => {
         }
     };
     
-    if (loading || !profile.fullName) {
+    if (loading) {
         return <Loading />
     }
     return (
@@ -322,7 +325,7 @@ const Profile = () => {
                             <p><strong>Your primary Sport of coaching: </strong> {profile.primarySport || "None"}</p>
                             <p><strong>Your secondary Sport of coaching</strong> {profile.secondarySport || "None"}</p>
                             <p><strong>Years of Experience:</strong> {profile.experience || "None"}</p>
-                            <p><strong>Teams You have coached for: </strong> {profile.experience || "None"}</p>
+                            <p><strong>Teams You have coached for: </strong> {profile.teamName || "None"}</p>
                             <p><strong>Your achievements as a coach: </strong> <br /> {profile.achievements || "None"}</p>
                             <p><strong>Kindly upload your QR code to facilitate donations for training your students.</strong></p>
                             <Button onClick={handleNavigation}>upload QR code</Button>
@@ -396,7 +399,8 @@ const Profile = () => {
                                             ))}
                                         </select> 
                                         <textarea name='teamName' placeholder='Please enter the name of the teams you have coached for' value={profile.teamName} onChange={handleChange} style={textareaStyle} onFocus={(e) => e.target.style.border = focusStyle.border} onBlur={(e) => e.target.style.border = blurStyle.border} />                               
-                                        <input type="number" name="experience" placeholder="Years of Experience as a coach" value={profile.experience} onChange={handleChange} className="border p-2 rounded w-full" />
+                                        <textarea name='achievements' placeholder='Your achievements as a coach' value={profile.achievements} onChange={handleChange} style={textareaStyle} onFocus={(e) => e.target.style.border = focusStyle.border} onBlur={(e) => e.target.style.border = blurStyle.border} /> 
+                                        <input type="text" name="experience" placeholder="Years of Experience as a coach" value={profile.experience} onChange={handleChange} className="border p-2 rounded w-full" />
                                     </>
                                 )}
                                 {decidinguser && (
