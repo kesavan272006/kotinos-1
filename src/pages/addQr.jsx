@@ -21,7 +21,7 @@ const QRUpload = () => {
 
       if (docSnap.exists()) {
         const userDetails = docSnap.data();
-        setExistingQR(userDetails.qrCode); // Retrieve the existing QR code
+        setExistingQR(userDetails.qrCode); 
       }
     };
 
@@ -85,7 +85,7 @@ const QRUpload = () => {
 
       if (user) {
         try {
-          const docRef = doc(database, "Users", user.uid);
+          const docRef = doc(database, "Users", auth.currentUser?.uid);
           const docSnap = await getDoc(docRef);
           if (docSnap.exists()) {
             const userData = docSnap.data();
