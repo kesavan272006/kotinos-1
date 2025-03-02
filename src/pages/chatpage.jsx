@@ -7,7 +7,10 @@ import { database, auth } from '../config/firebase';
 import Loading from '../components/Loading';
 import addphoto from '../assets/addphoto.svg';
 import deleteIcon from '../assets/deleteicon.svg'
-
+import { useNavigate } from 'react-router-dom';
+import currencyicon from '../assets/currencyicon.svg'
+import chatsystembg from '../assets/chatsystembg.webp'
+import logo from '../assets/logo.png'
 const ChatPage = () => {
     const [user, setUser] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -313,9 +316,10 @@ const ChatPage = () => {
                                                         marginTop: '5px',
                                                         marginLeft: '5px',
                                                         fontSize: '16px',
+                                                        color: 'red'
                                                     }}
                                                 >
-                                                    <RiDeleteBin6Line className='w-5 h-5 hover:bg-blue-100  rounded-full ' alt="❌" />
+                                                    <img src={deleteIcon} className='w-5 h-5' alt="❌" />
                                                 </button>
                                             )}
                                         </div>
@@ -358,23 +362,17 @@ const ChatPage = () => {
                                     value={message}
                                     onChange={(e) => setMessage(e.target.value)}
                                     label="Start a conversation"
-                                    className='w-[85%] '
+                                    style={{
+                                        width: '85%',
+                                        marginRight: '10px',
+                                        backgroundColor: '#f1f1f1',
+                                        borderRadius: '15px',
+                                    }}
                                 />
                                 <Button onClick={()=>handlenavigation(selectedUser.id)}> <img src={currencyicon} alt="" /> </Button>
                                 <Button
                                     onClick={sendMessage}
-                                    style={{
-                                        backgroundColor: '#28a745',
-                                        color: '#fff',
-                                        padding: '12px 24px',
-                                        fontSize: '16px',
-                                        fontWeight: 'bold',
-                                        borderRadius: '8px',
-                                        border: 'none',
-                                        cursor: 'pointer',
-                                        textAlign: 'center',
-                                        transition: 'background-color 0.3s ease',
-                                    }}
+                                    variant="contained" className="postButton bg-gradient-to-r from-blue-900 via-blue-700 to-cyan-500 "
                                 >
                                     Send
                                 </Button>
