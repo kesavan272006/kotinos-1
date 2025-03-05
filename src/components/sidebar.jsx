@@ -92,10 +92,10 @@ const Sidebar = () => {
   return (
     <div className="relative z-10">
       <div className="cursor-pointer absolute z-10 top-2 left-2 m-2" onClick={toggleVisibility}>
-        {isVisible ? <MdKeyboardArrowLeft className="relative left-56 md:left-64 text-2xl rounded-full inverter mt-2 scale-[130%] hover:scale-150 transition-all" /> : <FaBars className="text-2xl " />}
+        {isVisible ? <MdKeyboardArrowLeft className="relative left-56 md:left-64 text-2xl rounded-full inverter mt-2 scale-[130%] hover:scale-150 transition-all" /> : <FaBars className="text-2xl hover:scale-110 transition-all" />}
       </div>
 
-      <div className={`absolute z-0 md:w-[20vw] md:h-[100%] w-[70vw] h-full bg-gradient-to-b from-[#1E3A8A] to-[#3B82F6]  transition-transform duration-300 ${isVisible ? 'translate-x-0' : '-translate-x-full'}`}>
+      <div className={`absolute z-0 md:w-[20vw] md:h-[100%] w-[75vw] h-full bg-gradient-to-b from-[#1E3A8A] to-[#3B82F6]  transition-transform duration-300 ${isVisible ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="flex items-center ">
           {/* <div><img src={logo} className='w-16 rounded-full' alt="" /></div> */}
           <div className="heading russo text-white pl-8 text-4xl pt-5">KOTINOS</div>

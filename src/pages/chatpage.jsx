@@ -10,6 +10,7 @@ import deleteIcon from '../assets/deleteicon.svg'
 import { useNavigate } from 'react-router-dom';
 import currencyicon from '../assets/currencyicon.svg'
 import chatsystembg from '../assets/chatsystembg.webp'
+import chat_bg from '../assets/chatpage_bg.jpg'
 import logo from '../assets/logo.png'
 const ChatPage = () => {
     const [user, setUser] = useState([]);
@@ -211,16 +212,16 @@ const ChatPage = () => {
                                 justifyContent: 'center',
                             }}>
                                 <img src={logo} style={{height:'200px', width:'200px', borderRadius:'50%', alignSelf:'center'}} />
-                                <div style={{
+                                <div className='russo' style={{
                                     background: 'linear-gradient(to right, #1e3a8a, #1d4ed8, #22d3ee)', 
                                     WebkitBackgroundClip: 'text',  
                                     color: 'transparent',  
                                     fontSize: '4rem', 
                                     fontWeight: 'bold', 
                                 }}>
-                                    Kotinos
+                                    KOTINOS
                                 </div>
-                                <h1 style={{fontSize:'2rem', color:'black', fontWeight:'bold'}}>Your Dream, our Platform</h1>
+                                <h1 style={{fontSize:'2rem', color:'black', fontWeight:'bold'}}>Your Dream, Our Platform</h1>
                                 <h1>Select a chat to start your conversation</h1>
                             </div>
                         </div>
@@ -252,7 +253,7 @@ const ChatPage = () => {
                                 flex: 1,
                                 overflowY: 'scroll',
                                 paddingBottom: '80px',
-                                backgroundImage: `url(${chatsystembg})`,
+                                backgroundImage: `url(${chat_bg})`,
                                 backgroundSize: 'cover',
                                 backgroundPosition: 'center',
                                 backgroundRepeat: 'no-repeat',
