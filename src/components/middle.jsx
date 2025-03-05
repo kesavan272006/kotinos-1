@@ -296,7 +296,7 @@ const Middle = ({ userData }) => {
                                     </div>
                                     <h3 className='ml-6 mt-1 text-sm text-gray-400'>{formatTimestamp(post.timestamp)}</h3>
                                     {post.enableCrowdFunding && (
-                                            <Button style={{position:'absolute', right:20}} onClick={()=>handlenavigation(post.Id)} variant="contained" className="postButton bg-gradient-to-r from-blue-900 via-blue-700 to-cyan-500 "><h1>Click to pay</h1></Button>
+                                            <Button style={{position:'absolute', right:20}} onClick={()=>handlenavigation(post.Id)} variant="contained" className="postButton bg-gradient-to-r from-blue-900 via-blue-700 to-cyan-500 "><h1>Fund </h1></Button>
                                     )}
                                 </div>
                                 <br />
