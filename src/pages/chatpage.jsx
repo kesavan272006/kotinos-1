@@ -10,6 +10,7 @@ import deleteIcon from '../assets/deleteicon.svg'
 import { useNavigate } from 'react-router-dom';
 import currencyicon from '../assets/currencyicon.svg'
 import chatsystembg from '../assets/chatsystembg.webp'
+import chat_bg from '../assets/chatpage_bg.jpg'
 import logo from '../assets/logo.png'
 import Autocomplete from '@mui/material/Autocomplete';
 const ChatPage = () => {
@@ -609,7 +610,7 @@ const ChatPage = () => {
                                 flex: 1,
                                 overflowY: 'scroll',
                                 paddingBottom: '80px',
-                                backgroundImage: `url(${chatsystembg})`,
+                                backgroundImage: `url(${chat_bg})`,
                                 backgroundSize: 'cover',
                                 backgroundPosition: 'center',
                                 backgroundRepeat: 'no-repeat',
