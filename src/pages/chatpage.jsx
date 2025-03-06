@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import currencyicon from '../assets/currencyicon.svg'
 import logo from '../assets/logo.png'
 import Autocomplete from '@mui/material/Autocomplete';
-import chatpageback from '../assets/kotinosbg2.webp'
+import chatpageback from '../assets/chatbg3.webp'
 const ChatPage = () => {
     const [user, setUser] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -393,42 +393,36 @@ const ChatPage = () => {
             <Navbar />
             <div className='flex h-[90vh]'>
                 
-                <div style={{ width: '25%', borderRight: '1px solid #ddd' }}>
+            <div style={{ width: '25%', borderRight: '1px solid #ddd', overflowY: 'auto', maxHeight: '100vh' }}>
                     <Button onClick={handleOpen}>Create a Group</Button>
                     <h3 className="font-bold pl-1">Groups</h3>
                     <List>
-                        {groups.map((groupId) => {
-                            return (
-                                <Paper key={groupId} style={{ marginBottom: '10px' }}>
-                                    <ListItem button onClick={() => handleGroupClick(groupId)}>
-                                        <Avatar />
-                                        <div style={{ marginLeft: '10px' }}>
-                                            <ListItemText primary={groupNames[groupId] || 'Loading...'} />
-                                        </div>
-                                    </ListItem>
-                                </Paper>
-                            );
-                        })}
+                        {groups.map((groupId) => (
+                            <Paper key={groupId} style={{ marginBottom: '10px' }}>
+                                <ListItem button onClick={() => handleGroupClick(groupId)}>
+                                    <Avatar />
+                                    <div style={{ marginLeft: '10px' }}>
+                                        <ListItemText primary={groupNames[groupId] || 'Loading...'} />
+                                    </div>
+                                </ListItem>
+                            </Paper>
+                        ))}
                     </List>
                     <h3 className='font-bold pl-1'>Chats</h3>
                     <List>
-                        {user.filter(user => user.status === 'connected').map((eachuser) => {
-                            return (
-                                <Paper key={eachuser.id} style={{ marginBottom: '10px' }}>
-                                    <ListItem button onClick={()=>handleuserselection(eachuser)}>
-                                        <Avatar src={eachuser.profilePic} />
-                                        <div style={{ marginLeft: "10px" }}>
-                                            <ListItemText
-                                                primary={eachuser.username}
-                                                secondary={eachuser.role}
-                                            />
-                                        </div>
-                                    </ListItem>
-                                </Paper>
-                            );
-                        })}
+                        {user.filter(user => user.status === 'connected').map((eachuser) => (
+                            <Paper key={eachuser.id} style={{ marginBottom: '10px' }}>
+                                <ListItem button onClick={() => handleuserselection(eachuser)}>
+                                    <Avatar src={eachuser.profilePic} />
+                                    <div style={{ marginLeft: "10px" }}>
+                                        <ListItemText primary={eachuser.username} secondary={eachuser.role} />
+                                    </div>
+                                </ListItem>
+                            </Paper>
+                        ))}
                     </List>
                 </div>
+
 
                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column', position: 'relative' }}>
                     {isEditing && (
@@ -477,8 +471,8 @@ const ChatPage = () => {
                                     overflowY: 'scroll',
                                     paddingBottom: '80px',
                                     backgroundImage: `url(${chatpageback})`,
-                                    backgroundSize: 'cover',
-                                    backgroundPosition: 'center',
+                                    backgroundSize: 'contain',
+                                    backgroundPosition: 'right',
                                     backgroundRepeat: 'no-repeat',
                                     backgroundAttachment: 'fixed',
                                     height: '100%',
@@ -611,8 +605,8 @@ const ChatPage = () => {
                                     overflowY: 'scroll',
                                     paddingBottom: '80px',
                                     backgroundImage: `url(${chatpageback})`,
-                                    backgroundSize: 'cover',
-                                    backgroundPosition: 'center',
+                                    backgroundSize: 'contain',
+                                    backgroundPosition: 'right',
                                     backgroundRepeat: 'no-repeat',
                                     backgroundAttachment: 'fixed',
                                     height: '100%',
