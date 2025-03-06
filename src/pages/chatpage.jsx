@@ -9,10 +9,9 @@ import addphoto from '../assets/addphoto.svg';
 import deleteIcon from '../assets/deleteicon.svg'
 import { useNavigate } from 'react-router-dom';
 import currencyicon from '../assets/currencyicon.svg'
-import chatsystembg from '../assets/chatsystembg.webp'
-import chat_bg from '../assets/chatpage_bg.jpg'
 import logo from '../assets/logo.png'
 import Autocomplete from '@mui/material/Autocomplete';
+import chatpageback from '../assets/kotinosbg2.webp'
 const ChatPage = () => {
     const [user, setUser] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -477,7 +476,7 @@ const ChatPage = () => {
                                     flex: 1,
                                     overflowY: 'scroll',
                                     paddingBottom: '80px',
-                                    backgroundImage: `url(${chatsystembg})`,
+                                    backgroundImage: `url(${chatpageback})`,
                                     backgroundSize: 'cover',
                                     backgroundPosition: 'center',
                                     backgroundRepeat: 'no-repeat',
@@ -499,7 +498,7 @@ const ChatPage = () => {
                                                     {new Date(message.timestamp.seconds * 1000).toLocaleString()}
                                                 </div>
                                                 <div style={{
-                                                    backgroundColor: isCurrentUser ? '#375ecc' : '#FFFFFF',
+                                                    background: isCurrentUser ? 'linear-gradient(to bottom, #1a0d46, #0b3b7e, #0aa6c1)' : '#FFFFFF', // Gradient background for current user
                                                     color: isCurrentUser ? '#FFFFFF' : '#000',
                                                     padding: '10px',
                                                     borderRadius: '15px',
@@ -509,6 +508,7 @@ const ChatPage = () => {
                                                     marginLeft: isCurrentUser ? '10px' : '0',
                                                     marginRight: isCurrentUser ? '0' : '10px',
                                                 }}>
+
                                                     <span style={{fontSize:'15px', textDecoration:'underline', fontWeight:'bolder'}}>{senderNames[message.senderId] || "Loading..."}</span>
                                                     <br />
                                                     {message.images && message.images.map((img, index) => (
@@ -605,20 +605,19 @@ const ChatPage = () => {
                             </div>
 
                             <div style={{
-                                display: "flex",
-                                flexDirection: "column",
-                                flex: 1,
-                                overflowY: 'scroll',
-                                paddingBottom: '80px',
-                                backgroundImage: `url(${chatsystembg})`,
-                                backgroundSize: 'cover',
-                                backgroundPosition: 'center',
-                                backgroundRepeat: 'no-repeat',
-                                backgroundAttachment: 'fixed',
-                                height:'100%',
-                                width:'100%'
-                            }}
-                            >
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    flex: 1,
+                                    overflowY: 'scroll',
+                                    paddingBottom: '80px',
+                                    backgroundImage: `url(${chatpageback})`,
+                                    backgroundSize: 'cover',
+                                    backgroundPosition: 'center',
+                                    backgroundRepeat: 'no-repeat',
+                                    backgroundAttachment: 'fixed',
+                                    height: '100%',
+                                    width: '100%',
+                                }}>
                                 {messageData.map((userMessage, index) => {
                                     const isCurrentUser = userMessage.senderId === auth.currentUser?.uid;
                                     return (
@@ -633,16 +632,16 @@ const ChatPage = () => {
                                                 {new Date(userMessage.timestamp.seconds * 1000).toLocaleString()}
                                             </div>
                                             <div style={{
-                                                backgroundColor: isCurrentUser ? '#375ecc' : '#FFFFFF',
-                                                color: isCurrentUser ? '#FFFFFF' : '#000',
-                                                padding: '10px',
-                                                borderRadius: '15px',
-                                                maxWidth: '80%',
-                                                display: 'inline-block',
-                                                wordBreak: 'break-word',
-                                                marginLeft: isCurrentUser ? '10px' : '0',
-                                                marginRight: isCurrentUser ? '0' : '10px',
-                                            }}>
+                                                    background: isCurrentUser ? 'linear-gradient(to bottom, #1a0d46, #0b3b7e, #0aa6c1)' : '#FFFFFF', // Gradient background for current user
+                                                    color: isCurrentUser ? '#FFFFFF' : '#000',
+                                                    padding: '10px',
+                                                    borderRadius: '15px',
+                                                    maxWidth: '80%',
+                                                    display: 'inline-block',
+                                                    wordBreak: 'break-word',
+                                                    marginLeft: isCurrentUser ? '10px' : '0',
+                                                    marginRight: isCurrentUser ? '0' : '10px',
+                                                }}>
                                                 {userMessage.images && userMessage.images.map((img, index) => (
                                                     <img
                                                         key={index}
