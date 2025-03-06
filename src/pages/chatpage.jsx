@@ -610,7 +610,7 @@ const ChatPage = () => {
                                 flex: 1,
                                 overflowY: 'scroll',
                                 paddingBottom: '80px',
-                                backgroundImage: `url(${chat_bg})`,
+                                backgroundImage: `url(${chatsystembg})`,
                                 backgroundSize: 'cover',
                                 backgroundPosition: 'center',
                                 backgroundRepeat: 'no-repeat',
