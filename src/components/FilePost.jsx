@@ -166,6 +166,7 @@ const FilePost = (props, ref) => {
           enableCrowdFunding: isfunding,
           likes: 0,
           likedBy: [],
+          comments: [],
         });
         setIsOpen(false);
         setTitle('');
