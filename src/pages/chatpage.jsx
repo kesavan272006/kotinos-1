@@ -9,8 +9,8 @@ import addphoto from '../assets/addphoto.svg';
 import deleteIcon from '../assets/deleteicon.svg'
 import { useNavigate } from 'react-router-dom';
 import currencyicon from '../assets/currencyicon.svg'
-import chatsystembg from '../assets/chatsystembg.webp'
-import chat_bg from '../assets/chatpage_bg.jpg'
+import chat_bg from '../assets/chatsystembg.webp'
+// import chat_bg from '../assets/chatpage_bg.jpg'
 import logo from '../assets/logo.png'
 const ChatPage = () => {
     const [user, setUser] = useState([]);
@@ -247,7 +247,7 @@ const ChatPage = () => {
                                 </div>
                             </div>
 
-                            <div style={{
+                            <div className='' style={{
                                 display: "flex",
                                 flexDirection: "column",
                                 flex: 1,
@@ -275,7 +275,7 @@ const ChatPage = () => {
                                             <div style={{ fontSize: '10px', color: 'white', marginTop: '5px' }}>
                                                 {new Date(userMessage.timestamp.seconds * 1000).toLocaleString()}
                                             </div>
-                                            <div style={{
+                                            <div className='border' style={{
                                                 backgroundColor: isCurrentUser ? '#375ecc' : '#FFFFFF',
                                                 color: isCurrentUser ? '#FFFFFF' : '#000',
                                                 padding: '10px',
