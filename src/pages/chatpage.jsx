@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import currencyicon from '../assets/currencyicon.svg'
 import logo from '../assets/logo.png'
 import Autocomplete from '@mui/material/Autocomplete';
-import chatpageback from '../assets/chatbg3.webp'
+import chatpageback from '../assets/world2.jpg'
 const ChatPage = () => {
     const [user, setUser] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -471,8 +471,8 @@ const ChatPage = () => {
                                     overflowY: 'scroll',
                                     paddingBottom: '80px',
                                     backgroundImage: `url(${chatpageback})`,
-                                    backgroundSize: 'contain',
-                                    backgroundPosition: 'right',
+                                    backgroundSize: 'cover',
+                                    backgroundPosition: 'center',
                                     backgroundRepeat: 'no-repeat',
                                     backgroundAttachment: 'fixed',
                                     height: '100%',
@@ -495,8 +495,9 @@ const ChatPage = () => {
                                                     background: isCurrentUser ? 'linear-gradient(to bottom, #1a0d46, #0b3b7e, #0aa6c1)' : '#FFFFFF', // Gradient background for current user
                                                     color: isCurrentUser ? '#FFFFFF' : '#000',
                                                     padding: '10px',
-                                                    borderRadius: '15px',
-                                                    maxWidth: '80%',
+                                                    borderRadius: '10px',
+                                                    maxWidth: '60%',
+                                                    minWidth: '15%',
                                                     display: 'inline-block',
                                                     wordBreak: 'break-word',
                                                     marginLeft: isCurrentUser ? '10px' : '0',
@@ -605,8 +606,8 @@ const ChatPage = () => {
                                     overflowY: 'scroll',
                                     paddingBottom: '80px',
                                     backgroundImage: `url(${chatpageback})`,
-                                    backgroundSize: 'contain',
-                                    backgroundPosition: 'right',
+                                    backgroundSize: 'cover',
+                                    backgroundPosition: 'center',
                                     backgroundRepeat: 'no-repeat',
                                     backgroundAttachment: 'fixed',
                                     height: '100%',
