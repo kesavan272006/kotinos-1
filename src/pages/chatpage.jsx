@@ -11,7 +11,8 @@ import { useNavigate } from 'react-router-dom';
 import currencyicon from '../assets/currencyicon.svg'
 import logo from '../assets/logo.png'
 import Autocomplete from '@mui/material/Autocomplete';
-import chatpageback from '../assets/world2.jpg'
+import chatpageback from '../assets/chatbg3.webp'
+import chat_bg from '../assets/chat_bg.png'
 const ChatPage = () => {
     const [user, setUser] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -21,19 +22,20 @@ const ChatPage = () => {
     const [images, setImages] = useState([]);
     const [previewImages, setPreviewImages] = useState([]);
     const [openModal, setOpenModal] = useState(false);
-    const [isEditing, setIsEditing]=useState(false);
-    const [groupName, setGroupName]=useState('');
+    const [isEditing, setIsEditing] = useState(false);
+    const [groupName, setGroupName] = useState('');
     const navigate = useNavigate();
     const fileInputRef = useRef(null);
-    const [username, setUsername]=useState('');
-    const [role, setRole]=useState('');
+    const [username, setUsername] = useState('');
+    const [role, setRole] = useState('');
     const [selectedUsers, setSelectedUsers] = useState([]);
-    const [selectedGroup, setSelectedGroup]=useState(null);
-    const [groups, setGroups] = useState([]); 
-    const [grpmessage, setGrpMessage] = useState(""); 
+    const [selectedGroup, setSelectedGroup] = useState(null);
+    const [groups, setGroups] = useState([]);
+    const [grpmessage, setGrpMessage] = useState("");
     const [messages, setMessages] = useState([]);
     const [groupNames, setGroupNames] = useState({});
     const [senderNames, setSenderNames] = useState({});
+    const [view, setView] = useState(null);
     useEffect(() => {
         const fetchGroupNames = async () => {
             const groupNamesData = {};
@@ -44,49 +46,49 @@ const ChatPage = () => {
 
                 if (groupDoc.exists()) {
                     const groupData = groupDoc.data();
-                    groupNamesData[groupId] = groupData.groupName; 
+                    groupNamesData[groupId] = groupData.groupName;
                 }
             }
 
-            setGroupNames(groupNamesData); 
+            setGroupNames(groupNamesData);
         };
 
         fetchGroupNames();
     }, [groups, database]);
-    const handleuserselection =(eachuser)=>{
+    const handleuserselection = (eachuser) => {
         setSelectedUser(eachuser);
         setSelectedGroup(null);
     }
     useEffect(() => {
         const fetchUserData = async () => {
-          const currentUser = auth.currentUser;
-    
-          if (currentUser) {
-            const userRef = doc(database, "Users", currentUser.uid);
-            const userSnap = await getDoc(userRef);
-            if (userSnap.exists()) {
-              const userData = userSnap.data();
-              setUsername(userData.username || 'No Username');
-              setRole(userData.role || 'No Role');
+            const currentUser = auth.currentUser;
+
+            if (currentUser) {
+                const userRef = doc(database, "Users", currentUser.uid);
+                const userSnap = await getDoc(userRef);
+                if (userSnap.exists()) {
+                    const userData = userSnap.data();
+                    setUsername(userData.username || 'No Username');
+                    setRole(userData.role || 'No Role');
+                } else {
+                    navigate("/signin");
+                }
             } else {
-              navigate("/signin");
+                navigate("/signin");
             }
-          } else {
-            navigate("/signin");
-          }
         };
-    
+
         fetchUserData();
-      }, [navigate]);
-      
-      useEffect(() => {
+    }, [navigate]);
+
+    useEffect(() => {
         const fetchUserGroups = async () => {
             const userGroupsRef = collection(database, 'Users', auth.currentUser?.uid, 'Groups');
             const querySnapshot = await getDocs(userGroupsRef);
 
             const userGroups = [];
             querySnapshot.forEach((doc) => {
-                userGroups.push(doc.id); 
+                userGroups.push(doc.id);
             });
             setGroups(userGroups);
         };
@@ -96,13 +98,13 @@ const ChatPage = () => {
     if (!auth.currentUser) {
         return <Loading />;
     }
-    const handlenavigation = (userId)=>{
+    const handlenavigation = (userId) => {
         navigate(`/displayQr/${userId}`);
     }
     const handleImageClick = () => {
         fileInputRef.current.click();
     };
-      
+
     const handleFileChange = (e) => {
         const files = Array.from(e.target.files);
         if (files.length + images.length > 3) {
@@ -141,7 +143,7 @@ const ChatPage = () => {
         setSelectedUser(null);
         await fetchGroupMessages(groupId);
     };
-    
+
     const sendMessage = async () => {
         if (!selectedUser || (!message && images.length === 0)) return;
 
@@ -225,8 +227,8 @@ const ChatPage = () => {
             console.error(err);
         }
     };
-    useEffect(()=>{
-        if(selectedGroup){
+    useEffect(() => {
+        if (selectedGroup) {
             fetchGroupMessages();
         }
     }, [selectedGroup]);
@@ -258,14 +260,14 @@ const ChatPage = () => {
         };
         const groupRef = doc(database, 'Groups', selectedGroup);
         const messagesRef = collection(groupRef, 'messages');
-        const newMessageRef = doc(messagesRef, `${Math.random()}`); 
+        const newMessageRef = doc(messagesRef, `${Math.random()}`);
         await setDoc(newMessageRef, newMessage);
         await updateDoc(groupRef, {
-            lastMessage: newMessage.message, 
+            lastMessage: newMessage.message,
             lastMessageTimestamp: newMessage.timestamp,
         });
         fetchGroupMessages(groupids);
-        setGrpMessage(''); 
+        setGrpMessage('');
     };
     useEffect(() => {
         showRequest();
@@ -307,19 +309,19 @@ const ChatPage = () => {
         }
     };
     const connectedUsers = user.filter(user => user.status === 'connected');
-    const handleOpen = ()=>{
+    const handleOpen = () => {
         setSelectedUser(null);
         setIsEditing(true);
     }
-    const handleClose = ()=>{
+    const handleClose = () => {
         setIsEditing(false);
         setGroupName('');
         setSelectedUser(null);
     }
-    const handlenamechange =(e) =>{
+    const handlenamechange = (e) => {
         setGroupName(e.target.value);
     }
-    
+
     const handleSave = async () => {
         if (groupName === '') {
             alert('Kindly Enter a Group Name');
@@ -337,7 +339,7 @@ const ChatPage = () => {
                     setGroupName('');
                     return;
                 }
-                if(selectedUsers.length<2){
+                if (selectedUsers.length < 2) {
                     alert('Atleast two members are required to create a Group.');
                     return;
                 }
@@ -362,7 +364,7 @@ const ChatPage = () => {
                     members: membersDetails,
                     timestamp: new Date(),
                 });
-    
+
                 const userPromises = selectedUsers.map(async (user) => {
                     const individualGroupDoc = doc(database, 'Users', `${user.id}`);
                     const indiGroupRef = doc(individualGroupDoc, 'Groups', `${groupName}-${auth.currentUser?.uid}`);
@@ -374,7 +376,7 @@ const ChatPage = () => {
                         timestamp: new Date(),
                     });
                 });
-    
+
                 await Promise.all(userPromises);
                 setIsEditing(false);
                 setGroupName('');
@@ -386,14 +388,15 @@ const ChatPage = () => {
                 setSelectedUsers([]);
             }
         }
+
     };
-    
+
     return (
         <>
             <Navbar />
             <div className='flex h-[90vh]'>
-                
-            <div style={{ width: '25%', borderRight: '1px solid #ddd', overflowY: 'auto', maxHeight: '100vh' }}>
+
+                <div style={{ width: '25%', borderRight: '1px solid #ddd', overflowY: 'auto', maxHeight: '100vh' }}>
                     <Button onClick={handleOpen}>Create a Group</Button>
                     <h3 className="font-bold pl-1">Groups</h3>
                     <List>
@@ -436,149 +439,150 @@ const ChatPage = () => {
                                     disablePortal
                                     multiple
                                     options={connectedUsers}
-                                    getOptionLabel={(option)=>option.username}
+                                    getOptionLabel={(option) => option.username}
                                     sx={{ width: 300 }}
                                     renderInput={(params) => <TextField {...params} label="members" />}
                                     onChange={(event, value) => setSelectedUsers(value)}
                                 />
                                 <div>
                                     <Button onClick={handleClose}>close</Button>
-                                    <Button disabled={groupName==''} onClick={handleSave}>Save</Button>
+                                    <Button disabled={groupName == ''} onClick={handleSave}>Save</Button>
                                 </div>
                             </div>
                         </div>
                     )}
                     {selectedGroup && (
-                            <>
-                                <div style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    padding: '10px',
-                                    borderBottom: '1px solid #ddd'
-                                }}>
-                                    <Avatar src={profileicon} />
-                                    <div style={{ marginLeft: '10px' }}>
-                                        <div style={{ fontSize: '18px', fontWeight: 'bold' }}>
-                                            {groupNames[selectedGroup]}
-                                        </div>
+                        <>
+                            <div style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                padding: '10px',
+                                borderBottom: '1px solid #ddd'
+                            }}>
+                                <Avatar src={profileicon} />
+                                <div style={{ marginLeft: '10px' }}>
+                                    <div style={{ fontSize: '18px', fontWeight: 'bold' }}>
+                                        {groupNames[selectedGroup]}
                                     </div>
                                 </div>
+                            </div>
 
-                                <div style={{
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    flex: 1,
-                                    overflowY: 'scroll',
-                                    paddingBottom: '80px',
-                                    backgroundImage: `url(${chatpageback})`,
-                                    backgroundSize: 'cover',
-                                    backgroundPosition: 'center',
-                                    backgroundRepeat: 'no-repeat',
-                                    backgroundAttachment: 'fixed',
-                                    height: '100%',
-                                    width: '100%',
-                                }}>
-                                    {messages.map((message, index) => {
-                                        const isCurrentUser = message.senderId === auth.currentUser?.uid;
-                                        return (
-                                            <div key={index} style={{
-                                                display: 'flex',
-                                                justifyContent: isCurrentUser ? 'flex-end' : 'flex-start',
-                                                marginBottom: '15px',
-                                                paddingLeft: '10px',
-                                                paddingRight: '10px',
-                                            }}>
-                                                <div style={{ fontSize: '10px', color: 'white', marginTop: '5px' }}>
-                                                    {new Date(message.timestamp.seconds * 1000).toLocaleString()}
-                                                </div>
-                                                <div style={{
-                                                    background: isCurrentUser ? 'linear-gradient(to bottom, #1a0d46, #0b3b7e, #0aa6c1)' : '#FFFFFF', // Gradient background for current user
-                                                    color: isCurrentUser ? '#FFFFFF' : '#000',
-                                                    padding: '10px',
-                                                    borderRadius: '10px',
-                                                    maxWidth: '60%',
-                                                    minWidth: '15%',
-                                                    display: 'inline-block',
-                                                    wordBreak: 'break-word',
-                                                    marginLeft: isCurrentUser ? '10px' : '0',
-                                                    marginRight: isCurrentUser ? '0' : '10px',
-                                                }}>
-
-                                                    <span style={{fontSize:'15px', textDecoration:'underline', fontWeight:'bolder'}}>{senderNames[message.senderId] || "Loading..."}</span>
-                                                    <br />
-                                                    {message.images && message.images.map((img, index) => (
-                                                        <img
-                                                            key={index}
-                                                            src={img}
-                                                            alt={`Image-${index}`}
-                                                            style={{
-                                                                width: '100px',
-                                                                height: '100px',
-                                                                marginTop: '5px',
-                                                                borderRadius: '10px',
-                                                                display: 'block',
-                                                                marginBottom: '5px'
-                                                            }}
-                                                        />
-                                                    ))}
-                                                    {message.message && <span style={{ fontSize: '14px' }}>{message.message}</span>}
-                                                </div>
+                            <div style={{
+                                display: "flex",
+                                flexDirection: "column",
+                                flex: 1,
+                                overflowY: 'scroll',
+                                paddingBottom: '80px',
+                                backgroundImage: `url(${chat_bg})`,
+                                backgroundSize: 'cover',
+                                backgroundPosition: 'right',
+                                backgroundRepeat: 'no-repeat',
+                                backgroundAttachment: 'fixed',
+                                height: '100%',
+                                width: '100%',
+                            }}>
+                                {messages.map((message, index) => {
+                                    const isCurrentUser = message.senderId === auth.currentUser?.uid;
+                                    return (
+                                        <div key={index} style={{
+                                            display: 'flex',
+                                            justifyContent: isCurrentUser ? 'flex-end' : 'flex-start',
+                                            marginBottom: '15px',
+                                            paddingLeft: '10px',
+                                            paddingRight: '10px',
+                                        }}>
+                                            <div className='mr-2' style={{ fontSize: '10px', color: 'black', marginTop: '5px' }}>
+                                                {new Date(message.timestamp.seconds * 1000).toLocaleDateString()}
+                                                <br />
+                                                {new Date(message.timestamp.seconds * 1000).toLocaleTimeString()}
                                             </div>
-                                        );
-                                    })}
-                                </div>
+                                            <div className='mt-1' style={{
+                                                background: isCurrentUser ? 'linear-gradient(to bottom, #1a0d46, #0b3b7e, #0aa6c1)' : '#FFFFFF', // Gradient background for current user
+                                                color: isCurrentUser ? '#FFFFFF' : '#000',
+                                                padding: '10px',
+                                                borderRadius: '15px',
+                                                maxWidth: '80%',
+                                                display: 'inline-block',
+                                                wordBreak: 'break-word',
+                                                marginLeft: isCurrentUser ? '10px' : '0',
+                                                marginRight: isCurrentUser ? '0' : '10px',
+                                            }}>
 
-                                <div style={{
-                                    position: 'absolute',
-                                    bottom: '0',
-                                    left: '0',
-                                    width: '100%',
-                                    padding: '10px',
-                                    backgroundColor: '#fff',
-                                    boxShadow: '0 -2px 10px rgba(0, 0, 0, 0.1)',
-                                    display: 'flex',
-                                    flexDirection: 'row',
-                                    justifyContent: 'space-between',
-                                    alignItems: 'center',
-                                }}>
-                                    <div>
-                                        <input
-                                            type="file"
-                                            ref={fileInputRef}
-                                            style={{ display: 'none' }}
-                                            onChange={handleFileChange}
-                                            multiple
-                                        />
-                                        <img
-                                            src={addphoto}
-                                            alt="Img"
-                                            onClick={() => {
-                                                setOpenModal(true);
-                                            }}
-                                            style={{ cursor: 'pointer' }}
-                                        />
-                                    </div>
-                                    <TextField
-                                        value={grpmessage}
-                                        onChange={(e) => setGrpMessage(e.target.value)}
-                                        label="Start a conversation"
-                                        style={{
-                                            width: '85%',
-                                            marginRight: '10px',
-                                            backgroundColor: '#f1f1f1',
-                                            borderRadius: '15px',
-                                        }}
+                                                <span className='hover:underline cursor-pointer' style={{ fontSize: '15px', fontWeight: 'bolder' }}>{senderNames[message.senderId] || "Loading..."}</span>
+                                                <br />
+                                                {message.images && message.images.map((img, index) => (
+                                                    <img
+                                                        key={index}
+                                                        src={img}
+                                                        alt={`Image-${index}`}
+                                                        style={{
+                                                            width: '100px',
+                                                            height: '100px',
+                                                            marginTop: '5px',
+                                                            borderRadius: '10px',
+                                                            display: 'block',
+                                                            marginBottom: '5px'
+                                                        }}
+                                                    />
+                                                ))}
+                                                {message.message && <span style={{ fontSize: '14px' }}>{message.message}</span>}
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+
+                            <div style={{
+                                position: 'absolute',
+                                bottom: '0',
+                                left: '0',
+                                width: '100%',
+                                padding: '10px',
+                                backgroundColor: '#fff',
+                                boxShadow: '0 -2px 10px rgba(0, 0, 0, 0.1)',
+                                display: 'flex',
+                                flexDirection: 'row',
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                            }}>
+                                <div>
+                                    <input
+                                        type="file"
+                                        ref={fileInputRef}
+                                        style={{ display: 'none' }}
+                                        onChange={handleFileChange}
+                                        multiple
                                     />
-                                    <Button
-                                        onClick={()=>handleSendMessage(selectedGroup)}
-                                        variant="contained"
-                                        className="postButton bg-gradient-to-r from-blue-900 via-blue-700 to-cyan-500"
-                                    >
-                                        Send
-                                    </Button>
+                                    <img
+                                        src={addphoto}
+                                        alt="Img"
+                                        onClick={() => {
+                                            setOpenModal(true);
+                                        }}
+                                        style={{ cursor: 'pointer' }}
+                                    />
                                 </div>
-                            </>
-                        )}
+                                <TextField
+                                    value={grpmessage}
+                                    onChange={(e) => setGrpMessage(e.target.value)}
+                                    label="Start a conversation"
+                                    style={{
+                                        width: '85%',
+                                        marginRight: '10px',
+                                        backgroundColor: '#f1f1f1',
+                                        borderRadius: '15px',
+                                    }}
+                                />
+                                <Button
+                                    onClick={() => handleSendMessage(selectedGroup)}
+                                    variant="contained"
+                                    className="postButton bg-gradient-to-r from-blue-900 via-blue-700 to-cyan-500"
+                                >
+                                    Send
+                                </Button>
+                            </div>
+                        </>
+                    )}
 
                     {selectedUser && (
                         <>
@@ -600,43 +604,48 @@ const ChatPage = () => {
                             </div>
 
                             <div style={{
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    flex: 1,
-                                    overflowY: 'scroll',
-                                    paddingBottom: '80px',
-                                    backgroundImage: `url(${chatpageback})`,
-                                    backgroundSize: 'cover',
-                                    backgroundPosition: 'center',
-                                    backgroundRepeat: 'no-repeat',
-                                    backgroundAttachment: 'fixed',
-                                    height: '100%',
-                                    width: '100%',
-                                }}>
+                                display: "flex",
+                                flexDirection: "column",
+                                flex: 1,
+                                overflowY: 'scroll',
+                                paddingBottom: '80px',
+                                backgroundImage: `url(${chat_bg})`,
+                                backgroundSize: 'cover',
+                                backgroundPosition: 'right',
+                                backgroundRepeat: 'no-repeat',
+                                backgroundAttachment: 'fixed',
+                                height: '100%',
+                                width: '100%',
+                            }}>
                                 {messageData.map((userMessage, index) => {
                                     const isCurrentUser = userMessage.senderId === auth.currentUser?.uid;
                                     return (
-                                        <div key={index} style={{
-                                            display: 'flex',
-                                            justifyContent: isCurrentUser ? 'flex-end' : 'flex-start',
-                                            marginBottom: '15px',
-                                            paddingLeft: '10px',
-                                            paddingRight: '10px',
-                                        }}>
-                                            <div style={{ fontSize: '10px', color: 'white', marginTop: '5px' }}>
-                                                {new Date(userMessage.timestamp.seconds * 1000).toLocaleString()}
+                                        <div
+                                            onMouseEnter={() => setView(userMessage.id)}
+                                            onMouseLeave={() => setView(null)}
+                                            key={index} style={{
+                                                display: 'flex',
+                                                justifyContent: isCurrentUser ? 'flex-end' : 'flex-start',
+                                                marginBottom: '15px',
+                                                paddingLeft: '10px',
+                                                paddingRight: '10px',
+                                            }}>
+                                            <div className='mr-2' style={{ fontSize: '10px', color: 'black', marginTop: '5px' }}>
+                                                {new Date(userMessage.timestamp.seconds * 1000).toLocaleDateString()}
+                                                <br />
+                                                {new Date(userMessage.timestamp.seconds * 1000).toLocaleTimeString()}
                                             </div>
-                                            <div style={{
-                                                    background: isCurrentUser ? 'linear-gradient(to bottom, #1a0d46, #0b3b7e, #0aa6c1)' : '#FFFFFF', // Gradient background for current user
-                                                    color: isCurrentUser ? '#FFFFFF' : '#000',
-                                                    padding: '10px',
-                                                    borderRadius: '15px',
-                                                    maxWidth: '80%',
-                                                    display: 'inline-block',
-                                                    wordBreak: 'break-word',
-                                                    marginLeft: isCurrentUser ? '10px' : '0',
-                                                    marginRight: isCurrentUser ? '0' : '10px',
-                                                }}>
+                                            <div className='mt-1' style={{
+                                                background: isCurrentUser ? 'linear-gradient(to bottom, #210cae, #4dc9e6)' : 'white', // Gradient background for current user
+                                                color: isCurrentUser ? '#FFFFFF' : '#000',
+                                                padding: '10px',
+                                                borderRadius: '15px',
+                                                maxWidth: '80%',
+                                                display: 'inline-block',
+                                                wordBreak: 'break-word',
+                                                marginLeft: isCurrentUser ? '10px' : '0',
+                                                marginRight: isCurrentUser ? '0' : '10px',
+                                            }}>
                                                 {userMessage.images && userMessage.images.map((img, index) => (
                                                     <img
                                                         key={index}
@@ -654,7 +663,7 @@ const ChatPage = () => {
                                                 ))}
                                                 {userMessage.message && <span style={{ fontSize: '14px' }}>{userMessage.message}</span>}
                                             </div>
-                                            {isCurrentUser && (
+                                            {isCurrentUser && view === userMessage.id && (
                                                 <button
                                                     onClick={() => {
                                                         deleteMessage(userMessage.id, selectedUser.id)
@@ -721,7 +730,7 @@ const ChatPage = () => {
                                         borderRadius: '15px',
                                     }}
                                 />
-                                <Button onClick={()=>handlenavigation(selectedUser.id)}> <img src={currencyicon} alt="" /> </Button>
+                                <Button onClick={() => handlenavigation(selectedUser.id)}> <img src={currencyicon} alt="" /> </Button>
                                 <Button
                                     onClick={sendMessage}
                                     variant="contained" className="postButton bg-gradient-to-r from-blue-900 via-blue-700 to-cyan-500 "
@@ -734,9 +743,9 @@ const ChatPage = () => {
                     {!selectedUser && !selectedGroup && (
                         <div style={{
                             display: 'flex',
-                            justifyContent: 'center', 
-                            alignItems: 'center',      
-                            height: '100vh'             
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            height: '100vh'
                         }}>
                             <div style={{
                                 textAlign: 'center',
@@ -744,22 +753,22 @@ const ChatPage = () => {
                                 flexDirection: 'column',
                                 justifyContent: 'center',
                             }}>
-                                <img src={logo} style={{height:'200px', width:'200px', borderRadius:'50%', alignSelf:'center'}} />
-                                <div style={{
-                                    background: 'linear-gradient(to right, #1e3a8a, #1d4ed8, #22d3ee)', 
-                                    WebkitBackgroundClip: 'text',  
-                                    color: 'transparent',  
-                                    fontSize: '4rem', 
-                                    fontWeight: 'bold', 
+                                <img src={logo} style={{ height: '200px', width: '200px', borderRadius: '50%', alignSelf: 'center' }} />
+                                <div className='russo ' style={{
+                                    background: 'linear-gradient(to bottom, #1e3a8a, #1d4ed8, #22d3ee)',
+                                    WebkitBackgroundClip: 'text',
+                                    color: 'transparent',
+                                    fontSize: '4rem',
+                                    fontWeight: 'bold',
                                 }}>
-                                    Kotinos
+                                    KOTINOS
                                 </div>
-                                <h1 style={{fontSize:'2rem', color:'black', fontWeight:'bold'}}>Your Dream, our Platform</h1>
-                                <h1>Select a chat to start your conversation</h1>
+                                <h1 className='' style={{ fontSize: '2rem', color: 'black', fontWeight: 'bold' }}>Your Dream, Our Platform</h1>
+                                <h1 className='text-gray-400'>Select a chat to start your conversation</h1>
                             </div>
                         </div>
-                        
-                        
+
+
                     )}
                 </div>
 
@@ -805,7 +814,7 @@ const ChatPage = () => {
                             onClick={sendMessage}
                             className='bg-gradient-to-r from-blue-900/80 via-blue-700/80 to-cyan-500/80'
                             style={{
-                                
+
                                 color: '#fff',
                                 padding: '12px 24px',
                                 fontSize: '16px',

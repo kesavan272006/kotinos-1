@@ -432,12 +432,13 @@ const Profile = () => {
                         </div>
                     )}
                     
-                    <div className='w-full mt-5 mb-7'>
-                        <h1 style={{textAlign:'center', fontSize:'40px', color:'black', fontFamily:'sans-serif'}}>Your posts</h1>
+                    <div className=' mt-5 mb-7 md:col-span-2 flex flex-col items-center'>
+                        <h1 className='russo' style={{textAlign:'center', fontSize:'40px', color:'black'}}>Your Posts</h1>
                     {posts.map((post) => (
+                        
                         <div
                             key={post.id}
-                            className='bg-white rounded-xl mb-5'
+                            className='bg-white rounded-xl mb-5 w-[50%]'
                         >
                             <div className='pl-5'>
                                 <div className='flex flex-row'>
