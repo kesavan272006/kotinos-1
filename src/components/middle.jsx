@@ -252,21 +252,19 @@ const Middle = ({ userData }) => {
                                             }}
                                             onClick={closeModals}
                                             >
-                                            <div
-                                                style={{
-                                                position: 'relative',
-                                                maxWidth: '90%',
-                                                maxHeight: '90%',
-                                                }}
+                                            <div className='mb-14 max-w-[80vw] max-h-[80vh]'
+                                                
                                                 onClick={(e) => e.stopPropagation()} 
                                             >
                                                 <img
+                                                className=''
                                                 src={modalImages}
                                                 alt={profileicon}
                                                 style={{
                                                     width: '100%',
-                                                    height: 'auto',
+                                                    height: '90vh',
                                                     borderRadius: '4px',
+                                                    
                                                 }}
                                                 />
                                                 <button
@@ -310,10 +308,10 @@ const Middle = ({ userData }) => {
                                             <button className='relative left-[66%] md:hidden  text-xs bg-gradient-to-r from-blue-900 via-blue-700 to-cyan-500 ml-6 px-2 h-5 text-white font-bold mt-2 rounded-xl'>DONATE</button>
                                             <button
                                             onClick={() => handlenavigation(post.Id)}
-                                            className="hidden mt-1 -translate-y-14 translate-x-14 hover:scale-105 relative group left-[75%] px-2 bg-gradient-to-r from-blue-900 via-blue-700 to-cyan-500 text-white h-7 p-2 font-bold text-sm transition-all duration-300 rounded-full overflow-hidden md:flex md:items-center md:justify-center md:pr-4 origin-right"
+                                            className="hidden mt-1 -translate-y-14 translate-x-14 hover:scale-105 relative group left-[75%] px-2 bg-gradient-to-r from-blue-900 via-blue-700 to-cyan-500 text-white h-7 p-2 font-bold text-sm transition-all duration-300 rounded-lg overflow-hidden md:flex md:items-center md:justify-center md:pr-4 origin-right"
                                           >
                                             {/* <span className="group-hover:hidden text-xl ">₹</span> */}
-                                            <span className=" px-2 ml-2">DONATE</span>
+                                            <span className=" px-2 ml-2">FUND</span>
                                           </button>
                                           </>
                                           
@@ -380,10 +378,10 @@ const Middle = ({ userData }) => {
                     />
                 </div>
                 <div className='flex justify-between'>
-                    <button className='text-xl font-bold russo' onClick={prevImage}>{"<"}</button>
-                    <button className='text-xl font-bold russo' onClick={nextImage}>{">"}</button>
+                    <button className='text-xl font-bold russo ml-10' onClick={prevImage}>{"<"}</button>
+                    <button className='text-xl font-bold russo mr-10' onClick={nextImage}>{">"}</button>
                 </div>
-                <button onClick={closeModal} className='mt-10 bg-black text-white rounded-lg px-3 py-1 font-bold hover:scale-105 transition-all'>
+                <button onClick={closeModal} className='mt-4 bg-black text-white rounded-lg px-3 py-1 font-bold hover:scale-105 transition-all'>
                     Close
                 </button>
             </Modal>
