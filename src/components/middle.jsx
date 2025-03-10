@@ -11,6 +11,8 @@ import Posts from './posts';
 import FilePost from './FilePost';
 import Modal from 'react-modal';
 import { Button } from '@mui/material';
+import likebutton from '../assets/likebutton.svg'
+import commenticon from '../assets/comment.svg'
 import { CiHeart } from "react-icons/ci";
 import liked from '../assets/liked.svg';
 
@@ -190,6 +192,10 @@ const Middle = ({ userData }) => {
             console.error('Error toggling like:', err);
         }
     };
+    const [isEditing, setIsEditing]=useState(false);
+    const handleediting = ()=>{
+        setIsEditing(!isEditing);
+    }
     return (
         <>
             <h1 className='russo text-center mt-2 text-4xl w-full '>POSTS</h1>
@@ -246,21 +252,19 @@ const Middle = ({ userData }) => {
                                             }}
                                             onClick={closeModals}
                                             >
-                                            <div
-                                                style={{
-                                                position: 'relative',
-                                                maxWidth: '90%',
-                                                maxHeight: '90%',
-                                                }}
+                                            <div className='mb-14 max-w-[80vw] max-h-[80vh]'
+                                                
                                                 onClick={(e) => e.stopPropagation()} 
                                             >
                                                 <img
+                                                className=''
                                                 src={modalImages}
                                                 alt={profileicon}
                                                 style={{
                                                     width: '100%',
-                                                    height: 'auto',
+                                                    height: '90vh',
                                                     borderRadius: '4px',
+                                                    
                                                 }}
                                                 />
                                                 <button
@@ -304,7 +308,7 @@ const Middle = ({ userData }) => {
                                             <button className='relative left-[66%] md:hidden  text-xs bg-gradient-to-r from-blue-900 via-blue-700 to-cyan-500 ml-6 px-2 h-5 text-white font-bold mt-2 rounded-xl'>DONATE</button>
                                             <button
                                             onClick={() => handlenavigation(post.Id)}
-                                            className="hidden mt-1 -translate-y-14 translate-x-14 hover:scale-105 relative group left-[75%] px-2 bg-gradient-to-r from-blue-900 via-blue-700 to-cyan-500 text-white h-7 p-2 font-bold text-sm transition-all duration-300 rounded-full overflow-hidden md:flex md:items-center md:justify-center md:pr-4 origin-right"
+                                            className="hidden mt-1 -translate-y-14 translate-x-14 hover:scale-105 relative group left-[75%] px-2 bg-gradient-to-r from-blue-900 via-blue-700 to-cyan-500 text-white h-7 p-2 font-bold text-sm transition-all duration-300 rounded-lg overflow-hidden md:flex md:items-center md:justify-center md:pr-4 origin-right"
                                           >
                                             {/* <span className="group-hover:hidden text-xl ">₹</span> */}
                                             <span className=" px-2 ml-2">FUND</span>
@@ -344,9 +348,15 @@ const Middle = ({ userData }) => {
                                 
                             )}
                             
-                            <div className='mb-2 ml-5 mt-4 px-2 flex gap-1 items-center w-fit hover:bg-gradient-to-r hover:from-blue-900/20 hover:via-blue-700/20 hover:to-cyan-500/20 rounded-xl p-1'>
-                                <CiHeart  onClick={() => handlelikes(post.id, post.userId)} className='h-8 w-8  cursor-pointer scale-[80%]'/>
-                                {likeicon? <h1 className='text-blue-400'><strong>{post.likes}</strong></h1> : <h1><strong>{post.likes}</strong></h1>}
+                            <div style={{display:'flex', flexDirection:'row', justifyContent:'space-evenly'}}>
+                                <div className='mb-2 ml-5 mt-4 px-2 flex gap-1 items-center w-fit hover:bg-gradient-to-r hover:from-blue-900/20 hover:via-blue-700/20 hover:to-cyan-500/20 rounded-xl p-1'>
+                                    <CiHeart  onClick={() => handlelikes(post.id, post.userId)} className='h-8 w-8  cursor-pointer scale-[80%]'/>
+                                    {likeicon? <h1 className='text-blue-400'><strong>{post.likes}</strong></h1> : <h1><strong>{post.likes}</strong></h1>}
+                                </div>
+                                <div style={{marginLeft:'40%', display:'flex', flexDirection:'row', justifyContent:'start', alignItems:'center'}}>
+                                    <Button ><img src={commenticon} /></Button>
+                                    <h1 style={{fontSize:'25px'}}><strong>Comments</strong></h1>
+                                </div>
                             </div>
                         </div>
                     ))}

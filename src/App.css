@@ -207,6 +207,14 @@ body{
 .gradient-bg {
   background: linear-gradient(to right, #1e3a8a, #1d4ed8, #06b6d4);
 }
+.reflection {
+  display: inline-block;
+  font-size: 25px;
+  font-weight: bold;
+  color: #333;
+  
+  -webkit-box-reflect: below -50px linear-gradient(transparent, rgba(0, 0, 0, 0.3));
+}
 
 #dino {
   width: 50px;

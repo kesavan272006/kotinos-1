@@ -1,7 +1,8 @@
-
-const Notification = ()=>{
-    return (
-        <h1>hello world</h1>
+function Nofication(){
+    return(
+        <div>
+            <h1>hello</h1>
+        </div>
     )
 }
-export default Notification
+export default Nofication

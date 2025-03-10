@@ -26,6 +26,7 @@ import ChatPage from './pages/chatpage';
 import Game from './components/game';
 import QRUpload from './pages/addQr';
 import QRDisplay from './pages/QRDisplay';
+import AiChatbot from './pages/Aichatbot';
 function App() {
   return (
     <div>
@@ -57,6 +58,7 @@ function App() {
             <Route path="/game" element={<Game />} />
             <Route path="/addQr" element={<QRUpload />} />
             <Route path="/displayQr/:userId" element={<QRDisplay />} />
+            <Route path="/aichatbot" element={<AiChatbot />} />
           </Routes>
         </UserProvider>
       </RequestProvider>
