@@ -30,6 +30,7 @@ import AiChatbot from './pages/Aichatbot';
 import Cricket from './pages/sportsInfo/cricket';
 import Football from './pages/sportsInfo/football';
 import Sportspage from './pages/Sportspage';
+import OtherProfile from './pages/otherProfile';
 function App() {
   return (
     <div>
@@ -65,6 +66,7 @@ function App() {
             <Route path="/cricketinfo" element={<Cricket />} />
             <Route path="/footballinfo" element={<Football />} />
             <Route path="/sportspage" element={<Sportspage />} />
+            <Route path="/otherprofile/:userId" element={<OtherProfile />} />
           </Routes>
         </UserProvider>
       </RequestProvider>

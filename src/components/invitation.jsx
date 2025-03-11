@@ -5,7 +5,7 @@ import { Button } from "@mui/material";
 import { collection, doc, getDocs, deleteDoc, setDoc } from "firebase/firestore";
 import { auth, database } from "../config/firebase";
 import Loading from "./Loading";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useRequestContext } from '../context/RequestContext';
 const Invitation = () => {
   const [user, setuser] = useState([]);
@@ -134,10 +134,14 @@ const Invitation = () => {
                   <ListItem
                     style={{ display: "flex", flexDirection: "row", justifyContent: "start" }}
                   >
-                    <Avatar src={profileicon} />
-                    <div style={{ marginLeft: "10px" }}>
-                      <ListItemText primary={eachuser.username} secondary={eachuser.role} />
-                    </div>
+                    <Link to={`/otherprofile/${eachuser.id}`}>
+                        <div style={{display:'flex', flexDirection:'row', justifyContent:'start', alignItems:'center'}}>
+                          <Avatar src={profileicon} />
+                          <div style={{ marginLeft: "10px" }}>
+                            <ListItemText primary={eachuser.username} secondary={eachuser.role} />
+                          </div>
+                        </div>
+                    </Link>
                     <Button
                       style={{
                         backgroundColor: "red",

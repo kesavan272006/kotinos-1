@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { auth, database } from '../config/firebase';
 import { Avatar, Button, ListItem, ListItemText, Paper, List } from '@mui/material';
 import profileicon from '../assets/profileicon.svg';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useRequestContext } from '../context/RequestContext';
 import { setDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
@@ -81,7 +81,6 @@ const Connection = () => {
             });
             setOppId(auth.currentUser?.uid);
             alert(`Request sent successfully!`);
-            // getPendingRequests();
         } catch (err) {
             console.error(err);
         }
@@ -89,18 +88,39 @@ const Connection = () => {
         alert('Request already sent!');
     }
 };
-
-  
-  
-
-  const isRequestSent = (userId) => {
-    return pendingRequests.some(request => request.userId === userId && request.status === 'pending');
-  };
+  const fetchingProfilePic = async (userIds) =>{
+      const userRef = doc(database, "Users", userIds);
+        const userSnap = await getDoc(userRef);
+        if (userSnap.exists()) {
+          const userData = userSnap.data();
+          return userData.profilePic
+        } else {
+          return profileicon
+        }
+  }
+  const [profilePics, setProfilePics] = useState({});
 
   useEffect(() => {
-    getUsers();
-    // getPendingRequests();
-  }, []);
+    const fetchProfilePics = async () => {
+      const newProfilePics = {};
+
+      for (const user of userData) {
+        const pic = await fetchingProfilePic(user.id); 
+        newProfilePics[user.id] = pic; 
+      }
+
+      setProfilePics(newProfilePics); 
+    };
+
+    fetchProfilePics();
+  }, [userData]);
+  const isRequestSent = (userId) => {
+      return pendingRequests.some(request => request.userId === userId && request.status === 'pending');
+    };
+
+    useEffect(() => {
+      getUsers();
+    }, []);
 
   return (
     <div>
@@ -112,10 +132,14 @@ const Connection = () => {
             <Paper>
               <List>
                 <ListItem style={{ display: 'flex', flexDirection: 'row', justifyContent: 'start' }}>
-                  <Avatar src={profileicon} />
-                  <div style={{ marginLeft: '10px' }}>
-                    <ListItemText primary={users.username} secondary={users.role} />
-                  </div>
+                  <Link to={`/otherprofile/${users.id}`}>
+                    <div style={{display:'flex', flexDirection:'row', justifyContent:'start', alignItems:'center'}}>
+                      <Avatar src={profilePics[users.id] || profileicon} />
+                      <div style={{ marginLeft: '10px' }}>
+                        <ListItemText primary={users.username} secondary={users.role} />
+                      </div>
+                    </div>
+                  </Link>
                   {!isRequestAlreadySent && (
                     <Button
                       onClick={() => sendRequest(users.id)}
