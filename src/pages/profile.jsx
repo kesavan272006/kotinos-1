@@ -438,16 +438,16 @@ const Profile = () => {
                         
                         <div
                             key={post.id}
-                            className='bg-white rounded-xl mb-5 w-[50%]'
+                            className='bg-white rounded-xl mb-5 w-[100%] md:w-[50%]'
                         >
                             <div className='pl-5'>
                                 <div className='flex flex-row'>
                                     <img
+                                        className='h-14 w-14 mt-3'
                                         src={profile.profilePic||profileicon}
                                         alt={profileicon}
                                         style={{
-                                            height: '80px',
-                                            width: '80px',
+                                            
                                             borderRadius: '50%',
                                             backgroundColor: 'gray',
                                             marginRight: '20px',
@@ -462,7 +462,7 @@ const Profile = () => {
                                                 left: 0,
                                                 right: 0,
                                                 bottom: 0,
-                                                backgroundColor: 'rgba(86, 84, 84, 0.7)',
+                                                backgroundColor: 'rgba(86, 84, 84, 0.1)',
                                                 display: 'flex',
                                                 justifyContent: 'center',
                                                 alignItems: 'center',
@@ -487,13 +487,13 @@ const Profile = () => {
                                                     borderRadius: '8px',
                                                 }}
                                                 />
-                                                <button
+                                                <button className='hover:scale-105 transition-all font-bold'
                                                 onClick={closeModals}
                                                 style={{
                                                     position: 'absolute',
                                                     top: '10px',
                                                     right: '10px',
-                                                    background: 'red',
+                                                    background: 'black',
                                                     color: 'white',
                                                     border: 'none',
                                                     borderRadius: '50%',
@@ -515,30 +515,30 @@ const Profile = () => {
                                             justifyContent: 'center',
                                         }}
                                     >
-                                        <h1>{post.username}</h1>
+                                        <h1 className='font-bold'>{post.username}</h1>
                                         <h1>{post.role}</h1>
-                                        <h3>{formatTimestamp(post.timestamp)}</h3>
+                                        
                                     </div>
+                                    <h3 className='mt-4 text-gray-500 text-xs ml-4'>{formatTimestamp(post.timestamp)}</h3>
                                 </div>
                                 <br />
                                 <h1>{post.textPost}</h1>
                             </div>
                             <div>
-                                <strong className='text-2xl text-center'>
+                                <strong className='text-2xl text-center ml-5'>
                                     {post.title}
                                 </strong>
-                                <h2>{post.description}</h2>
+                                <h2 className='ml-5 text-base'>{post.description}</h2>
                             </div>
-                            <br />
-                            <br />
+                            
                             {post.images && post.images.length > 0 && (
-                                <div className='flex flex-wrap gap-2 pl-2'>
+                                <div className='flex flex-wrap gap-2 pl-5 py-1'>
                                     {post.images.slice(0, 3).map((image, index) => (
                                         <img
                                             key={index}
                                             src={image}
                                             alt={`Post Image ${index}`}
-                                            className='w-[100px] h-[100px] object-cover cursor-pointer'
+                                            className='w-[100px] h-[100px] rounded object-cover cursor-pointer'
                                             onClick={() => openModal(post.images, index)}
                                         />
                                     ))}
@@ -552,10 +552,7 @@ const Profile = () => {
                                     )}
                                 </div>
                             )}
-                            <FaRegHeart />
-
-                            <br />
-                            <br />
+                            <FaRegHeart className='ml-7 my-3' />
                         </div>
                     ))}
                 </div>

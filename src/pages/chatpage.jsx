@@ -683,6 +683,26 @@ const ChatPage = () => {
                                                     <img src={deleteIcon} className='w-5 h-5' alt="❌" />
                                                 </button>
                                             )}
+                                            {isCurrentUser && (
+                                                <button className='md:hidden block'
+                                                    onClick={() => {
+                                                        deleteMessage(userMessage.id, selectedUser.id)
+                                                        alert('The message is deleted only for you!');
+                                                        showMessage();
+                                                    }}
+                                                    style={{
+                                                        cursor: 'pointer',
+                                                        background: 'transparent',
+                                                        border: 'none',
+                                                        marginTop: '5px',
+                                                        marginLeft: '5px',
+                                                        fontSize: '16px',
+                                                        color: 'red'
+                                                    }}
+                                                >
+                                                    <img src={deleteIcon} className='w-5 h-5' alt="❌" />
+                                                </button>
+                                            )}
                                         </div>
                                     );
                                 })}
