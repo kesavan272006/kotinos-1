@@ -192,6 +192,14 @@ const Sidebar = () => {
               <div className='russo mt-1 text-xl'>Chatbot</div>
             </div>
           </Link>
+          <Link to='/sportspage' className=' russo inverter' state={{ username: username, role: role, email: email }}>
+            <div className="flex items-center hover:scale-105 hover:bg-black hover:bg-opacity-5 rounded-full p-1 my-3 transition-all cursor-pointer gap-5 md:gap-5 pl-4">
+              <div>
+                <IoIosPeople className='scale-[180%]' />
+              </div>
+              <div className='russo mt-1 text-xl'>Sports Info</div>
+            </div>
+          </Link>
         </div>
       </div>
 
