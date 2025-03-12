@@ -1,21 +1,17 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+// Firebase configuration from .env file
 const firebaseConfig = {
-  apiKey: "AIzaSyA-Uvz7WgFomQCRMNNG7R6sEsWVIiCpaWI",
-  authDomain: "kotinos-3a963.firebaseapp.com",
-  projectId: "kotinos-3a963",
-  storageBucket: "kotinos-3a963.firebasestorage.app",
-  messagingSenderId: "1046079812733",
-  appId: "1:1046079812733:web:fa67bca191c4b8d49f6d14",
-  measurementId: "G-V3QZ62CNB3"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
 
 // Initialize Firebase
