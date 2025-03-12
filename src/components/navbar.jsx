@@ -8,7 +8,7 @@ import { NavLink } from 'react-router-dom';
 
 
 import { GoHomeFill } from "react-icons/go";
-import { TiMessages } from "react-icons/ti";
+import { IoChatbubbleEllipses } from "react-icons/io5";
 import { IoIosNotifications } from "react-icons/io";
 import { IoPersonSharp } from "react-icons/io5";
 import { MdLogout } from "react-icons/md";
@@ -44,7 +44,7 @@ function Navbar() {
                 <div className="ul ">
                     <ul className='flex items-center md:text-2xl gap-4 text-l pr-1 md:pr-10'>
                     <NavLink to='/home' className={({ isActive }) => isActive ? 'active-link md:ml-10 ml-4 russo hover:scale-110 transition-all cursor-pointer' : 'md:ml-10 ml-4 russo hover:scale-110 transition-all cursor-pointer'}><GoHomeFill className='scale-[160%]' /></NavLink>
-                        <NavLink to='/chatpage' className={({ isActive }) => isActive ? 'active-link md:ml-10 ml-4 russo hover:scale-110 transition-all cursor-pointer' : 'md:ml-10 ml-4 russo hover:scale-110 transition-all cursor-pointer'}><TiMessages className='scale-[160%]' /></NavLink>
+                        <NavLink to='/chatpage' className={({ isActive }) => isActive ? 'active-link md:ml-10 ml-4 russo hover:scale-110 transition-all cursor-pointer' : 'md:ml-10 ml-4 russo hover:scale-110 transition-all cursor-pointer'}><IoChatbubbleEllipses className='scale-[160%]' /></NavLink>
                         <NavLink to='/invitation' className={({ isActive }) => isActive ? 'active-link md:ml-10 ml-4 russo hover:scale-110 transition-all cursor-pointer' : 'md:ml-10 ml-4 russo hover:scale-110 transition-all cursor-pointer'}><IoIosNotifications className='scale-[160%]' /></NavLink>
                         <NavLink to='/profile' className={({ isActive }) => isActive ? 'active-link md:ml-10 ml-4 russo hover:scale-110 transition-all cursor-pointer' : 'md:ml-10 ml-4 russo hover:scale-110 transition-all cursor-pointer'}><IoPersonSharp className='scale-[160%]' /></NavLink>
                         <NavLink to='/network' className={({ isActive }) => isActive ? 'active-link md:ml-10 ml-4 russo hover:scale-110 transition-all cursor-pointer' : 'md:ml-10 ml-4 russo hover:scale-110 transition-all cursor-pointer'}><IoIosPeople className='scale-[160%]' /></NavLink>

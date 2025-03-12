@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import Navbar from '../components/navbar';
+
 import { Paper, ListItem, Avatar, ListItemText, List } from "@mui/material";
 import profileicon from "../assets/profileicon.svg";
 import { Button } from "@mui/material";
@@ -106,6 +108,7 @@ const Invitation = () => {
 
   return (
     <div>
+      <Navbar />
       {user.filter((eachuser) => eachuser.status === "pending").length === 0 ? (
           <div
             style={{
@@ -122,8 +125,8 @@ const Invitation = () => {
               fontSize: "40px",
             }}
           >
-            <span style={{ color: "red", marginRight: "10px" }}>No </span>invitations
-            available!
+            <span className="lexend" style={{ color: "#2BCEE0", marginRight: "10px" }}>No </span><p className="lexend">invitations
+            available!</p>
           </div>
         ) : (
           user

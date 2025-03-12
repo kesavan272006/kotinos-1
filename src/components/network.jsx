@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Navbar from '../components/navbar';
 import { Paper, Avatar, ListItem, ListItemText, List, Button } from '@mui/material';
 import profileicon from '../assets/profileicon.svg'; 
 import { collection, doc, getDocs } from 'firebase/firestore';
@@ -56,17 +57,18 @@ const Network = () => {
 
     return (
         <div>
+            <Navbar />
             {user.length === 0 ? (
-                <div style={{
+                <div  style={{
                     width: '100%', height: '40vw', backgroundColor: '#F1F8F9', textAlign: 'center',
                     justifyContent: 'center', alignItems: 'center', alignSelf: 'center', display: 'flex',
                     flexDirection: 'row', fontWeight: 'bolder', fontSize: '40px'
                 }}>
-                    <span style={{ color: 'red', marginRight: '10px' }}>No </span>friends available!
+                    <span style={{ color: '#2BCEE0', marginRight: '10px' }}>No </span>friends available!
                 </div>
             ) : (
                 user.filter(user => user.status === 'connected').map((eachuser) => {
-                    return <Paper key={eachuser.id}>
+                    return <Paper className='mt-1 mx-1 hover:bg-gray-100 hover:transition-all' key={eachuser.id}>
                         <Link to={`/otherprofile/${eachuser.id}`}>
                             <List>
                                 <ListItem style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>

@@ -1,44 +1,63 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Russo+One&display=swap');
 
 @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Russo+One&display=swap');
-body{
+
+body {
   background-color: #f1f8f9;
-  
+
 }
-.navbar{
+
+.navbar {
   box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
 
 }
-.russo{
+
+.russo {
   font-family: "Russo One", serif;
 }
-.lexend{
+
+.lexend {
   font-family: "Lexend", serif;
 }
-.logo{
+
+.logo {
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
 
 }
+
 @media (min-width: 768px) {
-  .main-head{
+  .main-head {
     line-height: 60px;
   }
 }
-.line{
+
+.line {
   border: 3px solid gray;
   margin-top: 40px;
 }
+
 /* NAVBAR */
 .active-link {
-  color: rgb(3, 148, 220); 
+  color: rgb(3, 148, 220);
+}
+
+.navbar-bg {
+  background: hsla(0, 0%, 0%, 1);
+
+  background: linear-gradient(180deg, hsla(0, 0%, 0%, 1) 35%, hsla(255, 100%, 27%, 1) 100%);
+
+  background: -moz-linear-gradient(180deg, hsla(0, 0%, 0%, 1) 35%, hsla(255, 100%, 27%, 1) 100%);
+
+  background: -webkit-linear-gradient(180deg, hsla(0, 0%, 0%, 1) 35%, hsla(255, 100%, 27%, 1) 100%);
+
+  filter: progid: DXImageTransform.Microsoft.gradient(startColorstr="#000000", endColorstr="#23008C", GradientType=1);
 }
 
 /* .shadoww{
   box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 } */
 /*SIGN IN TO KOTINOS*/
-.input-box-signin{
+.input-box-signin {
   border: 2px solid rgb(178, 174, 174);
   border-radius: 10px;
   padding: 4px;
@@ -46,30 +65,44 @@ body{
 
 
 
-.typewriter{
-  overflow: hidden; /* Ensures the content is not revealed until the animation */
-  border-right: .15em solid white; /* The typwriter cursor */
+.typewriter {
+  overflow: hidden;
+  /* Ensures the content is not revealed until the animation */
+  border-right: .15em solid white;
+  /* The typwriter cursor */
   white-space: nowrap;
-  margin: 0 auto; 
-  animation: 
+  margin: 0 auto;
+  animation:
     typing 3.5s steps(40, end),
     blink-caret .75s step-end infinite;
 }
 
-.inverter{
+.inverter {
   filter: invert(1);
 }
 
 /* The typing effect */
 @keyframes typing {
-  from { width: 0 }
-  to { width: 100% }
+  from {
+    width: 0
+  }
+
+  to {
+    width: 100%
+  }
 }
 
 /* The typewriter cursor effect */
 @keyframes blink-caret {
-  from, to { border-color: transparent }
-  50% { border-color: white; }
+
+  from,
+  to {
+    border-color: transparent
+  }
+
+  50% {
+    border-color: white;
+  }
 }
 
 ::-webkit-scrollbar {
@@ -79,7 +112,7 @@ body{
 ::-webkit-scrollbar-track {
   background-color: #f1f1f1;
   margin-top: 4px;
-  
+
 }
 
 ::-webkit-scrollbar-thumb {
@@ -90,7 +123,8 @@ body{
 ::-webkit-scrollbar-thumb:hover {
   background-color: #555;
 }
-#Logo{
+
+#Logo {
   height: 86px;
   width: 86px;
   border-radius: 100%;
@@ -100,6 +134,7 @@ body{
 .active-link {
   color: rgb(3, 148, 220);
 }
+
 .middle-container {
   width: 50vw;
   margin-top: 50px;
@@ -197,6 +232,7 @@ body{
   display: flex;
   justify-content: space-between;
 }
+
 .game {
   width: 600px;
   height: 225px;
@@ -207,12 +243,13 @@ body{
 .gradient-bg {
   background: linear-gradient(to right, #1e3a8a, #1d4ed8, #06b6d4);
 }
+
 .reflection {
   display: inline-block;
   font-size: 25px;
   font-weight: bold;
   color: #333;
-  
+
   -webkit-box-reflect: below -50px linear-gradient(transparent, rgba(0, 0, 0, 0.3));
 }
 
@@ -271,6 +308,7 @@ body{
     left: -5px;
   }
 }
+
 /* QRUpload.css */
 .qr-upload-container {
   width: 100%;
@@ -341,6 +379,7 @@ input[type="file"] {
   align-self: center;
   align-content: center;
 }
+
 .qr-display-container {
   padding: 20px;
   max-width: 600px;
@@ -476,6 +515,7 @@ input[type="file"] {
     font-size: 12px;
   }
 }
+
 .right-arrow,
 .left-arrow {
   cursor: pointer;
@@ -604,6 +644,7 @@ input[type="file"] {
     width: 280px;
   }
 }
+
 .floating-buttons-container {
   position: fixed;
   bottom: 20px;
@@ -613,7 +654,8 @@ input[type="file"] {
   gap: 10px;
 }
 
-.floating-button, .floating-button2 {
+.floating-button,
+.floating-button2 {
   width: 40px;
   height: 40px;
   background-color: #007bff;
@@ -629,9 +671,11 @@ input[type="file"] {
   transition: background-color 0.3s ease;
 }
 
-.floating-button:hover, .floating-button2:hover {
+.floating-button:hover,
+.floating-button2:hover {
   background-color: #0056b3;
 }
+
 .floating-buttons-container {
   position: fixed;
   bottom: 20px;
@@ -641,7 +685,8 @@ input[type="file"] {
   gap: 10px;
 }
 
-.floating-button, .floating-button2 {
+.floating-button,
+.floating-button2 {
   width: 40px;
   height: 40px;
   background-color: #007bff;
@@ -657,6 +702,7 @@ input[type="file"] {
   transition: background-color 0.3s ease;
 }
 
-.floating-button:hover, .floating-button2:hover {
+.floating-button:hover,
+.floating-button2:hover {
   background-color: #0056b3;
 }
