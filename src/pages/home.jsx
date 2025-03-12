@@ -36,7 +36,7 @@ function Home() {
     }
 
     return (
-        <div className="page-container flex flex-col min-h-screen overflow-hidden">
+        <div className="page-container flex flex-col min-h-screen overflow-hidden ">
             <div className="flex flex-grow">
                 <Sidebar className="sticky top-0 w-[20vw] bg-white" />
                 <div className="flex flex-col justify-center items-center w-full overflow-y-scroll h-full">

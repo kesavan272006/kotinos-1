@@ -429,7 +429,7 @@ const handleChanges3 = (e, service) => {
         <>
             <Navbar />
             <h1 style={{textAlign:'center', opacity:'0.8', paddingTop:'1%'}}>If you find any error, just refresh the page.</h1>
-            <div className="grid md:grid-cols-2 gap-6 m-5">
+            <div className="grid md:grid-cols-2 gap-6 m-5 md:px-10">
                 <div className="bg-white p-4 rounded-lg relative shadow-sm">
                     <div className="flex flex-col items-center mb-4">
                         <label className="relative cursor-pointer">
@@ -667,7 +667,7 @@ const handleChanges3 = (e, service) => {
                         
                         <div
                             key={post.id}
-                            className='bg-white rounded-xl mb-5 w-[100%] md:w-[50%]'
+                            className='bg-white rounded-xl mb-5 w-[100%] md:w-[50%] p-1'
                         >
                             <div className='pl-5'>
                                 <div className='flex flex-row'>
@@ -761,13 +761,27 @@ const handleChanges3 = (e, service) => {
                             </div>
                             
                             {post.images && post.images.length > 0 && (
-                                <div className='flex flex-wrap gap-2 pl-5 py-1'>
-                                    {post.images.slice(0, 3).map((image, index) => (
+                                <div className='flex flex-col pl-5 py-1 pr-5'>
+                                    {post.images.slice(0, 1).map((image, index) => (
+                                        <div className="flex bg-gray-50 justify-center rounded-lg py-2">
+                                            <img
+                                            key={index}
+                                            src={image}
+                                            alt={`Post Image ${index}`}
+                                            className='w-fit h-fit md:max-h-[550px] md:max-w-[700px] rounded object-cover cursor-pointer'
+                                            onClick={() => openModal(post.images, index)}
+                                        />
+                                        </div>
+                                        
+                                    ))}
+                                    <br />
+                                    <div className='flex gap-2 justify-start '>
+                                    {post.images.slice(1, 3).map((image, index) => (
                                         <img
                                             key={index}
                                             src={image}
                                             alt={`Post Image ${index}`}
-                                            className='w-[100px] h-[100px] rounded object-cover cursor-pointer'
+                                            className='w-[100px] h-[100px] rounded object-cover cursor-pointer mb-4 border '
                                             onClick={() => openModal(post.images, index)}
                                         />
                                     ))}
@@ -779,9 +793,9 @@ const handleChanges3 = (e, service) => {
                                             <span>+{post.images.length - 3}</span>
                                         </div>
                                     )}
+                                    </div>
                                 </div>
                             )}
-                            <FaRegHeart className='ml-7 my-3' />
                         </div>
                     ))}
                 </div>
