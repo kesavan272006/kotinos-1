@@ -203,19 +203,52 @@ const OtherProfile = () => {
                             <img src={profile.profilePic || profileicon} alt="Profile" onClick={()=>openModals(profile.profilePic || profileicon)} className="w-24 h-24 rounded-full object-cover border-2 border-blue-300" />
                         </label>
                     </div>
-                    <h2 className="text-xl font-semibold mb-4 flex justify-between items-center">
-                        Personal Information
-                    </h2>
-                    <div className="space-y-3">
-                        <p><strong>User Name:</strong> {username || "Not provided"}</p>
-                        <p><strong>Logged in as:</strong> {role || "Not provided"}</p>
-                        <p><strong>emailId: </strong> {email || "Not provided"}</p>
-                        <p><strong>Date of Birth:</strong> {profile.dob || "Not provided"}</p>
-                        <p><strong>Gender:</strong> {profile.gender || "Not provided"}</p>
-                        <p><strong>State:</strong> {profile.state || "Not provided"}</p>
-                    </div>
+                    {!decidingorganization && (
+                        <>
+                            <h2 className="text-xl font-semibold mb-4 flex justify-between items-center">
+                                Personal Information
+                            </h2>
+                            <div className="space-y-3">
+                                <p><strong>User Name:</strong> {username || "Not provided"}</p>
+                                <p><strong>Logged in as:</strong> {role || "Not provided"}</p>
+                                <p><strong>emailId: </strong> {email || "Not provided"}</p>
+                                <p><strong>Date of Birth:</strong> {profile.dob || "Not provided"}</p>
+                                <p><strong>Gender:</strong> {profile.gender || "Not provided"}</p>
+                                <p><strong>State:</strong> {profile.state || "Not provided"}</p>
+                            </div>
+                        </>
+                    )}
+                    {decidingorganization && (
+                        <>
+                            <h2 className="text-xl font-semibold mb-4 flex justify-between items-center">
+                            Organization Information
+                            </h2>
+                            <div className="space-y-3">
+                                <p><strong>Organization Name:</strong> {username || "Not provided"}</p>
+                                <p><strong>Primary Contact Person:</strong> {profile.primaryPerson || "Not provided"}</p>
+                                <p><strong>Email of primary Contact Person:</strong> {profile.primaryPersonEmail || "Not provided"}</p>
+                                <p><strong>Logged in as:</strong> {role || "Not provided"}</p>
+                                <p><strong>Organization's emailId: </strong> {email || "Not provided"}</p>
+                                <p><strong>Date of Establishment:</strong> {profile.dob || "Not provided"}</p>
+                                <p><strong>State of main Operation:</strong> {profile.state || "Not provided"}</p>
+                                <p><strong>Website URL:</strong> {profile.websiteUrl || "Not provided"}</p>
+                                <p><strong>Organization Type:</strong> {profile.organizationType || "Not provided"}</p>
+                                <p><strong>Mission or Brief Description of your Organization:</strong> <br />{profile.mission || "Not provided"}</p>
+                            </div>
+                        </>
+                    )}
                 </div>
-
+                {decidingorganization && (
+                    <div className="bg-white shadow-sm p-4 rounded-lg">
+                        <h2 className="text-xl font-semibold mb-4">Sports Information</h2>
+                        <div className="space-y-3">
+                            <p><strong>The sports which you focus primarily: </strong> {profile.primarySport || "None"}</p>
+                            <p><strong>Other sports of focus: </strong> {profile.secondarySport || "None"}</p>
+                            <p><strong>Type of services offered: </strong> <br /> {profile.servicesOffered || "None"}</p>
+                            <p><strong>Achievement Highlights: </strong> {profile.achievements || "None"}</p>
+                        </div>
+                    </div>
+                )}
                 {decidingathlete && (
                     <div className="bg-white shadow-sm p-4 rounded-lg">
                         <h2 className="text-xl font-semibold mb-4">Sports Information</h2>

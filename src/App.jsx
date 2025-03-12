@@ -27,9 +27,6 @@ import Game from './components/game';
 import QRUpload from './pages/addQr';
 import QRDisplay from './pages/QRDisplay';
 import AiChatbot from './pages/Aichatbot';
-import Cricket from './pages/sportsInfo/cricket';
-import Football from './pages/sportsInfo/football';
-import Sportspage from './pages/Sportspage';
 import OtherProfile from './pages/otherProfile';
 function App() {
   return (
@@ -63,9 +60,6 @@ function App() {
             <Route path="/addQr" element={<QRUpload />} />
             <Route path="/displayQr/:userId" element={<QRDisplay />} />
             <Route path="/aichatbot" element={<AiChatbot />} />
-            <Route path="/cricketinfo" element={<Cricket />} />
-            <Route path="/footballinfo" element={<Football />} />
-            <Route path="/sportspage" element={<Sportspage />} />
             <Route path="/otherprofile/:userId" element={<OtherProfile />} />
           </Routes>
         </UserProvider>
