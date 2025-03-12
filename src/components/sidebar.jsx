@@ -67,7 +67,7 @@ const Sidebar = () => {
   }, [navigate]);
 
   const getNews = () => {
-    fetch("'https://api.currentsapi.services/v1/latest-news?apiKey=b3e69597246cc80b8fe2545e2039b979'")
+    fetch("https://api.currentsapi.services/v1/latest-news?apiKey=b3e69597246cc80b8fe2545e2039b979")
       .then((res) => res.json())
       .then((json) => setNews(json.articles))
       .catch((error) => console.error("Error:", error));
