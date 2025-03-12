@@ -67,35 +67,21 @@ const Network = () => {
             ) : (
                 user.filter(user => user.status === 'connected').map((eachuser) => {
                     return <Paper key={eachuser.id}>
-                        <List>
-                            <ListItem style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
-                                <div style={{display:'flex', flexDirection:'row', justifyContent:'start', alignItems:'center'}}>
-                                    <Avatar src={profileicon} />
-                                    <div style={{ marginLeft: "10px" }}>
-                                        <ListItemText
-                                            primary={eachuser.username}
-                                            secondary={eachuser.role}
-                                        />
+                        <Link to={`/otherprofile/${eachuser.id}`}>
+                            <List>
+                                <ListItem style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
+                                    <div style={{display:'flex', flexDirection:'row', justifyContent:'start', alignItems:'center'}}>
+                                        <Avatar src={profileicon} />
+                                        <div style={{ marginLeft: "10px" }}>
+                                            <ListItemText
+                                                primary={eachuser.username}
+                                                secondary={eachuser.role}
+                                            />
+                                        </div>
                                     </div>
-                                </div>
-                                {/* <Link to='/messages' state={{username: eachuser.username, role:eachuser.role, id: eachuser.id}}>
-                                <Button style={{
-                                    backgroundColor: '#28a745',
-                                    color: '#fff',
-                                    padding: '12px 24px', 
-                                    fontSize: '16px',
-                                    fontWeight: 'bold',
-                                    borderRadius: '8px',
-                                    border: 'none',
-                                    cursor: 'pointer',
-                                    textAlign: 'center',
-                                    transition: 'background-color 0.3s ease',
-                                    }}>
-                                    Message
-                                    </Button>
-                                </Link> */}
-                            </ListItem>
-                        </List>
+                                </ListItem>
+                            </List>
+                        </Link>
                     </Paper>
                 })
             )}
