@@ -4,7 +4,7 @@ import { RiMovieLine } from "react-icons/ri";
 import { MdEvent } from "react-icons/md";
 import { FaRegHeart } from "react-icons/fa";
 import profileicon from '../assets/profileicon.svg';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { auth, database } from '../config/firebase';
 import { collection, doc, getDoc, getDocs, setDoc, updateDoc, increment, arrayRemove, arrayUnion } from 'firebase/firestore';
 import Posts from './posts';
@@ -233,76 +233,80 @@ const Middle = ({ userData }) => {
                     {posts.map((post) => (
                         <div key={post.id} className='bg-white rounded-xl border  mb-5'>
                             <div className='pl-5 pt-3'>
-                                <div style={{position:'relative'}} className='flex flex-row'>
-                                    <img src={post.profilepic||profileicon} alt={profileicon} className='mr-5 h-14 w-14 rounded-full bg-gray-300' onClick={() => openModals(post.profilepic||profileicon)}/>
-                                    {isModalOpened && (
-                                            <div
-                                            className=''
-                                            style={{
-                                                position: 'fixed',
-                                                top: 0,
-                                                left: 0,
-                                                right: 0,
-                                                bottom: 0,
-                                                backgroundColor: 'rgba(92, 91, 91, 0.01)',
-                                                display: 'flex',
-                                                justifyContent: 'center',
-                                                alignItems: 'center',
-                                                zIndex: 9999,
-                                            }}
-                                            onClick={closeModals}
-                                            >
-                                            <div className='mb-14 max-w-[80vw] max-h-[80vh]'
-                                                
-                                                onClick={(e) => e.stopPropagation()} 
-                                            >
-                                                <img
+                                    <div style={{position:'relative'}} className='flex flex-row'>
+                                        <img src={post.profilepic||profileicon} alt={profileicon} className='mr-5 h-14 w-14 rounded-full bg-gray-300' onClick={() => openModals(post.profilepic||profileicon)}/>
+                                        {isModalOpened && (
+                                                <div
                                                 className=''
-                                                src={modalImages}
-                                                alt={profileicon}
                                                 style={{
-                                                    width: '100%',
-                                                    height: '90vh',
-                                                    borderRadius: '4px',
-                                                    
+                                                    position: 'fixed',
+                                                    top: 0,
+                                                    left: 0,
+                                                    right: 0,
+                                                    bottom: 0,
+                                                    backgroundColor: 'rgba(92, 91, 91, 0.01)',
+                                                    display: 'flex',
+                                                    justifyContent: 'center',
+                                                    alignItems: 'center',
+                                                    zIndex: 9999,
                                                 }}
-                                                />
-                                                <button
                                                 onClick={closeModals}
-                                                style={{
-                                                    position: 'absolute',
-                                                    top: '10px',
-                                                    right: '10px',
-                                                    background: 'black',
-                                                    color: 'white',
-                                                    border: 'none',
-                                                    borderRadius: '50%',
-                                                    width: '30px',
-                                                    height: '30px',
-                                                    fontSize: '18px',
-                                                    fontWeight: 'bold',
-                                                    cursor: 'pointer',
-                                                }}
                                                 >
-                                                X
-                                                </button>
+                                                <div className='mb-14 max-w-[80vw] max-h-[80vh]'
+                                                    
+                                                    onClick={(e) => e.stopPropagation()} 
+                                                >
+                                                    <img
+                                                    className=''
+                                                    src={modalImages}
+                                                    alt={profileicon}
+                                                    style={{
+                                                        width: '100%',
+                                                        height: '90vh',
+                                                        borderRadius: '4px',
+                                                        
+                                                    }}
+                                                    />
+                                                    <button
+                                                    onClick={closeModals}
+                                                    style={{
+                                                        position: 'absolute',
+                                                        top: '10px',
+                                                        right: '10px',
+                                                        background: 'black',
+                                                        color: 'white',
+                                                        border: 'none',
+                                                        borderRadius: '50%',
+                                                        width: '30px',
+                                                        height: '30px',
+                                                        fontSize: '18px',
+                                                        fontWeight: 'bold',
+                                                        cursor: 'pointer',
+                                                    }}
+                                                    >
+                                                    X
+                                                    </button>
+                                                </div>
+                                                </div>
+                                            )}
+                                        <Link to={`/otherprofile/${post.Id}`}>
+                                            <div style={{display:'flex', flexDirection:'row'}}>
+                                                <div
+                                                    style={{
+                                                        display: 'flex',
+                                                        flexDirection: 'column',
+                                                        justifyContent: 'center',
+                                                        marginRight:'20px'
+                                                    }}
+                                                >
+                                                    <h1 className='font-bold'>{post.username}</h1>
+                                                    <h1>{post.role}</h1>
+                                                    
+                                                </div>
+                                                <h3 className='absolute md:relative m-1 top-full md:ml-6 mt-1 text-sm text-gray-400'>{formatTimestamp(post.timestamp)}</h3>
                                             </div>
-                                            </div>
-                                        )}
-                                    <div
-                                        style={{
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            justifyContent: 'center',
-                                        }}
-                                    >
-                                        <h1 className='font-bold'>{post.username}</h1>
-                                        <h1>{post.role}</h1>
-                                        
+                                        </Link>
                                     </div>
-                                    <h3 className='absolute md:relative m-1 top-full md:ml-6 mt-1 text-sm text-gray-400'>{formatTimestamp(post.timestamp)}</h3>
-                                    
-                                </div>
                                 {post.enableCrowdFunding && (
                                         <>
                                             <button className='relative left-[66%] md:hidden  text-xs bg-gradient-to-r from-blue-900 via-blue-700 to-cyan-500 ml-6 px-2 h-5 text-white font-bold mt-2 rounded-xl'>DONATE</button>

@@ -270,7 +270,158 @@ const Profile = () => {
             }
         }
     };
-    
+    // Organization Type Dropdown
+const organizationTypes = [
+    "Sports Training",
+    "Event Management",
+    "Athlete Development",
+    "Fitness Center",
+    "Youth Sports Club",
+    "Coaching Academy",
+    "Sports Facility",
+    "Recreational Sports Center",
+    "Other"
+  ];
+  
+  // Type of Services Offered (Checkbox options)
+  const servicesOffered = [
+    "Event Hosting",
+    "Athlete Training",
+    "Coaching",
+    "Facility Rental",
+    "Sports Equipment Supply",
+    "Sports Therapy",
+    "Sports Nutrition",
+    "Youth Development Programs"
+  ];
+  
+  // Types of Events Conducted Dropdown
+  const eventTypes = [
+    "Tournaments",
+    "Competitions",
+    "Workshops",
+    "Camps",
+    "Seminars",
+    "Exhibitions",
+    "Fundraisers",
+    "Conferences"
+  ];
+  
+  // Target Audience for Services Dropdown
+  const targetAudience = [
+    "Youth Athletes",
+    "Professional Athletes",
+    "Recreational Players",
+    "Coaches",
+    "Sports Enthusiasts",
+    "Amateur Athletes",
+    "Schools/Colleges",
+    "Corporate Groups"
+  ];
+  
+  // Primary Sports Focus (Array to list the sports they focus on)
+  const primarySportsFocus = [
+    "Soccer",
+    "Basketball",
+    "Tennis",
+    "Cricket",
+    "Swimming",
+    "Track and Field",
+    "Rugby",
+    "Baseball",
+    "Cycling",
+    "Martial Arts",
+    "Gymnastics",
+    "Volleyball",
+    "E-Sports",
+    "Other"
+  ];
+  const handleChanges = (e, service) => {
+    const { checked } = e.target;
+    setProfile((prevProfile) => {
+        const currentServices = prevProfile.servicesOffered
+            ? prevProfile.servicesOffered.split(', ') 
+            : [];
+
+        if (checked) {
+            if (!currentServices.includes(service)) {
+                currentServices.push(service);
+            }
+        } else {
+            const index = currentServices.indexOf(service);
+            if (index > -1) {
+                currentServices.splice(index, 1);
+            }
+        }
+        return {
+            ...prevProfile,
+            servicesOffered: currentServices.join(', '),
+        };
+    });
+};
+const handleChanges2 = (e, service) => {
+    const { checked } = e.target;
+    setProfile((prevProfile) => {
+        const currentServices = prevProfile.eventsConducted
+            ? prevProfile.eventsConducted.split(', ') 
+            : [];
+
+        if (checked) {
+            if (!currentServices.includes(service)) {
+                currentServices.push(service);
+            }
+        } else {
+            const index = currentServices.indexOf(service);
+            if (index > -1) {
+                currentServices.splice(index, 1);
+            }
+        }
+        return {
+            ...prevProfile,
+            eventsConducted: currentServices.join(', '),
+        };
+    });
+};
+const handleChanges3 = (e, service) => {
+    const { checked } = e.target;
+    setProfile((prevProfile) => {
+        const currentServices = prevProfile.targetAudience
+            ? prevProfile.targetAudience.split(', ') 
+            : [];
+
+        if (checked) {
+            if (!currentServices.includes(service)) {
+                currentServices.push(service);
+            }
+        } else {
+            const index = currentServices.indexOf(service);
+            if (index > -1) {
+                currentServices.splice(index, 1);
+            }
+        }
+        return {
+            ...prevProfile,
+            targetAudience: currentServices.join(', '),
+        };
+    });
+};
+  const secondarySportsInterest = [
+    "Soccer",
+    "Basketball",
+    "Tennis",
+    "Cricket",
+    "Swimming",
+    "Track and Field",
+    "Rugby",
+    "Baseball",
+    "Cycling",
+    "Martial Arts",
+    "Gymnastics",
+    "Volleyball",
+    "E-Sports",
+    "Other"
+  ];
+  
     if (loading) {
         return <Loading />
     }
@@ -285,23 +436,51 @@ const Profile = () => {
                             <img src={profile.profilePic || profileicon} alt="Profile" onClick={()=>openModals(profile.profilePic || profileicon)} className="w-24 h-24 rounded-full object-cover border-2 border-blue-300" />
                         </label>
                     </div>
-                    <h2 className="text-xl font-semibold mb-4 flex justify-between items-center">
-                        Personal Information
-                        <button onClick={() => setIsEditing(true)} className="flex items-center text-sm text-blue-700 hover:text-green-600 transition-colors">
-                            <span>Edit Profile</span>
-                            {/* <Edit className="mr-2" size={18} /> */}
-                        </button>
+                    {!decidingorganization && (
+                        <>
+                            <h2 className="text-xl font-semibold mb-4 flex justify-between items-center">
+                                Personal Information
+                                <button onClick={() => setIsEditing(true)} className="flex items-center text-sm text-blue-700 hover:text-green-600 transition-colors">
+                                    <span>Edit Profile</span>
+                                    {/* <Edit className="mr-2" size={18} /> */}
+                                </button>
 
-                    </h2>
-                    <div className="space-y-3">
-                        <p><strong>User Name:</strong> {username || "Not provided"}</p>
-                        {/* <p><strong>Full Name:</strong> {profile.fullName || "Not provided"}</p> */}
-                        <p><strong>Logged in as:</strong> {role || "Not provided"}</p>
-                        <p><strong>Your emailId: </strong> {email || "Not provided"}</p>
-                        <p><strong>Date of Birth:</strong> {profile.dob || "Not provided"}</p>
-                        <p><strong>Gender:</strong> {profile.gender || "Not provided"}</p>
-                        <p><strong>State:</strong> {profile.state || "Not provided"}</p>
-                    </div>
+                            </h2>
+                            <div className="space-y-3">
+                                <p><strong>User Name:</strong> {username || "Not provided"}</p>
+                                {/* <p><strong>Full Name:</strong> {profile.fullName || "Not provided"}</p> */}
+                                <p><strong>Logged in as:</strong> {role || "Not provided"}</p>
+                                <p><strong>Your emailId: </strong> {email || "Not provided"}</p>
+                                <p><strong>Date of Birth:</strong> {profile.dob || "Not provided"}</p>
+                                <p><strong>Gender:</strong> {profile.gender || "Not provided"}</p>
+                                <p><strong>State:</strong> {profile.state || "Not provided"}</p>
+                            </div>
+                        </>
+                    )}
+                    {decidingorganization && (
+                        <>
+                            <h2 className="text-xl font-semibold mb-4 flex justify-between items-center">
+                            Organization Information
+                            <button onClick={() => setIsEditing(true)} className="flex items-center text-sm text-blue-700 hover:text-green-600 transition-colors">
+                                <span>Edit Profile</span>
+                                {/* <Edit className="mr-2" size={18} /> */}
+                            </button>
+
+                            </h2>
+                            <div className="space-y-3">
+                                <p><strong>Organization Name:</strong> {username || "Not provided"}</p>
+                                <p><strong>Primary Contact Person:</strong> {profile.primaryPerson || "Not provided"}</p>
+                                <p><strong>Email of primary Contact Person:</strong> {profile.primaryPersonEmail || "Not provided"}</p>
+                                <p><strong>Logged in as:</strong> {role || "Not provided"}</p>
+                                <p><strong>Organization's emailId: </strong> {email || "Not provided"}</p>
+                                <p><strong>Date of Establishment:</strong> {profile.dob || "Not provided"}</p>
+                                <p><strong>State of main Operation:</strong> {profile.state || "Not provided"}</p>
+                                <p><strong>Website URL:</strong> {profile.websiteUrl || "Not provided"}</p>
+                                <p><strong>Organization Type:</strong> {profile.organizationType || "Not provided"}</p>
+                                <p><strong>Mission or Brief Description of your Organization:</strong> <br />{profile.mission || "Not provided"}</p>
+                            </div>
+                        </>
+                    )}
                 </div>
 
                 {decidingathlete && (
@@ -344,6 +523,17 @@ const Profile = () => {
                         </div>
                     </div>
                 )}
+                {decidingorganization && (
+                    <div className="bg-white shadow-sm p-4 rounded-lg">
+                        <h2 className="text-xl font-semibold mb-4">Sports Information</h2>
+                        <div className="space-y-3">
+                            <p><strong>The sports which you focus primarily: </strong> {profile.primarySport || "None"}</p>
+                            <p><strong>Other sports of focus: </strong> {profile.secondarySport || "None"}</p>
+                            <p><strong>Type of services offered: </strong> <br /> {profile.servicesOffered || "None"}</p>
+                            <p><strong>Achievement Highlights: </strong> {profile.achievements || "None"}</p>
+                        </div>
+                    </div>
+                )}
                 {isEditing && (
                     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
                         <div className="bg-white p-6 rounded-lg shadow-lg w-96 max-h-[90vh] overflow-y-auto">
@@ -351,14 +541,18 @@ const Profile = () => {
                             <div className="space-y-3">
                                 <label>Upload Profile Picture</label>
                                 <input type="file" accept="image/*" onChange={handleImageUpload} className="border p-2 rounded w-full" />
-                                {/* <input type="text" name="fullName" placeholder="Full Name" value={profile.fullName} onChange={handleChange} className="border p-2 rounded w-full" /> */}
+                                {decidingorganization && (
+                                    <h1>Date of Establishment:</h1>
+                                )}
                                 <input type="date" name="dob" value={profile.dob} onChange={handleChange} className="border p-2 rounded w-full" />
-                                <select name="gender" value={profile.gender} onChange={handleChange} className="border p-2 rounded w-full">
-                                    <option value="">Select Gender</option>
-                                    <option value="Male">Male</option>
-                                    <option value="Female">Female</option>
-                                    <option value="Other">Other</option>
-                                </select>
+                                {!decidingorganization && (
+                                    <select name="gender" value={profile.gender} onChange={handleChange} className="border p-2 rounded w-full">
+                                        <option value="">Select Gender</option>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                )}
                                 <select name="state" value={profile.state} onChange={handleChange} className="border p-2 rounded w-full">
                                     <option value="">Select State</option>
                                     {indianStates.map((state) => (
@@ -401,6 +595,41 @@ const Profile = () => {
                                         <textarea name='teamName' placeholder='Please enter the name of the teams you have coached for' value={profile.teamName} onChange={handleChange} style={textareaStyle} onFocus={(e) => e.target.style.border = focusStyle.border} onBlur={(e) => e.target.style.border = blurStyle.border} />                               
                                         <textarea name='achievements' placeholder='Your achievements as a coach' value={profile.achievements} onChange={handleChange} style={textareaStyle} onFocus={(e) => e.target.style.border = focusStyle.border} onBlur={(e) => e.target.style.border = blurStyle.border} /> 
                                         <input type="text" name="experience" placeholder="Years of Experience as a coach" value={profile.experience} onChange={handleChange} className="border p-2 rounded w-full" />
+                                    </>
+                                )}
+                                {decidingorganization && (
+                                    <>
+                                        <input type="text" name="primaryPersonEmail" placeholder="Email of the primary contact person" value={profile.primaryPersonEmail} onChange={handleChange} className="border p-2 rounded w-full" />
+                                        <input type="text" name="primaryPerson" placeholder="name of the primary contact person" value={profile.primaryPerson} onChange={handleChange} className="border p-2 rounded w-full" />
+                                        <select name="primarySport" value={profile.primarySport} onChange={handleChange} className="border p-2 rounded w-full">
+                                        <option value="">Select the sports which you focus primarily</option>
+                                        {sportsArray.map((state) => (
+                                            <option key={state} value={state}>{state}</option>
+                                        ))}
+                                        </select>
+                                        <select name="secondarySport" value={profile.secondarySport} onChange={handleChange} className="border p-2 rounded w-full">
+                                            <option value="">Select the other sports which you focus</option>
+                                            {sportsArray.map((state) => (
+                                                <option key={state} value={state}>{state}</option>
+                                            ))}
+                                        </select> 
+                                        <h1>Types of services offered:</h1>
+                                        <div className="space-y-2" style={{display:'flex', flexDirection:'column', justifyContent:'center'}}>
+                                            {servicesOffered.map((service) => (
+                                                <label key={service}>
+                                                <input
+                                                    type="checkbox"
+                                                    name="servicesOffered"
+                                                    value={service}
+                                                    checked={(profile.servicesOffered || "").split(', ').includes(service)} // Check if the service is selected
+                                                    onChange={(e) => handleChanges(e, service)}
+                                                    className="form-checkbox text-blue-500"
+                                                />
+                                                <span className="ml-2">{service}</span>
+                                                </label>
+                                            ))}
+                                        </div>
+                                        <textarea name='achievements' placeholder='Your achievements as an organization' value={profile.achievements} onChange={handleChange} style={textareaStyle} onFocus={(e) => e.target.style.border = focusStyle.border} onBlur={(e) => e.target.style.border = blurStyle.border} /> 
                                     </>
                                 )}
                                 {decidinguser && (
