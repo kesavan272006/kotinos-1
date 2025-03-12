@@ -309,10 +309,9 @@ const Middle = ({ userData }) => {
                                     </div>
                                 {post.enableCrowdFunding && (
                                         <>
-                                            <button className='relative left-[66%] md:hidden  text-xs bg-gradient-to-r from-blue-900 via-blue-700 to-cyan-500 ml-6 px-2 h-5 text-white font-bold mt-2 rounded-xl'>DONATE</button>
                                             <button
                                             onClick={() => handlenavigation(post.Id)}
-                                            className="hidden mt-1 -translate-y-14 translate-x-14 hover:scale-105 relative group left-[75%] px-2 bg-gradient-to-r from-blue-900 via-blue-700 to-cyan-500 text-white h-7 p-2 font-bold text-sm transition-all duration-300 rounded-lg overflow-hidden md:flex md:items-center md:justify-center md:pr-4 origin-right"
+                                            className="mt-1 -translate-y-14 -translate-x-4 md:translate-x-20 hover:scale-105 relative group left-[75%] px-2 bg-gradient-to-r from-blue-900 via-blue-700 to-cyan-500 text-white h-7 p-2 font-bold text-sm transition-all duration-300 rounded-lg overflow-hidden flex items-center justify-center pr-4 origin-right"
                                           >
                                             {/* <span className="group-hover:hidden text-xl ">₹</span> */}
                                             <span className=" px-2 ml-2">FUND</span>
@@ -357,7 +356,7 @@ const Middle = ({ userData }) => {
                                     <CiHeart  onClick={() => handlelikes(post.id, post.userId)} className='h-8 w-8  cursor-pointer scale-[80%]'/>
                                     {likeicon? <h1 className='text-blue-400'><strong>{post.likes}</strong></h1> : <h1><strong>{post.likes}</strong></h1>}
                                 </div>
-                                <div style={{marginLeft:'40%', display:'flex', flexDirection:'row', justifyContent:'start', alignItems:'center'}}>
+                                <div style={{marginLeft:'0%', display:'flex', flexDirection:'row', justifyContent:'start', alignItems:'center'}}>
                                     <Button ><img src={commenticon} /></Button>
                                     <h1 style={{fontSize:'25px'}}><strong>Comments</strong></h1>
                                 </div>
