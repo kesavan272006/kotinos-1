@@ -15,6 +15,7 @@ import likebutton from '../assets/likebutton.svg'
 import commenticon from '../assets/comment.svg'
 import { CiHeart } from "react-icons/ci";
 import liked from '../assets/liked.svg';
+import { BiCommentDetail } from "react-icons/bi";
 
 
 const Middle = ({ userData }) => {
@@ -351,14 +352,14 @@ const Middle = ({ userData }) => {
                                 
                             )}
                             
-                            <div style={{display:'flex', flexDirection:'row', justifyContent:'space-evenly'}}>
+                            <div  className="gap-10" style={{display:'flex', flexDirection:'row',}}>
                                 <div className='mb-2 ml-5 mt-4 px-2 flex gap-1 items-center w-fit hover:bg-gradient-to-r hover:from-blue-900/20 hover:via-blue-700/20 hover:to-cyan-500/20 rounded-xl p-1'>
                                     <CiHeart  onClick={() => handlelikes(post.id, post.userId)} className='h-8 w-8  cursor-pointer scale-[80%]'/>
                                     {likeicon? <h1 className='text-blue-400'><strong>{post.likes}</strong></h1> : <h1><strong>{post.likes}</strong></h1>}
                                 </div>
-                                <div style={{marginLeft:'0%', display:'flex', flexDirection:'row', justifyContent:'start', alignItems:'center'}}>
-                                    <Button ><img src={commenticon} /></Button>
-                                    <h1 style={{fontSize:'25px'}}><strong>Comments</strong></h1>
+                                <div className='gap-3 mt-2' style={{marginLeft:'0%', display:'flex', flexDirection:'row', justifyContent:'start', alignItems:'center'}}>
+                                    <button ><BiCommentDetail className='scale-125' /></button>
+                                    <h1 className='font-bold'>0</h1>
                                 </div>
                             </div>
                         </div>
