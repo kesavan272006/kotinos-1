@@ -16,7 +16,7 @@ import { getDocs } from 'firebase/firestore';
 import Modal from 'react-modal';
 import { signOut } from 'firebase/auth';
 const Profile = () => {
-    const handleNavigation = ()=>{
+    const handleNavigation = () => {
         navigate('/addQR');
     }
     const { userDetails } = useUser();
@@ -24,7 +24,7 @@ const Profile = () => {
     const [role, setRole] = useState('');
     const navigate = useNavigate();
     const [photourl, setphotourl] = useState(null);
-    const [email, setemail]=useState('');
+    const [email, setemail] = useState('');
     const indianStates = [
         "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka", "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal"
     ];
@@ -47,7 +47,7 @@ const Profile = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [imagesToDisplay, setImagesToDisplay] = useState([]);
-    const [profilepic, setprofilepic]=useState(null);
+    const [profilepic, setprofilepic] = useState(null);
     const openModal = (images, index) => {
         setImagesToDisplay(images);
         setCurrentImageIndex(index);
@@ -81,7 +81,7 @@ const Profile = () => {
     const getPost = async () => {
         setTimeout(async () => {
             try {
-    
+
                 const postRef = collection(database, 'Users', `${auth.currentUser?.uid}`, 'Posts');
 
                 const postSnapshot = await getDocs(postRef);
@@ -90,14 +90,14 @@ const Profile = () => {
                     id: doc.id,
                     userId: `${auth.currentUser?.uid}`,
                 }));
-    
+
                 const sortedPosts = postsData.sort((a, b) => {
                     const aTimestamp = a.timestamp?.seconds || 0;
                     const bTimestamp = b.timestamp?.seconds || 0;
                     return bTimestamp - aTimestamp;
                 });
-    
-                if(postsData){
+
+                if (postsData) {
                     setPosts(sortedPosts);
                 }
             } catch (err) {
@@ -116,8 +116,8 @@ const Profile = () => {
         return '';
     };
     const [loading, setLoading] = useState(true);
-    const decidingathlete = role === 'athlete'; 
-    const decidingcoach = role === 'coach'; 
+    const decidingathlete = role === 'athlete';
+    const decidingcoach = role === 'coach';
     const decidinguser = role === 'user';
     const decidingorganization = role === 'organization';
     useEffect(() => {
@@ -140,13 +140,13 @@ const Profile = () => {
         };
         fetchProfile();
     }, [user, navigate, role]);
-    
+
     useEffect(() => {
         const timer = setTimeout(() => {
             setLoading(false);
         }, 3000);
         const fetchProfile2 = async () => {
-            
+
             if (user) {
                 try {
                     const docRef = doc(database, "Users", auth.currentUser?.uid);
@@ -164,7 +164,7 @@ const Profile = () => {
             }
             return () => clearTimeout(timer);
         };
-        
+
         fetchProfile2();
     }, [user, navigate, role]);
     const sportsArray = [
@@ -173,25 +173,25 @@ const Profile = () => {
         "Gymnastics", "Cycling", "Rugby", "Skiing", "Archery", "Weightlifting", "Fencing", "Rowing", "Handball", "Golf", "Triathlon", "MMA (Mixed Martial Arts)",
         "Surfing", "Skateboarding", "Rock Climbing", "Polo", "Badminton", "Kickboxing"
     ];
-    
+
     const handleChange = (e) => {
         setProfile({ ...profile, [e.target.name]: e.target.value });
     };
-    
+
     const handleSave = async () => {
         if (user) {
             try {
                 const documentRef = doc(database, "Users", auth.currentUser?.uid);
                 const profileDetailsRef = doc(documentRef, "profileDetails", "details");
-    
+
                 const updatedProfile = { ...profile };
                 if (profile.profilePic !== "") {
                     await setDoc(documentRef, { profilePic: profile.profilePic }, { merge: true });
                     await setDoc(profileDetailsRef, { profilePic: profile.profilePic }, { merge: true });
                 }
-    
+
                 await setDoc(profileDetailsRef, updatedProfile, { merge: true });
-    
+
                 console.log('Profile saved successfully!');
                 setIsEditing(false);
             } catch (error) {
@@ -199,8 +199,8 @@ const Profile = () => {
             }
         }
     };
-    
-    
+
+
     const handleImageUpload = (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -222,15 +222,15 @@ const Profile = () => {
         fontFamily: 'Arial, sans-serif',
         boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
         transition: 'all 0.3s ease',
-      };
-      
-      const focusStyle = {
+    };
+
+    const focusStyle = {
         border: '2px solid #3E8E41',
-      };
-      
-      const blurStyle = {
+    };
+
+    const blurStyle = {
         border: '2px solid #4CAF50',
-      };
+    };
     const logout = async () => {
         try {
             await signOut(auth);
@@ -271,219 +271,191 @@ const Profile = () => {
         }
     };
     // Organization Type Dropdown
-const organizationTypes = [
-    "Sports Training",
-    "Event Management",
-    "Athlete Development",
-    "Fitness Center",
-    "Youth Sports Club",
-    "Coaching Academy",
-    "Sports Facility",
-    "Recreational Sports Center",
-    "Other"
-  ];
-  
-  // Type of Services Offered (Checkbox options)
-  const servicesOffered = [
-    "Event Hosting",
-    "Athlete Training",
-    "Coaching",
-    "Facility Rental",
-    "Sports Equipment Supply",
-    "Sports Therapy",
-    "Sports Nutrition",
-    "Youth Development Programs"
-  ];
-  
-  // Types of Events Conducted Dropdown
-  const eventTypes = [
-    "Tournaments",
-    "Competitions",
-    "Workshops",
-    "Camps",
-    "Seminars",
-    "Exhibitions",
-    "Fundraisers",
-    "Conferences"
-  ];
-  
-  // Target Audience for Services Dropdown
-  const targetAudience = [
-    "Youth Athletes",
-    "Professional Athletes",
-    "Recreational Players",
-    "Coaches",
-    "Sports Enthusiasts",
-    "Amateur Athletes",
-    "Schools/Colleges",
-    "Corporate Groups"
-  ];
-  
-  // Primary Sports Focus (Array to list the sports they focus on)
-  const primarySportsFocus = [
-    "Soccer",
-    "Basketball",
-    "Tennis",
-    "Cricket",
-    "Swimming",
-    "Track and Field",
-    "Rugby",
-    "Baseball",
-    "Cycling",
-    "Martial Arts",
-    "Gymnastics",
-    "Volleyball",
-    "E-Sports",
-    "Other"
-  ];
-  const handleChanges = (e, service) => {
-    const { checked } = e.target;
-    setProfile((prevProfile) => {
-        const currentServices = prevProfile.servicesOffered
-            ? prevProfile.servicesOffered.split(', ') 
-            : [];
+    const organizationTypes = [
+        "Sports Training",
+        "Event Management",
+        "Athlete Development",
+        "Fitness Center",
+        "Youth Sports Club",
+        "Coaching Academy",
+        "Sports Facility",
+        "Recreational Sports Center",
+        "Other"
+    ];
 
-        if (checked) {
-            if (!currentServices.includes(service)) {
-                currentServices.push(service);
-            }
-        } else {
-            const index = currentServices.indexOf(service);
-            if (index > -1) {
-                currentServices.splice(index, 1);
-            }
-        }
-        return {
-            ...prevProfile,
-            servicesOffered: currentServices.join(', '),
-        };
-    });
-};
-const handleChanges2 = (e, service) => {
-    const { checked } = e.target;
-    setProfile((prevProfile) => {
-        const currentServices = prevProfile.eventsConducted
-            ? prevProfile.eventsConducted.split(', ') 
-            : [];
+    // Type of Services Offered (Checkbox options)
+    const servicesOffered = [
+        "Event Hosting",
+        "Athlete Training",
+        "Coaching",
+        "Facility Rental",
+        "Sports Equipment Supply",
+        "Sports Therapy",
+        "Sports Nutrition",
+        "Youth Development Programs"
+    ];
 
-        if (checked) {
-            if (!currentServices.includes(service)) {
-                currentServices.push(service);
-            }
-        } else {
-            const index = currentServices.indexOf(service);
-            if (index > -1) {
-                currentServices.splice(index, 1);
-            }
-        }
-        return {
-            ...prevProfile,
-            eventsConducted: currentServices.join(', '),
-        };
-    });
-};
-const handleChanges3 = (e, service) => {
-    const { checked } = e.target;
-    setProfile((prevProfile) => {
-        const currentServices = prevProfile.targetAudience
-            ? prevProfile.targetAudience.split(', ') 
-            : [];
+    // Types of Events Conducted Dropdown
+    const eventTypes = [
+        "Tournaments",
+        "Competitions",
+        "Workshops",
+        "Camps",
+        "Seminars",
+        "Exhibitions",
+        "Fundraisers",
+        "Conferences"
+    ];
 
-        if (checked) {
-            if (!currentServices.includes(service)) {
-                currentServices.push(service);
+    // Target Audience for Services Dropdown
+    const targetAudience = [
+        "Youth Athletes",
+        "Professional Athletes",
+        "Recreational Players",
+        "Coaches",
+        "Sports Enthusiasts",
+        "Amateur Athletes",
+        "Schools/Colleges",
+        "Corporate Groups"
+    ];
+
+    // Primary Sports Focus (Array to list the sports they focus on)
+    const primarySportsFocus = [
+        "Soccer",
+        "Basketball",
+        "Tennis",
+        "Cricket",
+        "Swimming",
+        "Track and Field",
+        "Rugby",
+        "Baseball",
+        "Cycling",
+        "Martial Arts",
+        "Gymnastics",
+        "Volleyball",
+        "E-Sports",
+        "Other"
+    ];
+    const handleChanges = (e, service) => {
+        const { checked } = e.target;
+        setProfile((prevProfile) => {
+            const currentServices = prevProfile.servicesOffered
+                ? prevProfile.servicesOffered.split(', ')
+                : [];
+
+            if (checked) {
+                if (!currentServices.includes(service)) {
+                    currentServices.push(service);
+                }
+            } else {
+                const index = currentServices.indexOf(service);
+                if (index > -1) {
+                    currentServices.splice(index, 1);
+                }
             }
-        } else {
-            const index = currentServices.indexOf(service);
-            if (index > -1) {
-                currentServices.splice(index, 1);
+            return {
+                ...prevProfile,
+                servicesOffered: currentServices.join(', '),
+            };
+        });
+    };
+    const handleChanges2 = (e, service) => {
+        const { checked } = e.target;
+        setProfile((prevProfile) => {
+            const currentServices = prevProfile.eventsConducted
+                ? prevProfile.eventsConducted.split(', ')
+                : [];
+
+            if (checked) {
+                if (!currentServices.includes(service)) {
+                    currentServices.push(service);
+                }
+            } else {
+                const index = currentServices.indexOf(service);
+                if (index > -1) {
+                    currentServices.splice(index, 1);
+                }
             }
-        }
-        return {
-            ...prevProfile,
-            targetAudience: currentServices.join(', '),
-        };
-    });
-};
-  const secondarySportsInterest = [
-    "Soccer",
-    "Basketball",
-    "Tennis",
-    "Cricket",
-    "Swimming",
-    "Track and Field",
-    "Rugby",
-    "Baseball",
-    "Cycling",
-    "Martial Arts",
-    "Gymnastics",
-    "Volleyball",
-    "E-Sports",
-    "Other"
-  ];
-  
+            return {
+                ...prevProfile,
+                eventsConducted: currentServices.join(', '),
+            };
+        });
+    };
+    const handleChanges3 = (e, service) => {
+        const { checked } = e.target;
+        setProfile((prevProfile) => {
+            const currentServices = prevProfile.targetAudience
+                ? prevProfile.targetAudience.split(', ')
+                : [];
+
+            if (checked) {
+                if (!currentServices.includes(service)) {
+                    currentServices.push(service);
+                }
+            } else {
+                const index = currentServices.indexOf(service);
+                if (index > -1) {
+                    currentServices.splice(index, 1);
+                }
+            }
+            return {
+                ...prevProfile,
+                targetAudience: currentServices.join(', '),
+            };
+        });
+    };
+    const secondarySportsInterest = [
+        "Soccer",
+        "Basketball",
+        "Tennis",
+        "Cricket",
+        "Swimming",
+        "Track and Field",
+        "Rugby",
+        "Baseball",
+        "Cycling",
+        "Martial Arts",
+        "Gymnastics",
+        "Volleyball",
+        "E-Sports",
+        "Other"
+    ];
+
     if (loading) {
         return <Loading />
     }
     return (
         <>
             <Navbar />
-            <h1 style={{textAlign:'center', opacity:'0.8', paddingTop:'1%'}}>If you find any error, just refresh the page.</h1>
+            <h1 style={{ textAlign: 'center', opacity: '0.8', paddingTop: '1%' }}>If you find any error, just refresh the page.</h1>
             <div className="grid md:grid-cols-2 gap-6 m-5 md:px-10">
-                <div className="bg-white p-4 rounded-lg relative shadow-sm">
-                    <div className="flex flex-col items-center mb-4">
-                        <label className="relative cursor-pointer">
-                            <img src={profile.profilePic || profileicon} alt="Profile" onClick={()=>openModals(profile.profilePic || profileicon)} className="w-24 h-24 rounded-full object-cover border-2 border-blue-300" />
-                        </label>
-                    </div>
-                    {!decidingorganization && (
-                        <>
-                            <h2 className="text-xl font-semibold mb-4 flex justify-between items-center">
-                                Personal Information
-                                <button onClick={() => setIsEditing(true)} className="flex items-center text-sm text-blue-700 hover:text-green-600 transition-colors">
-                                    <span>Edit Profile</span>
-                                    {/* <Edit className="mr-2" size={18} /> */}
-                                </button>
-
-                            </h2>
-                            <div className="space-y-3">
-                                <p><strong>User Name:</strong> {username || "Not provided"}</p>
-                                {/* <p><strong>Full Name:</strong> {profile.fullName || "Not provided"}</p> */}
-                                <p><strong>Logged in as:</strong> {role || "Not provided"}</p>
-                                <p><strong>Your emailId: </strong> {email || "Not provided"}</p>
-                                <p><strong>Date of Birth:</strong> {profile.dob || "Not provided"}</p>
-                                <p><strong>Gender:</strong> {profile.gender || "Not provided"}</p>
-                                <p><strong>State:</strong> {profile.state || "Not provided"}</p>
-                            </div>
-                        </>
-                    )}
-                    {decidingorganization && (
-                        <>
-                            <h2 className="text-xl font-semibold mb-4 flex justify-between items-center">
-                            Organization Information
+                <div className="bg-gradient-to-r from-blue-900 via-blue-700 to-cyan-500 p-[1px] rounded-lg">
+                    <div className="bg-white p-4 rounded-lg relative shadow-sm">
+                        <div className="flex flex-col items-center mb-4">
+                            <label className="relative cursor-pointer">
+                                <img src={profile.profilePic || profileicon} alt="Profile" onClick={() => openModals(profile.profilePic || profileicon)} className="w-24 h-24 rounded-full object-cover border-2 border-blue-300" />
+                            </label>
+                        </div>
+                        <h2 className="text-xl font-semibold mb-4 flex justify-between items-center">
+                            Personal Information
                             <button onClick={() => setIsEditing(true)} className="flex items-center text-sm text-blue-700 hover:text-green-600 transition-colors">
                                 <span>Edit Profile</span>
-                                {/* <Edit className="mr-2" size={18} /> */}
                             </button>
-
-                            </h2>
-                            <div className="space-y-3">
-                                <p><strong>Organization Name:</strong> {username || "Not provided"}</p>
-                                <p><strong>Primary Contact Person:</strong> {profile.primaryPerson || "Not provided"}</p>
-                                <p><strong>Email of primary Contact Person:</strong> {profile.primaryPersonEmail || "Not provided"}</p>
-                                <p><strong>Logged in as:</strong> {role || "Not provided"}</p>
-                                <p><strong>Organization's emailId: </strong> {email || "Not provided"}</p>
-                                <p><strong>Date of Establishment:</strong> {profile.dob || "Not provided"}</p>
-                                <p><strong>State of main Operation:</strong> {profile.state || "Not provided"}</p>
-                                <p><strong>Website URL:</strong> {profile.websiteUrl || "Not provided"}</p>
-                                <p><strong>Organization Type:</strong> {profile.organizationType || "Not provided"}</p>
-                                <p><strong>Mission or Brief Description of your Organization:</strong> <br />{profile.mission || "Not provided"}</p>
-                            </div>
-                        </>
-                    )}
+                        </h2>
+                        <div className="space-y-3">
+                            <p><strong>User Name:</strong> {username || "Not provided"}</p>
+                            <p><strong>Logged in as:</strong> {role || "Not provided"}</p>
+                            <p><strong>Your emailId: </strong> {email || "Not provided"}</p>
+                            <p><strong>Date of Birth:</strong> {profile.dob || "Not provided"}</p>
+                            <p><strong>Gender:</strong> {profile.gender || "Not provided"}</p>
+                            <p><strong>State:</strong> {profile.state || "Not provided"}</p>
+                        </div>
+                    </div>
                 </div>
 
                 {decidingathlete && (
+                    <div className="bg-gradient-to-r from-blue-900 via-blue-700 to-cyan-500 p-1 rounded-lg">
                     <div className="bg-white shadow-sm p-4 rounded-lg">
                         <h2 className="text-xl font-semibold mb-4">Sports Information</h2>
                         <div className="space-y-3">
@@ -492,38 +464,47 @@ const handleChanges3 = (e, service) => {
                             <p><strong>Years of Experience:</strong> {profile.experience || "None"}</p>
                             <p><strong>Teams You have played for: </strong> <br /> {profile.teamName || "None"}</p>
                             <p><strong>Your achievements as a player: </strong> <br /> {profile.achievements || "None"}</p>
-                            <h1><strong>upload your QR code to receive financial support for your athletic journey</strong></h1>
-                            <Button onClick={handleNavigation}>upload QR code</Button>
+                            <h1><strong>Upload your QR code to receive financial support for your athletic journey</strong></h1>
+                            <Button onClick={handleNavigation}>Upload QR Code</Button>
                         </div>
                     </div>
+                </div>
+                
                 )}
                 {decidingcoach && (
+                    <div className="bg-gradient-to-r from-blue-900 via-blue-700 to-cyan-500 p-1 rounded-lg">
                     <div className="bg-white shadow-sm p-4 rounded-lg">
                         <h2 className="text-xl font-semibold mb-4">Sports Information</h2>
                         <div className="space-y-3">
                             <p><strong>Your primary Sport of coaching: </strong> {profile.primarySport || "None"}</p>
-                            <p><strong>Your secondary Sport of coaching</strong> {profile.secondarySport || "None"}</p>
+                            <p><strong>Your secondary Sport of coaching:</strong> {profile.secondarySport || "None"}</p>
                             <p><strong>Years of Experience:</strong> {profile.experience || "None"}</p>
                             <p><strong>Teams You have coached for: </strong> {profile.teamName || "None"}</p>
                             <p><strong>Your achievements as a coach: </strong> <br /> {profile.achievements || "None"}</p>
                             <p><strong>Kindly upload your QR code to facilitate donations for training your students.</strong></p>
-                            <Button onClick={handleNavigation}>upload QR code</Button>
+                            <Button onClick={handleNavigation}>Upload QR Code</Button>
                         </div>
                     </div>
+                </div>
+                
                 )}
                 {decidinguser && (
-                    <div className="bg-white shadow-sm p-4 rounded-lg">
+                    <div className="bg-gradient-to-r from-cyan-500 via-blue-700 to-blue-900 p-[1px] rounded-lg">
+                    <div className="bg-white shadow-sm p-4 rounded-lg h-full">
                         <h2 className="text-xl font-semibold mb-4">Sports Information</h2>
                         <div className="space-y-3">
-                            <p><strong>The sports which majorly interests you: </strong> {profile.primarySport || "None"}</p>
+                            <p><strong>The sports which majorly interest you: </strong> {profile.primarySport || "None"}</p>
                             <p><strong>The other sport which interests you: </strong> {profile.secondarySport || "None"}</p>
-                            <p><strong>Your favourite sports Moments: </strong> <br /> {profile.achievements || "None"}</p>
-                            <p><strong>Your favourite teams: </strong> <br /> {profile.teamName || "None"}</p>
+                            <p><strong>Your favorite sports moments: </strong> <br /> {profile.achievements || "None"}</p>
+                            <p><strong>Your favorite teams: </strong> <br /> {profile.teamName || "None"}</p>
                             <p><strong>Approximate number of years you have been interested in these sports: </strong> {profile.experience || "None"}</p>
                         </div>
                     </div>
+                </div>
+                
                 )}
                 {decidingorganization && (
+                    <div className="bg-gradient-to-r from-blue-900 via-blue-700 to-cyan-500 p-1 rounded-lg">
                     <div className="bg-white shadow-sm p-4 rounded-lg">
                         <h2 className="text-xl font-semibold mb-4">Sports Information</h2>
                         <div className="space-y-3">
@@ -533,6 +514,8 @@ const handleChanges3 = (e, service) => {
                             <p><strong>Achievement Highlights: </strong> {profile.achievements || "None"}</p>
                         </div>
                     </div>
+                </div>
+                
                 )}
                 {isEditing && (
                     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
@@ -562,18 +545,18 @@ const handleChanges3 = (e, service) => {
                                 {decidingathlete && (
                                     <>
                                         <select name="primarySport" value={profile.primarySport} onChange={handleChange} className="border p-2 rounded w-full">
-                                        <option value="">Select your primary Sports</option>
-                                        {sportsArray.map((state) => (
-                                            <option key={state} value={state}>{state}</option>
-                                        ))}
+                                            <option value="">Select your primary Sports</option>
+                                            {sportsArray.map((state) => (
+                                                <option key={state} value={state}>{state}</option>
+                                            ))}
                                         </select>
                                         <select name="secondarySport" value={profile.secondarySport} onChange={handleChange} className="border p-2 rounded w-full">
                                             <option value="">Select your secondary Sports</option>
                                             {sportsArray.map((state) => (
                                                 <option key={state} value={state}>{state}</option>
                                             ))}
-                                        </select> 
-                                        <textarea name='teamName' placeholder='Please enter the name of the teams you have played for' value={profile.teamName} onChange={handleChange} style={textareaStyle} onFocus={(e) => e.target.style.border = focusStyle.border} onBlur={(e) => e.target.style.border = blurStyle.border} />                               
+                                        </select>
+                                        <textarea name='teamName' placeholder='Please enter the name of the teams you have played for' value={profile.teamName} onChange={handleChange} style={textareaStyle} onFocus={(e) => e.target.style.border = focusStyle.border} onBlur={(e) => e.target.style.border = blurStyle.border} />
                                         <textarea name='achievements' placeholder='Please enter your achievements as a player' value={profile.achievements} onChange={handleChange} style={textareaStyle} onFocus={(e) => e.target.style.border = focusStyle.border} onBlur={(e) => e.target.style.border = blurStyle.border} />
                                         <input type="number" name="experience" placeholder="Years of Experience" value={profile.experience} onChange={handleChange} className="border p-2 rounded w-full" />
                                     </>
@@ -581,19 +564,19 @@ const handleChanges3 = (e, service) => {
                                 {decidingcoach && (
                                     <>
                                         <select name="primarySport" value={profile.primarySport} onChange={handleChange} className="border p-2 rounded w-full">
-                                        <option value="">Select your primary Sports of coaching</option>
-                                        {sportsArray.map((state) => (
-                                            <option key={state} value={state}>{state}</option>
-                                        ))}
+                                            <option value="">Select your primary Sports of coaching</option>
+                                            {sportsArray.map((state) => (
+                                                <option key={state} value={state}>{state}</option>
+                                            ))}
                                         </select>
                                         <select name="secondarySport" value={profile.secondarySport} onChange={handleChange} className="border p-2 rounded w-full">
                                             <option value="">Select your secondary Sports of coaching</option>
                                             {sportsArray.map((state) => (
                                                 <option key={state} value={state}>{state}</option>
                                             ))}
-                                        </select> 
-                                        <textarea name='teamName' placeholder='Please enter the name of the teams you have coached for' value={profile.teamName} onChange={handleChange} style={textareaStyle} onFocus={(e) => e.target.style.border = focusStyle.border} onBlur={(e) => e.target.style.border = blurStyle.border} />                               
-                                        <textarea name='achievements' placeholder='Your achievements as a coach' value={profile.achievements} onChange={handleChange} style={textareaStyle} onFocus={(e) => e.target.style.border = focusStyle.border} onBlur={(e) => e.target.style.border = blurStyle.border} /> 
+                                        </select>
+                                        <textarea name='teamName' placeholder='Please enter the name of the teams you have coached for' value={profile.teamName} onChange={handleChange} style={textareaStyle} onFocus={(e) => e.target.style.border = focusStyle.border} onBlur={(e) => e.target.style.border = blurStyle.border} />
+                                        <textarea name='achievements' placeholder='Your achievements as a coach' value={profile.achievements} onChange={handleChange} style={textareaStyle} onFocus={(e) => e.target.style.border = focusStyle.border} onBlur={(e) => e.target.style.border = blurStyle.border} />
                                         <input type="text" name="experience" placeholder="Years of Experience as a coach" value={profile.experience} onChange={handleChange} className="border p-2 rounded w-full" />
                                     </>
                                 )}
@@ -602,34 +585,34 @@ const handleChanges3 = (e, service) => {
                                         <input type="text" name="primaryPersonEmail" placeholder="Email of the primary contact person" value={profile.primaryPersonEmail} onChange={handleChange} className="border p-2 rounded w-full" />
                                         <input type="text" name="primaryPerson" placeholder="name of the primary contact person" value={profile.primaryPerson} onChange={handleChange} className="border p-2 rounded w-full" />
                                         <select name="primarySport" value={profile.primarySport} onChange={handleChange} className="border p-2 rounded w-full">
-                                        <option value="">Select the sports which you focus primarily</option>
-                                        {sportsArray.map((state) => (
-                                            <option key={state} value={state}>{state}</option>
-                                        ))}
+                                            <option value="">Select the sports which you focus primarily</option>
+                                            {sportsArray.map((state) => (
+                                                <option key={state} value={state}>{state}</option>
+                                            ))}
                                         </select>
                                         <select name="secondarySport" value={profile.secondarySport} onChange={handleChange} className="border p-2 rounded w-full">
                                             <option value="">Select the other sports which you focus</option>
                                             {sportsArray.map((state) => (
                                                 <option key={state} value={state}>{state}</option>
                                             ))}
-                                        </select> 
+                                        </select>
                                         <h1>Types of services offered:</h1>
-                                        <div className="space-y-2" style={{display:'flex', flexDirection:'column', justifyContent:'center'}}>
+                                        <div className="space-y-2" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                                             {servicesOffered.map((service) => (
                                                 <label key={service}>
-                                                <input
-                                                    type="checkbox"
-                                                    name="servicesOffered"
-                                                    value={service}
-                                                    checked={(profile.servicesOffered || "").split(', ').includes(service)} // Check if the service is selected
-                                                    onChange={(e) => handleChanges(e, service)}
-                                                    className="form-checkbox text-blue-500"
-                                                />
-                                                <span className="ml-2">{service}</span>
+                                                    <input
+                                                        type="checkbox"
+                                                        name="servicesOffered"
+                                                        value={service}
+                                                        checked={(profile.servicesOffered || "").split(', ').includes(service)} // Check if the service is selected
+                                                        onChange={(e) => handleChanges(e, service)}
+                                                        className="form-checkbox text-blue-500"
+                                                    />
+                                                    <span className="ml-2">{service}</span>
                                                 </label>
                                             ))}
                                         </div>
-                                        <textarea name='achievements' placeholder='Your achievements as an organization' value={profile.achievements} onChange={handleChange} style={textareaStyle} onFocus={(e) => e.target.style.border = focusStyle.border} onBlur={(e) => e.target.style.border = blurStyle.border} /> 
+                                        <textarea name='achievements' placeholder='Your achievements as an organization' value={profile.achievements} onChange={handleChange} style={textareaStyle} onFocus={(e) => e.target.style.border = focusStyle.border} onBlur={(e) => e.target.style.border = blurStyle.border} />
                                     </>
                                 )}
                                 {decidinguser && (
@@ -645,26 +628,26 @@ const handleChanges3 = (e, service) => {
                                             {sportsArray.map((state) => (
                                                 <option key={state} value={state}>{state}</option>
                                             ))}
-                                        </select> 
+                                        </select>
                                         <textarea name='teamName' placeholder='Please enter your favourite teams and mention the sport too' value={profile.teamName} onChange={handleChange} style={textareaStyle} onFocus={(e) => e.target.style.border = focusStyle.border} onBlur={(e) => e.target.style.border = blurStyle.border} />
-                                        <textarea name='achievements' placeholder='Please enter your favourite sport moments' value={profile.achievements} onChange={handleChange} style={textareaStyle} onFocus={(e) => e.target.style.border = focusStyle.border} onBlur={(e) => e.target.style.border = blurStyle.border} />                               
+                                        <textarea name='achievements' placeholder='Please enter your favourite sport moments' value={profile.achievements} onChange={handleChange} style={textareaStyle} onFocus={(e) => e.target.style.border = focusStyle.border} onBlur={(e) => e.target.style.border = blurStyle.border} />
                                         <input type="number" name="experience" placeholder="approximate number of years you have interest in these sports" value={profile.experience} onChange={handleChange} className="border p-2 rounded w-full" />
                                     </>
                                 )}
-                                    <div className="flex justify-end space-x-2 mt-4">
-                                        <button onClick={() => setIsEditing(false)} className="px-4 py-2 bg-gray-300 rounded">Exit</button>
-                                        <button onClick={handleSave} className="px-4 py-2 bg-blue-500 text-white rounded">Save</button>
-                                        <button onClick={handleDelete} className="px-4 py-2 bg-red-500 text-white rounded">Delete</button>
-                                    </div>
+                                <div className="flex justify-end space-x-2 mt-4">
+                                    <button onClick={() => setIsEditing(false)} className="px-4 py-2 bg-gray-300 rounded">Exit</button>
+                                    <button onClick={handleSave} className="px-4 py-2 bg-blue-500 text-white rounded">Save</button>
+                                    <button onClick={handleDelete} className="px-4 py-2 bg-red-500 text-white rounded">Delete</button>
                                 </div>
                             </div>
                         </div>
-                    )}
-                    
-                    <div className=' mt-5 mb-7 md:col-span-2 flex flex-col items-center'>
-                        <h1 className='russo' style={{textAlign:'center', fontSize:'40px', color:'black'}}>Your Posts</h1>
+                    </div>
+                )}
+
+                <div className=' mt-5 mb-7 md:col-span-2 flex flex-col items-center'>
+                    <h1 className='russo' style={{ textAlign: 'center', fontSize: '40px', color: 'black' }}>Your Posts</h1>
                     {posts.map((post) => (
-                        
+
                         <div
                             key={post.id}
                             className='bg-white rounded-xl mb-5 w-[100%] md:w-[50%] p-1'
@@ -673,18 +656,18 @@ const handleChanges3 = (e, service) => {
                                 <div className='flex flex-row'>
                                     <img
                                         className='h-14 w-14 mt-3'
-                                        src={profile.profilePic||profileicon}
+                                        src={profile.profilePic || profileicon}
                                         alt={profileicon}
                                         style={{
-                                            
+
                                             borderRadius: '50%',
                                             backgroundColor: 'gray',
                                             marginRight: '20px',
                                         }}
-                                        onClick={() => openModals(profile.profilePic||profileicon)}
+                                        onClick={() => openModals(profile.profilePic || profileicon)}
                                     />
                                     {isModalOpened && (
-                                            <div
+                                        <div
                                             style={{
                                                 position: 'fixed',
                                                 top: 0,
@@ -698,45 +681,45 @@ const handleChanges3 = (e, service) => {
                                                 zIndex: 9999,
                                             }}
                                             onClick={closeModals}
-                                            >
+                                        >
                                             <div
                                                 style={{
-                                                position: 'relative',
-                                                maxWidth: '90%',
-                                                maxHeight: '90%',
+                                                    position: 'relative',
+                                                    maxWidth: '90%',
+                                                    maxHeight: '90%',
                                                 }}
-                                                onClick={(e) => e.stopPropagation()} 
+                                                onClick={(e) => e.stopPropagation()}
                                             >
                                                 <img
-                                                src={modalImages}
-                                                alt={profileicon}
-                                                style={{
-                                                    width: '100%',
-                                                    height: 'auto',
-                                                    borderRadius: '8px',
-                                                }}
+                                                    src={modalImages}
+                                                    alt={profileicon}
+                                                    style={{
+                                                        width: '100%',
+                                                        height: 'auto',
+                                                        borderRadius: '8px',
+                                                    }}
                                                 />
                                                 <button className='hover:scale-105 transition-all font-bold'
-                                                onClick={closeModals}
-                                                style={{
-                                                    position: 'absolute',
-                                                    top: '10px',
-                                                    right: '10px',
-                                                    background: 'black',
-                                                    color: 'white',
-                                                    border: 'none',
-                                                    borderRadius: '50%',
-                                                    width: '30px',
-                                                    height: '30px',
-                                                    fontSize: '18px',
-                                                    cursor: 'pointer',
-                                                }}
+                                                    onClick={closeModals}
+                                                    style={{
+                                                        position: 'absolute',
+                                                        top: '10px',
+                                                        right: '10px',
+                                                        background: 'black',
+                                                        color: 'white',
+                                                        border: 'none',
+                                                        borderRadius: '50%',
+                                                        width: '30px',
+                                                        height: '30px',
+                                                        fontSize: '18px',
+                                                        cursor: 'pointer',
+                                                    }}
                                                 >
-                                                X
+                                                    X
                                                 </button>
                                             </div>
-                                            </div>
-                                        )}
+                                        </div>
+                                    )}
                                     <div
                                         style={{
                                             display: 'flex',
@@ -746,7 +729,7 @@ const handleChanges3 = (e, service) => {
                                     >
                                         <h1 className='font-bold'>{post.username}</h1>
                                         <h1>{post.role}</h1>
-                                        
+
                                     </div>
                                     <h3 className='mt-4 text-gray-500 text-xs ml-4'>{formatTimestamp(post.timestamp)}</h3>
                                 </div>
@@ -759,81 +742,81 @@ const handleChanges3 = (e, service) => {
                                 </strong>
                                 <h2 className='ml-5 text-base'>{post.description}</h2>
                             </div>
-                            
+
                             {post.images && post.images.length > 0 && (
                                 <div className='flex flex-col pl-5 py-1 pr-5'>
                                     {post.images.slice(0, 1).map((image, index) => (
                                         <div className="flex bg-gray-50 justify-center rounded-lg py-2">
                                             <img
-                                            key={index}
-                                            src={image}
-                                            alt={`Post Image ${index}`}
-                                            className='w-fit h-fit md:max-h-[550px] md:max-w-[700px] rounded object-cover cursor-pointer'
-                                            onClick={() => openModal(post.images, index)}
-                                        />
+                                                key={index}
+                                                src={image}
+                                                alt={`Post Image ${index}`}
+                                                className='w-fit h-fit md:max-h-[550px] md:max-w-[700px] rounded object-cover cursor-pointer'
+                                                onClick={() => openModal(post.images, index)}
+                                            />
                                         </div>
-                                        
+
                                     ))}
                                     <br />
                                     <div className='flex gap-2 justify-start '>
-                                    {post.images.slice(1, 3).map((image, index) => (
-                                        <img
-                                            key={index}
-                                            src={image}
-                                            alt={`Post Image ${index}`}
-                                            className='w-[100px] h-[100px] rounded object-cover cursor-pointer mb-4 border '
-                                            onClick={() => openModal(post.images, index)}
-                                        />
-                                    ))}
-                                    {post.images.length > 3 && (
-                                        <div
-                                            onClick={() => openModal(post.images, 3)}
-                                            className='flex justify-center items-center w-[100px] h-[100px] bg-gray-300 rounded cursor-pointer'
-                                        >
-                                            <span>+{post.images.length - 3}</span>
-                                        </div>
-                                    )}
+                                        {post.images.slice(1, 3).map((image, index) => (
+                                            <img
+                                                key={index}
+                                                src={image}
+                                                alt={`Post Image ${index}`}
+                                                className='w-[100px] h-[100px] rounded object-cover cursor-pointer mb-4 border '
+                                                onClick={() => openModal(post.images, index)}
+                                            />
+                                        ))}
+                                        {post.images.length > 3 && (
+                                            <div
+                                                onClick={() => openModal(post.images, 3)}
+                                                className='flex justify-center items-center w-[100px] h-[100px] bg-gray-300 rounded cursor-pointer'
+                                            >
+                                                <span>+{post.images.length - 3}</span>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             )}
                         </div>
                     ))}
                 </div>
+            </div>
+            <Modal
+                isOpen={isModalOpen}
+                onRequestClose={closeModal}
+                contentLabel="Image Modal"
+                style={{
+                    content: {
+                        top: '50%',
+                        left: '50%',
+                        right: 'auto',
+                        bottom: 'auto',
+                        transform: 'translate(-50%, -50%)',
+                        backgroundColor: 'white',
+                        padding: '20px',
+                        borderRadius: '10px',
+                        maxWidth: '80%',
+                    },
+                }}
+            >
+                <div className='flex justify-center'>
+                    <img
+                        src={imagesToDisplay[currentImageIndex]}
+                        alt="Full view"
+                        className='w-full max-h-[500px] object-contain'
+                    />
                 </div>
-                 <Modal
-                        isOpen={isModalOpen}
-                        onRequestClose={closeModal}
-                        contentLabel="Image Modal"
-                        style={{
-                            content: {
-                                top: '50%',
-                                left: '50%',
-                                right: 'auto',
-                                bottom: 'auto',
-                                transform: 'translate(-50%, -50%)',
-                                backgroundColor: 'white',
-                                padding: '20px',
-                                borderRadius: '10px',
-                                maxWidth: '80%',
-                            },
-                        }}
-                    >
-                        <div className='flex justify-center'>
-                            <img
-                                src={imagesToDisplay[currentImageIndex]}
-                                alt="Full view"
-                                className='w-full max-h-[500px] object-contain'
-                            />
-                        </div>
-                        <div className='flex justify-between'>
-                            <button onClick={prevImage}>{"<"}</button>
-                            <button onClick={nextImage}>{">"}</button>
-                        </div>
-                        <button onClick={closeModal} className='mt-2'>
-                            Close
-                        </button>
-                    </Modal>
-                <Footer />
+                <div className='flex justify-between'>
+                    <button onClick={prevImage}>{"<"}</button>
+                    <button onClick={nextImage}>{">"}</button>
+                </div>
+                <button onClick={closeModal} className='mt-2'>
+                    Close
+                </button>
+            </Modal>
+            <Footer />
         </>
     );
 };

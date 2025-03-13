@@ -111,6 +111,7 @@ const Invitation = () => {
       <Navbar />
       {user.filter((eachuser) => eachuser.status === "pending").length === 0 ? (
           <div
+          className=""
             style={{
               width: "100%",
               height: "40vw",
@@ -125,7 +126,7 @@ const Invitation = () => {
               fontSize: "40px",
             }}
           >
-            <span className="lexend" style={{ color: "#2BCEE0", marginRight: "10px" }}>No </span><p className="lexend">invitations
+            <span className="lexend hidden md:block" style={{ color: "#2BCEE0", marginRight: "10px" }}>No </span><p className="lexend"><span className="md:hidden text-[#2BCEE0]">No </span>invitations
             available!</p>
           </div>
         ) : (
