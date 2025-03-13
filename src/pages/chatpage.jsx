@@ -412,7 +412,7 @@ const ChatPage = () => {
     };
 
     return (
-        <>
+        <div className='overflow-y-hidden'> {/* added to remove the input box being lifter above in phones */}
             <Navbar />
             {!isMobile && (
                 <div className='flex h-[90vh]'>
@@ -1275,7 +1275,7 @@ const ChatPage = () => {
                     </Modal>
                 </div>
             )}
-        </>
+        </div>
     );
 };
 
