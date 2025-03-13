@@ -176,14 +176,14 @@ const Sidebar = () => {
               </div>
               <div className='russo mt-1 text-xl'>News</div>
             </div>
-            <Link to='/game' className=' russo inverter' state={{ username: username, role: role, email: email }}>
+            {/* <Link to='/game' className=' russo inverter' state={{ username: username, role: role, email: email }}>
             <div className="flex items-center hover:scale-105 hover:bg-black hover:bg-opacity-5 rounded-full p-1 my-3 transition-all cursor-pointer gap-5 md:gap-5 pl-4">
               <div>
                 <IoGameController className='scale-[180%]' />
               </div>
               <div className='russo mt-1 text-xl'>Game</div>
             </div>
-          </Link>
+          </Link> */}
           <Link to='/aichatbot' className=' russo inverter' state={{ username: username, role: role, email: email }}>
             <div className="flex items-center hover:scale-105 hover:bg-black hover:bg-opacity-5 rounded-full p-1 my-3 transition-all cursor-pointer gap-5 md:gap-5 pl-4">
               <div>

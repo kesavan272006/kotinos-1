@@ -95,18 +95,18 @@ const Signin = () => {
                     }
                 `}
             </style>
-            <div className="bg-image w-full"></div>
+            <div className="absolute inset-0 bg-gradient-to-b from-[#000328] to-[#00458e] h-full w-full"></div>
             <div>
                 <ToastContainer autoClose={500} position='top-middle' />
             </div>
-            <div style={{ justifyContent: 'center' }} className="relative z-10 shadow-2xl left flex items-center justify-center md:text-6xl text-3xl text-center bg-white">
-                <h1 className='russo  w-full m-0 p-5 pt-6'>KOTINOS</h1>
+            <div style={{ justifyContent: 'center' }} className="relative z-10 left flex items-center justify-center md:text-6xl text-3xl text-center text-white">
+                <h1 className='lexend  w-full m-0 pt-14 text-4xl'>Sign In to Kotinos</h1>
             </div>
-            <div className="signin-head w-full text-center relative z-20">
-                <h2 className='lexend text-5xl mt-10 mb-3'>Sign In</h2>
+            <div className="signin-head w-full text-center relative z-20 opacity-0">
+                <h2 className='lexend text-5xl mt-2 mb-3 text-white'>Sign In</h2>
             </div>
             <div className="flex justify-center relative z-20 items-center">
-            <div className='md:w-[35%] bg-white mt-10 md:mt-4 p-10 rounded-lg shadow-2xl '>
+            <div className='md:w-[35%] bg-white mt-10 md:mt-4 p-10 rounded-lg '>
             <h2 className='lexend text-xl'>User name</h2>
             <input type="text" placeholder='Enter your Username here' className='w-full my-2 mb-5 p-1 rounded-lg border' onChange={(e)=>setusername(e.target.value)} />
             <h2 className='lexend'>Which of these best describes you?</h2>
