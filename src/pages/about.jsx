@@ -34,9 +34,10 @@ function About() {
                 </p>
             </div>
             <div className='absolute bottom-0 w-full'>
-                
+            <div className='hidden md:block'><Footer/></div>
             </div>
-            <Footer />
+            <div className='md:hidden'><Footer className="" /></div>
+            
         </div>
     )
 }
