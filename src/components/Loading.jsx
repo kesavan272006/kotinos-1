@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import Lottie from 'react-lottie';
 import loadingAnimation from '../assets/loading.json'; 
+import gsap from 'gsap';
+import { useRef,useLayoutEffect } from 'react';
 
 const Loading = () => {
     const [isLoading, setIsLoading] = useState(true);
@@ -26,12 +28,14 @@ const Loading = () => {
         },
     };
 
+    
+
     return (
-        <div className="loading-container" style={styles.container}>
+        <div className="loading-container bg-gradient-to-b from-[#C8DDFF] to-[#FFFFFF]" style={styles.container}>
             <Lottie options={options} height={400} width={400} />
             <div style={styles.textContainer}>
-                <h1 style={styles.title}> <span style={{color: 'rgb(43, 206, 244)'}}>K</span>otinos</h1>
-                <h1 style={styles.subtitle}>Your dream, our Platform</h1>
+                <h1 id="koti" className="russo text-6xl"> <span style={{color: 'rgb(43, 206, 244)'}}>K</span>OTINOS</h1>
+                <h1 className='text-black lexend text-xl pt-2'>Your dream, our Platform</h1>
             </div>
         </div>
     );
