@@ -99,7 +99,7 @@ const ReplySection = ({ postId, commentId, posterId }) => {
                 transition: 'background 0.3s ease',
                 }}
             >
-                <h1 style={{color:'white'}}>-&gt;</h1>
+                <h3 style={{color:'white'}}>-&gt;</h3>
             </button>
             </div>
 
