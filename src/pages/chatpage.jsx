@@ -417,34 +417,149 @@ const ChatPage = () => {
             {!isMobile && (
                 <div className='flex h-[90vh]'>
 
-                    <div style={{ width: '25%', borderRight: '1px solid #ddd', overflowY: 'auto', maxHeight: '100vh' }}>
-                        <Button onClick={handleOpen}>Create a Group</Button>
-                        <h3 className="font-bold pl-1">Groups</h3>
-                        <List>
-                            {groups.map((groupId) => (
-                                <Paper key={groupId} style={{ marginBottom: '10px' }}>
-                                    <ListItem button onClick={() => handleGroupClick(groupId)}>
-                                        <Avatar />
-                                        <div style={{ marginLeft: '10px' }}>
-                                            <ListItemText primary={groupNames[groupId] || 'Loading...'} />
-                                        </div>
-                                    </ListItem>
-                                </Paper>
-                            ))}
-                        </List>
-                        <h3 className='font-bold pl-1'>Chats</h3>
-                        <List>
-                            {user.filter(user => user.status === 'connected').map((eachuser) => (
-                                <Paper key={eachuser.id} style={{ marginBottom: '10px' }}>
-                                    <ListItem button onClick={() => handleuserselection(eachuser)}>
-                                        <Avatar src={eachuser.profilePic} />
-                                        <div style={{ marginLeft: "10px" }}>
-                                            <ListItemText primary={eachuser.username} secondary={eachuser.role} />
-                                        </div>
-                                    </ListItem>
-                                </Paper>
-                            ))}
-                        </List>
+                    <div style={{
+                        width: '25%',
+                        borderRight: '1px solid #e0e0e0',
+                        overflowY: 'auto',
+                        maxHeight: '100vh',
+                        backgroundColor: '#f8f9fa',
+                        boxShadow: '1px 0 5px rgba(0, 0, 0, 0.05)'
+                    }}>
+                        <div style={{ padding: '16px', borderBottom: '1px solid #eaeaea' }}>
+                            <Button
+                                onClick={handleOpen}
+                                variant="contained"
+                                fullWidth
+                                style={{
+                                    backgroundColor: '',
+                                    color: 'white',
+                                    textTransform: 'none',
+                                    fontWeight: 'bold',
+                                    borderRadius: '8px',
+                                    padding: '10px'
+                                }}
+                            >
+                                Create a Group
+                            </Button>
+                        </div>
+
+                        <div style={{ padding: '12px 8px' }}>
+                            <h3 className="font-bold pl-2" style={{
+                                color: '#424242',
+                                marginBottom: '10px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'space-between'
+                            }}>
+                                Groups
+                                <span style={{
+                                    backgroundColor: '#edf3fc', color: '#787cff',
+                                    fontSize: '12px',
+                                    padding: '2px 8px',
+                                    borderRadius: '12px'
+                                }}>
+                                    {groups.length}
+                                </span>
+                            </h3>
+                            <List>
+                                {groups.map((groupId) => (
+                                    <Paper
+                                        key={groupId}
+                                        style={{
+                                            marginBottom: '8px',
+                                            borderRadius: '8px',
+                                            overflow: 'hidden',
+                                            transition: 'transform 0.2s, box-shadow 0.2s',
+                                            cursor: 'pointer'
+                                        }}
+                                        elevation={1}
+                                    >
+                                        <ListItem button onClick={() => handleGroupClick(groupId)} style={{ padding: '8px 12px' }}>
+                                            <Avatar style={{ backgroundColor: '#edf3fc', color: '#787cff' }}>
+                                                {(groupNames[groupId] || 'G')[0].toUpperCase()}
+                                            </Avatar>
+                                            <div style={{ marginLeft: '12px', overflow: 'hidden' }}>
+                                                <ListItemText
+                                                    primary={
+                                                        <span style={{ fontWeight: 500, color: '#424242' }}>
+                                                            {groupNames[groupId] || 'Loading...'}
+                                                        </span>
+                                                    }
+                                                    secondary={
+                                                        <span style={{ fontSize: '12px', color: '#757575' }}>
+                                                            Group conversation
+                                                        </span>
+                                                    }
+                                                    primaryTypographyProps={{ noWrap: true }}
+                                                    secondaryTypographyProps={{ noWrap: true }}
+                                                />
+                                            </div>
+                                        </ListItem>
+                                    </Paper>
+                                ))}
+                            </List>
+                        </div>
+
+                        <div style={{ padding: '12px 8px' }}>
+                            <h3 className='font-bold pl-2' style={{
+                                color: '#424242',
+                                marginBottom: '10px',
+                                marginTop: '12px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'space-between'
+                            }}>
+                                Chats
+                                <span style={{
+                                    backgroundColor: '#edf3fc', color: '#787cff',
+                                    fontSize: '12px',
+                                    padding: '2px 8px',
+                                    borderRadius: '12px'
+                                }}>
+                                    {user.filter(user => user.status === 'connected').length}
+                                </span>
+                            </h3>
+                            <List>
+                                {user.filter(user => user.status === 'connected').map((eachuser) => (
+                                    <Paper
+                                        key={eachuser.id}
+                                        style={{
+                                            marginBottom: '8px',
+                                            borderRadius: '8px',
+                                            overflow: 'hidden',
+                                            transition: 'transform 0.2s, box-shadow 0.2s',
+                                            cursor: 'pointer'
+                                        }}
+                                        elevation={1}
+                                    >
+                                        <ListItem button onClick={() => handleuserselection(eachuser)} style={{ padding: '8px 12px' }}>
+                                            <Avatar
+                                                src={eachuser.profilePic}
+                                                style={!eachuser.profilePic ? { backgroundColor: '#edf3fc', color: '#787cff' } : {}}
+                                            >
+                                                {!eachuser.profilePic && eachuser.username[0].toUpperCase()}
+                                            </Avatar>
+                                            <div style={{ marginLeft: '12px', overflow: 'hidden' }}>
+                                                <ListItemText
+                                                    primary={
+                                                        <span style={{ fontWeight: 500, color: '#424242' }}>
+                                                            {eachuser.username}
+                                                        </span>
+                                                    }
+                                                    secondary={
+                                                        <span style={{ fontSize: '12px', color: '#757575' }}>
+                                                            {eachuser.role}
+                                                        </span>
+                                                    }
+                                                    primaryTypographyProps={{ noWrap: true }}
+                                                    secondaryTypographyProps={{ noWrap: true }}
+                                                />
+                                            </div>
+                                        </ListItem>
+                                    </Paper>
+                                ))}
+                            </List>
+                        </div>
                     </div>
 
 
@@ -455,7 +570,7 @@ const ChatPage = () => {
                                     <h1><strong>Create a Group</strong></h1>
                                     <br />
                                     <TextField label='Group Name' className='w-[90%] ' value={groupName} onChange={handlenamechange} />
-                                    
+
                                     <Autocomplete
                                         disablePortal
                                         multiple
@@ -595,7 +710,7 @@ const ChatPage = () => {
                                         onClick={() => handleSendMessage(selectedGroup)}
                                         variant="contained"
                                         className="postButton text-white font-bold px-3 py-1 rounded mr-4"
-                                        style={{background: 'linear-gradient(to bottom, #1a0d46, #0b3b7e, #0aa6c1)'}}
+                                        style={{ background: 'linear-gradient(to bottom, #1a0d46, #0b3b7e, #0aa6c1)' }}
                                     >
                                         Send
                                     </button>
@@ -756,7 +871,7 @@ const ChatPage = () => {
                                                 setOpenModal(true);
                                             }} />
                                     </div>
-                                    <input                                        
+                                    <input
                                         className='rounded-[20px] border h-10 pl-5 pb-1'
                                         value={message}
                                         onChange={(e) => setMessage(e.target.value)}
@@ -766,13 +881,13 @@ const ChatPage = () => {
                                             marginRight: '10px',
                                         }}
                                     />
-                                    <RiMoneyRupeeCircleLine onClick={() => handlenavigation(selectedUser.id)} className='text-3xl mx-3 cursor-pointer hover:bg-gray-200 rounded'/>
+                                    <RiMoneyRupeeCircleLine onClick={() => handlenavigation(selectedUser.id)} className='text-3xl mx-3 cursor-pointer hover:bg-gray-200 rounded' />
 
                                     <button
                                         onClick={sendMessage}
                                         variant="contained"
                                         className="postButton text-white font-bold px-3 py-1 rounded mr-4"
-                                        style={{background: 'linear-gradient(to bottom, #1e3a8a, #1d4ed8, #22d3ee)'}}
+                                        style={{ background: 'linear-gradient(to bottom, #1e3a8a, #1d4ed8, #22d3ee)' }}
                                     >
                                         Send
                                     </button>
@@ -1008,12 +1123,12 @@ const ChatPage = () => {
                                         onChange={handleFileChange}
                                         multiple
                                     />
-                                    
+
                                     <BiImageAdd
-                                            className='cursor-pointer text-3xl mt-1 hover:bg-gray-200 rounded mr-2'
-                                            onClick={() => {
-                                                setOpenModal(true);
-                                            }} />
+                                        className='cursor-pointer text-3xl mt-1 hover:bg-gray-200 rounded mr-2'
+                                        onClick={() => {
+                                            setOpenModal(true);
+                                        }} />
                                 </div>
                                 <input
                                     value={grpmessage}
@@ -1037,27 +1152,27 @@ const ChatPage = () => {
                     )}
                     {selectedUser && (
                         <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-                            
-                            <div style={{display:'flex', flexDirection:'row', alignItems:'center'}}>
-                            <ArrowLeft onClick={() => setSelectedUser(null)} />
-                            <Link to={`/otherprofile/${selectedUser.id}`}>
-                                <div style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    padding: '10px',
-                                    borderBottom: '1px solid #ddd'
-                                }}>
-                                    <Avatar src={selectedUser.profilePic} />
-                                    <div style={{ marginLeft: '10px' }}>
-                                        <div style={{ fontSize: '18px', fontWeight: 'bold' }}>
-                                            {selectedUser.username}
-                                        </div>
-                                        <div style={{ fontSize: '14px', color: '#888' }}>
-                                            {selectedUser.role}
+
+                            <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                                <ArrowLeft onClick={() => setSelectedUser(null)} />
+                                <Link to={`/otherprofile/${selectedUser.id}`}>
+                                    <div style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        padding: '10px',
+                                        borderBottom: '1px solid #ddd'
+                                    }}>
+                                        <Avatar src={selectedUser.profilePic} />
+                                        <div style={{ marginLeft: '10px' }}>
+                                            <div style={{ fontSize: '18px', fontWeight: 'bold' }}>
+                                                {selectedUser.username}
+                                            </div>
+                                            <div style={{ fontSize: '14px', color: '#888' }}>
+                                                {selectedUser.role}
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </Link>
+                                </Link>
                             </div>
                             <div style={{
                                 display: "flex",
@@ -1166,10 +1281,10 @@ const ChatPage = () => {
                                         multiple
                                     />
                                     <BiImageAdd
-                                            className='cursor-pointer text-3xl mt-1 hover:bg-gray-200 rounded mr-2'
-                                            onClick={() => {
-                                                setOpenModal(true);
-                                            }} />
+                                        className='cursor-pointer text-3xl mt-1 hover:bg-gray-200 rounded mr-2'
+                                        onClick={() => {
+                                            setOpenModal(true);
+                                        }} />
                                 </div>
                                 <input
                                     value={message}
@@ -1179,10 +1294,10 @@ const ChatPage = () => {
                                     style={{
                                         width: '85%',
                                         marginRight: '10px',
-                                        
+
                                     }}
                                 />
-                                <RiMoneyRupeeCircleLine onClick={() => handlenavigation(selectedUser.id)} className='text-5xl mx-3 cursor-pointer hover:bg-gray-200 rounded'/>
+                                <RiMoneyRupeeCircleLine onClick={() => handlenavigation(selectedUser.id)} className='text-5xl mx-3 cursor-pointer hover:bg-gray-200 rounded' />
                                 <Button
                                     onClick={sendMessage}
                                     variant="contained" className="postButton bg-gradient-to-r from-blue-900 via-blue-700 to-cyan-500 "

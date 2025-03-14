@@ -1,20 +1,52 @@
-import logo from '../assets/logo.png';
-import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { auth } from '../config/firebase';
 import { signOut } from 'firebase/auth';
-import { useNavigate } from 'react-router-dom';
-import Searchicon from '../assets/searchicon2.svg'
-import { NavLink } from 'react-router-dom';
 
-
+// Import icons
 import { GoHomeFill } from "react-icons/go";
-import { IoChatbubbleEllipses } from "react-icons/io5";
-import { IoIosNotifications } from "react-icons/io";
-import { IoPersonSharp } from "react-icons/io5";
+import { IoChatbubbleEllipses, IoPersonSharp } from "react-icons/io5";
+import { IoIosNotifications, IoIosPeople } from "react-icons/io";
 import { MdLogout } from "react-icons/md";
-import { IoIosPeople } from "react-icons/io";
+import { FiSearch } from "react-icons/fi";
+
 function Navbar() {
     const navigate = useNavigate();
+    const location = useLocation();
+    const [showNotifications, setShowNotifications] = useState(false);
+    const [showProfile, setShowProfile] = useState(false);
+    const [searchFocused, setSearchFocused] = useState(false);
+    const [scrolled, setScrolled] = useState(false);
+
+    // Handle scroll effect
+    useEffect(() => {
+        const handleScroll = () => {
+            if (window.scrollY > 10) {
+                setScrolled(true);
+            } else {
+                setScrolled(false);
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
+    // Close dropdowns when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (showNotifications || showProfile) {
+                if (!event.target.closest('.dropdown-container')) {
+                    setShowNotifications(false);
+                    setShowProfile(false);
+                }
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, [showNotifications, showProfile]);
+
     const logout = async () => {
         try {
             await signOut(auth);
@@ -23,36 +55,140 @@ function Navbar() {
             console.error("Error signing out:", error);
         }
     };
+
+    // Check if a navigation link is active
+    const isActive = (path) => location.pathname === path;
+
     return (
-        <div className="bg-white border border-gray-100 border-x-0 border-t-0 w-full py-3">
-            <style>
-                {`
-                    .search-bar:focus{
-                        outline: none;
-                    }
-                `}
-            </style>
-            <nav className='flex items-center md:w-full md:justify-between'>
-                <div className="flex items-center md:gap-5 px-2 md:w-full">
-                    <Link to='/about'><img src={logo} className='md:block mx-2 h-12 w-12 hidden rounded-full' /></Link>
-                    <div className="search border border-gray-500 flex items-center w-[90%] md:w-[30%] rounded-full">
-                        <img src={Searchicon} alt="Search" className="m-2" />
-                        <input type="text" placeholder="Search" className="search-bar w-full md:w-full  text-lg rounded-full active:border-none md:py-2 md:pr-8" />
+        <div className={`sticky top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-white/95 backdrop-blur-sm shadow-lg' : 'bg-white shadow-md'}`}>
+            <nav className='w-full flex items-center justify-between py-3 px-4'>
+                {/* Left Side: Logo */}
+                <div className="flex items-center">
+                    <Link to='/about' className="flex items-center">
+                        <div className="h-10 w-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-xl transition-transform hover:scale-105">
+                            K
+                        </div>
+                        <span className="ml-2 text-lg font-semibold hidden md:block text-gray-800">Kotinos</span>
+                    </Link>
+                    <div className={`hidden md:flex items-center relative mx-4 flex-1 max-w-md transition-all ${searchFocused ? 'scale-105' : ''}`}>
+                    <div className={`flex items-center w-full border ${searchFocused ? 'border-blue-500 bg-blue-50' : 'border-gray-300 bg-gray-100'} rounded-full px-4 py-2 transition-all`}>
+                        <FiSearch className={`${searchFocused ? 'text-blue-500' : 'text-gray-500'} transition-colors`} />
+                        <input 
+                            type="text" 
+                            placeholder="Search" 
+                            className="w-full ml-2 text-gray-700 outline-none bg-transparent" 
+                            onFocus={() => setSearchFocused(true)}
+                            onBlur={() => setSearchFocused(false)}
+                        />
+                    </div>
+                </div>
+                </div>
+
+                {/* Middle: Search Bar */}
+                
+
+                {/* Mobile Search */}
+                <div className="md:hidden flex-1 mx-3">
+                    <div className="flex items-center border border-gray-300 bg-gray-100 rounded-full px-3 py-2">
+                        <FiSearch className="text-gray-500" />
+                        <input 
+                            type="text" 
+                            placeholder="Search" 
+                            className="w-full ml-2 text-gray-700 outline-none bg-transparent" 
+                        />
                     </div>
                 </div>
 
-                <div className="ul ">
-                    <ul className='flex items-center md:text-2xl gap-4 text-l pr-1 md:pr-10'>
-                    <NavLink to='/home' className={({ isActive }) => isActive ? 'active-link md:ml-10 ml-4 russo hover:scale-110 transition-all cursor-pointer' : 'md:ml-10 ml-4 russo hover:scale-110 transition-all cursor-pointer'}><GoHomeFill className='scale-[160%]' /></NavLink>
-                        <NavLink to='/chatpage' className={({ isActive }) => isActive ? 'active-link md:ml-10 ml-4 russo hover:scale-110 transition-all cursor-pointer' : 'md:ml-10 ml-4 russo hover:scale-110 transition-all cursor-pointer'}><IoChatbubbleEllipses className='scale-[160%]' /></NavLink>
-                        <NavLink to='/invitation' className={({ isActive }) => isActive ? 'active-link md:ml-10 ml-4 russo hover:scale-110 transition-all cursor-pointer' : 'md:ml-10 ml-4 russo hover:scale-110 transition-all cursor-pointer'}><IoIosNotifications className='scale-[160%]' /></NavLink>
-                        <NavLink to='/profile' className={({ isActive }) => isActive ? 'active-link md:ml-10 ml-4 russo hover:scale-110 transition-all cursor-pointer' : 'md:ml-10 ml-4 russo hover:scale-110 transition-all cursor-pointer'}><IoPersonSharp className='scale-[160%]' /></NavLink>
-                        <NavLink to='/network' className={({ isActive }) => isActive ? 'active-link md:ml-10 ml-4 russo hover:scale-110 transition-all cursor-pointer' : 'md:ml-10 ml-4 russo hover:scale-110 transition-all cursor-pointer'}><IoIosPeople className='scale-[160%]' /></NavLink>
-                        <button onClick={logout} className='md:ml-10 ml-4 russo hover:scale-110 transition-all cursor-pointer'><MdLogout className='scale-[160%]'/></button>
+                {/* Right Side: Navigation Links */}
+                <div className="flex items-center">
+                    <ul className='flex items-center space-x-1 md:space-x-3'>
+                        <li>
+                            <NavLink to='/home' className={`p-2 rounded-full flex items-center justify-center transition-colors ${isActive('/home') ? 'bg-blue-100 text-blue-600' : 'text-gray-700 hover:bg-gray-100'}`}>
+                                <GoHomeFill className='text-xl md:text-2xl' />
+                            </NavLink>
+                        </li>
+
+                        <li>
+                            <NavLink to='/chatpage' className={`p-2 rounded-full flex items-center justify-center transition-colors ${isActive('/chatpage') ? 'bg-blue-100 text-blue-600' : 'text-gray-700 hover:bg-gray-100'}`}>
+                                <IoChatbubbleEllipses className='text-xl md:text-2xl' />
+                            </NavLink>
+                        </li>
+
+                        {/* Notification Dropdown */}
+                        <li className="dropdown-container relative">
+                            <button 
+                                onClick={() => {
+                                    setShowNotifications(!showNotifications);
+                                    setShowProfile(false);
+                                }}
+                                className={`p-2 rounded-full flex items-center justify-center transition-colors ${showNotifications ? 'bg-blue-100 text-blue-600' : 'text-gray-700 hover:bg-gray-100'}`}
+                            >
+                                <IoIosNotifications className='text-xl md:text-2xl' />
+                            </button>
+                            {showNotifications && (
+                                <div className="absolute right-0 mt-2 w-72 bg-white rounded-lg shadow-xl border border-gray-200 overflow-hidden transition-all">
+                                    <div className="px-4 py-3 border-b border-gray-200 flex justify-between items-center">
+                                        <h3 className="font-semibold text-gray-800">Notifications</h3>
+                                        <button className="text-xs text-blue-600 hover:text-blue-800">Mark all as read</button>
+                                    </div>
+                                    <div className="max-h-72 overflow-y-auto">
+                                        <div className="px-4 py-3 bg-gray-50 hover:bg-gray-100 border-b border-gray-100 cursor-pointer">
+                                            <p className="text-sm text-gray-800">No new notifications</p>
+                                        </div>
+                                    </div>
+                                    <div className="px-4 py-2 text-center">
+                                        <button className="text-sm text-blue-600 hover:text-blue-800">View all notifications</button>
+                                    </div>
+                                </div>
+                            )}
+                        </li>
+                        <li>
+                            <NavLink to='/network' className={`p-2 rounded-full flex items-center justify-center transition-colors ${isActive('/network') ? 'bg-blue-100 text-blue-600' : 'text-gray-700 hover:bg-gray-100'}`}>
+                                <IoIosPeople className='text-xl md:text-2xl' />
+                            </NavLink>
+                        </li>
+
+                        {/* Profile Dropdown */}
+                        <li className="dropdown-container relative">
+                            <button 
+                                onClick={() => {
+                                    setShowProfile(!showProfile);
+                                    setShowNotifications(false);
+                                }}
+                                className={`p-2 rounded-full flex items-center justify-center transition-colors ${showProfile ? 'bg-blue-100 text-blue-600' : 'text-gray-700 hover:bg-gray-100'}`}
+                            >
+                                <IoPersonSharp className='text-xl md:text-2xl' />
+                            </button>
+                            {showProfile && (
+                                <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-gray-200 overflow-hidden">
+                                    <div className="px-4 py-3 border-b border-gray-200">
+                                        <p className="font-semibold text-gray-800">John Doe</p>
+                                        <p className="text-sm text-gray-500">john.doe@example.com</p>
+                                    </div>
+                                    <div>
+                                        <NavLink to='/profile' className="flex items-center px-4 py-3 hover:bg-gray-100 transition-colors">
+                                            <IoPersonSharp className="text-gray-600 mr-3" />
+                                            <span className="text-gray-700">Profile</span>
+                                        </NavLink>
+                                        <NavLink to='/network' className="flex items-center px-4 py-3 hover:bg-gray-100 transition-colors">
+                                            <IoIosPeople className="text-gray-600 mr-3" />
+                                            <span className="text-gray-700">Network</span>
+                                        </NavLink>
+                                        <button onClick={logout} className="flex items-center w-full px-4 py-3 hover:bg-red-50 text-left transition-colors">
+                                            <MdLogout className="text-red-500 mr-3" />
+                                            <span className="text-red-500">Logout</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+                        </li>
+
+                        
                     </ul>
                 </div>
             </nav>
         </div>
-    )
+    );
 }
+
 export default Navbar;
