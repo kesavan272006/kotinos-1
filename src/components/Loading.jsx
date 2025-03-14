@@ -31,7 +31,7 @@ const Loading = () => {
     
 
     return (
-        <div className="loading-container bg-gradient-to-b from-[#C8DDFF] to-[#FFFFFF]" style={styles.container}>
+        <div className="loading-container bg-gradient-to-b from-[#e8fcfc] to-[#FFFFFF]" style={styles.container}>
             <Lottie options={options} height={400} width={400} />
             <div style={styles.textContainer}>
                 <h1 id="koti" className="russo text-6xl"> <span style={{color: 'rgb(43, 206, 244)'}}>K</span>OTINOS</h1>
