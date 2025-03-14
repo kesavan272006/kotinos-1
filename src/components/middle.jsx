@@ -330,26 +330,40 @@ const Middle = ({ userData }) => {
                                 <h2 className='pl-7 text-lg'>{post.description}</h2>
                             </div>
                             {post.images && post.images.length > 0 && (
-                                <div className='flex flex-wrap gap-2 pl-5'>
-                                    {post.images.slice(0, 3).map((image, index) => (
-                                        <img
-                                            key={index}
-                                            src={image}
-                                            alt={`Post Image ${index}`}
-                                            className='w-[100px] h-[100px] object-cover rounded-xl cursor-pointer'
-                                            onClick={() => openModal(post.images, index)}
-                                        />
-                                    ))}
-                                    {post.images.length > 3 && (
-                                        <div
-                                            onClick={() => openModal(post.images, 3)}
-                                            className='flex justify-center items-center w-[100px] h-[100px] bg-gray-300 rounded cursor-pointer'
-                                        >
-                                            <span>+{post.images.length - 3}</span>
+                                <div className='flex flex-col pl-5 py-1 pr-5'>
+                                    {post.images.slice(0, 1).map((image, index) => (
+                                        <div className="flex bg-gray-50 justify-center rounded-lg py-2">
+                                            <img
+                                                key={index}
+                                                src={image}
+                                                alt={`Post Image ${index}`}
+                                                className='w-fit h-fit md:max-h-[550px] md:max-w-[700px] rounded object-cover cursor-pointer'
+                                                onClick={() => openModal(post.images, index)}
+                                            />
                                         </div>
-                                    )}
+
+                                    ))}
+                                    <br />
+                                    <div className='flex gap-2 justify-start '>
+                                        {post.images.slice(1, 3).map((image, index) => (
+                                            <img
+                                                key={index}
+                                                src={image}
+                                                alt={`Post Image ${index}`}
+                                                className='w-[100px] h-[100px] rounded object-cover cursor-pointer mb-4 border '
+                                                onClick={() => openModal(post.images, index)}
+                                            />
+                                        ))}
+                                        {post.images.length > 3 && (
+                                            <div
+                                                onClick={() => openModal(post.images, 3)}
+                                                className='flex justify-center items-center w-[100px] h-[100px] bg-gray-300 rounded cursor-pointer'
+                                            >
+                                                <span>+{post.images.length - 3}</span>
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
-                                
                             )}
                             
                             <div  className="gap-10" style={{display:'flex', flexDirection:'row',}}>

@@ -49,7 +49,7 @@ function Getstarted() {
             </style>
             <Navbarout />
             <div ref={comp}>
-                <div id='main-text' className="main-head flex items-center justify-center flex-col russo text-[28px] pt-20 md:text-[64px] md:pt-32">
+                <div id='main-text' className="main-head flex items-center justify-center flex-col russo text-[28px] pt-32 md:text-[64px] md:pt-32">
                     <div className=' text-[white]'>Empowering <span className='text-[#2BCEE0]'>Athletes</span>.</div>
                     <div>
                         <span className='text-[#2BCEE0]'>Elevating</span><span className='text-[white]'> Performance.</span>
@@ -66,9 +66,11 @@ function Getstarted() {
                 <div id="get-started-button" className='flex justify-center items-center mt-8'>
                     <button onClick={handleclick} className='rounded-full px-5 py-2 bg-gradient-to-r from-blue-800 via-blue-700 to-blue-800 hover:bg-gradient-to-r hover:from-blue-800 hover:via-blue-600 hover:to-blue-800  text-white russo text-[17px] hover:scale-110 transition-all'>Get Started</button>
                 </div>
+                <hr className='line' />
+                
             </div>
-            <hr className='line' />
             <Footer />
+            
         </>
     );
 }

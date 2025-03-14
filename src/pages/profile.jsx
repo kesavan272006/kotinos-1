@@ -456,7 +456,7 @@ const Profile = () => {
 
                 {decidingathlete && (
                     <div className="bg-gradient-to-r from-blue-900 via-blue-700 to-cyan-500 p-1 rounded-lg">
-                    <div className="bg-white shadow-sm p-4 rounded-lg">
+                    <div className="bg-white shadow-sm p-4 rounded-lg h-full">
                         <h2 className="text-xl font-semibold mb-4">Sports Information</h2>
                         <div className="space-y-3">
                             <p><strong>Primary Sport:</strong> {profile.primarySport || "None"}</p>
@@ -473,7 +473,7 @@ const Profile = () => {
                 )}
                 {decidingcoach && (
                     <div className="bg-gradient-to-r from-blue-900 via-blue-700 to-cyan-500 p-1 rounded-lg">
-                    <div className="bg-white shadow-sm p-4 rounded-lg">
+                    <div className="bg-white shadow-sm p-4 rounded-lg h-full">
                         <h2 className="text-xl font-semibold mb-4">Sports Information</h2>
                         <div className="space-y-3">
                             <p><strong>Your primary Sport of coaching: </strong> {profile.primarySport || "None"}</p>
@@ -505,7 +505,7 @@ const Profile = () => {
                 )}
                 {decidingorganization && (
                     <div className="bg-gradient-to-r from-blue-900 via-blue-700 to-cyan-500 p-1 rounded-lg">
-                    <div className="bg-white shadow-sm p-4 rounded-lg">
+                    <div className="bg-white shadow-sm p-4 rounded-lg h-full">
                         <h2 className="text-xl font-semibold mb-4">Sports Information</h2>
                         <div className="space-y-3">
                             <p><strong>The sports which you focus primarily: </strong> {profile.primarySport || "None"}</p>
@@ -787,32 +787,21 @@ const Profile = () => {
                 isOpen={isModalOpen}
                 onRequestClose={closeModal}
                 contentLabel="Image Modal"
-                style={{
-                    content: {
-                        top: '50%',
-                        left: '50%',
-                        right: 'auto',
-                        bottom: 'auto',
-                        transform: 'translate(-50%, -50%)',
-                        backgroundColor: 'white',
-                        padding: '20px',
-                        borderRadius: '10px',
-                        maxWidth: '80%',
-                    },
-                }}
+                className="bg-white p-5 rounded-lg shadow-lg outline-none md:w-[80%] md:h-[85%] md:mt-20 m-4"
+                overlayClassName="fixed inset-0 bg-black bg-opacity-30 flex justify-center items-center"
             >
                 <div className='flex justify-center'>
                     <img
                         src={imagesToDisplay[currentImageIndex]}
                         alt="Full view"
-                        className='w-full max-h-[500px] object-contain'
+                        className='h-[400px] w-[800px] md:h-[500px] md:w-[80%] object-contain'
                     />
                 </div>
                 <div className='flex justify-between'>
-                    <button onClick={prevImage}>{"<"}</button>
-                    <button onClick={nextImage}>{">"}</button>
+                    <button className='text-xl font-bold russo ml-10' onClick={prevImage}>{"<"}</button>
+                    <button className='text-xl font-bold russo mr-10' onClick={nextImage}>{">"}</button>
                 </div>
-                <button onClick={closeModal} className='mt-2'>
+                <button onClick={closeModal} className='mt-4 ml-7 bg-black text-white rounded-lg px-3 py-1 font-bold hover:scale-105 transition-all'>
                     Close
                 </button>
             </Modal>
