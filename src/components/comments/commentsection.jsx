@@ -34,7 +34,7 @@ const CommentSection = ({ postId, posterId }) => {
 
         return {
           id: docSnap.id,
-          userId: userId,
+          userId: commentData.Id,
           content: commentData.content || "No content",
           userName,
           userRole,
