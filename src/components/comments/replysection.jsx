@@ -99,14 +99,7 @@ const ReplySection = ({ postId, commentId, posterId }) => {
                 transition: 'background 0.3s ease',
                 }}
             >
-                <img 
-                src={sendicon} 
-                alt="send" 
-                style={{
-                    width: '40px', 
-                    height: '40px', 
-                }} 
-                />
+                <h1 style={{color:'white'}}>-&gt;</h1>
             </button>
             </div>
 
