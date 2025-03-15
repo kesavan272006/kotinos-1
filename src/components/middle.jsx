@@ -16,6 +16,7 @@ import commenticon from '../assets/comment.svg'
 import { CiHeart } from "react-icons/ci";
 import liked from '../assets/liked.svg';
 import { BiCommentDetail } from "react-icons/bi";
+import CommentModal from './comments/commentmodal';
 
 
 const Middle = ({ userData }) => {
@@ -27,7 +28,7 @@ const Middle = ({ userData }) => {
     const [posts, setPosts] = useState([]);
     const [text, setText] = useState('');
     const [file, setFile] = useState(null);
-
+    const [openComment, setOpenComment]=useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [imagesToDisplay, setImagesToDisplay] = useState([]);
@@ -37,6 +38,8 @@ const Middle = ({ userData }) => {
         setCurrentImageIndex(index);
         setIsModalOpen(true);
     };
+    const [postId, setpostId]=useState(null);
+    const [posterId, setPosterId]=useState(null);
     const handlenavigation = (userId)=>{
         navigate(`/displayQr/${userId}`);
     }
@@ -86,38 +89,47 @@ const Middle = ({ userData }) => {
             try {
                 const usersRef = collection(database, 'Users');
                 const usersSnapshot = await getDocs(usersRef);
-    
+        
                 let allPosts = [];
-    
+        
                 for (let userDoc of usersSnapshot.docs) {
                     const userId = userDoc.id;
                     const postRef = collection(database, 'Users', userId, 'Posts');
-    
                     const postSnapshot = await getDocs(postRef);
-                    const postsData = postSnapshot.docs.map((doc) => ({
-                        ...doc.data(),
-                        id: doc.id,
-                        userId: userId,
-                    }));
+                    const postsData = postSnapshot.docs.map(async (doc) => {
+                        const postData = doc.data();
+                        const postId = doc.id;
+                        const commentsRef = collection(database, 'Users', userId, 'Posts', postId, 'comments');
+                        const commentsSnapshot = await getDocs(commentsRef);
+                        const commentCount = commentsSnapshot.size; 
+                        return {
+                            ...postData,
+                            id: postId,
+                            userId: userId,
+                            commentCount: commentCount, 
+                        };
+                    });
     
-                    allPosts = allPosts.concat(postsData);
+                    const resolvedPosts = await Promise.all(postsData);
+                    allPosts = allPosts.concat(resolvedPosts);
                 }
-    
                 const sortedPosts = allPosts.sort((a, b) => {
                     const aTimestamp = a.timestamp?.seconds || 0;
                     const bTimestamp = b.timestamp?.seconds || 0;
                     return bTimestamp - aTimestamp;
                 });
-    
+        
                 setPosts(sortedPosts);
             } catch (err) {
                 console.error("Error fetching posts:", err);
             }
         }, 1000);
     };
+    
     useEffect(() => {
         getPost();
-    }, [posts]);
+    }, []);
+    
 
     const handlePost = async () => {
         if (text !== '') {
@@ -372,15 +384,26 @@ const Middle = ({ userData }) => {
                                     {likeicon? <h1 className='text-blue-400'><strong>{post.likes}</strong></h1> : <h1><strong>{post.likes}</strong></h1>}
                                 </div>
                                 <div className='gap-3 mt-2' style={{marginLeft:'0%', display:'flex', flexDirection:'row', justifyContent:'start', alignItems:'center'}}>
-                                    <button ><BiCommentDetail className='scale-125' /></button>
-                                    <h1 className='font-bold'>0</h1>
+                                    <button onClick={()=>{
+                                        setOpenComment(true);
+                                        setpostId(post.id);
+                                        setPosterId(post.Id)
+                                    }}><BiCommentDetail className='scale-125' /></button>
+                                    <h1 className='font-bold'> {post.commentCount} </h1>
                                 </div>
                             </div>
                         </div>
                     ))}
                 </div>
             </div>
-
+            {openComment && postId && (
+                <CommentModal
+                    postId={postId} 
+                    posterId={posterId}
+                    onClose={() => setOpenComment(false)}
+              />
+      
+            )}
             <Modal
                 isOpen={isModalOpen}
                 onRequestClose={closeModal}

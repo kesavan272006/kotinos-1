@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Lottie from 'react-lottie';
 import loadingAnimation from '../assets/loading.json'; 
-import gsap from 'gsap';
+// import gsap from 'gsap';
 import { useRef,useLayoutEffect } from 'react';
 
 const Loading = () => {

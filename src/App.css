@@ -716,3 +716,242 @@ input[type="file"] {
     font-style: normal;
   
 }
+/* Main Comment Section Container */
+.comment-section {
+  width: 100%;
+  max-width: 600px;
+  max-height: 500px;
+  background: #fff;
+  color: #333;
+  padding: 20px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.comment-section:hover {
+  transform: translateY(-5px);
+}
+
+/* Comment Input */
+.comment-input {
+  width: 80%;
+  padding: 12px 15px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: #f9f9f9;
+  color: #333;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  margin-right: 5%;
+}
+
+.comment-input:focus {
+  background: #fff;
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.7);
+  border-color: #007bff;
+}
+
+/* Comment Button */
+.comment-button {
+  width: 15%;
+  padding: 12px;
+  background: #007bff;
+  border: none;
+  color: white;
+  cursor: pointer;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 16px;
+  transition: background 0.3s ease;
+}
+
+.comment-button:hover {
+  background: #0056b3;
+}
+
+/* Scrollable Comment List */
+.comment-list {
+  max-height: 350px;
+  overflow-y: auto;
+  padding-right: 5px;
+  border-radius: 8px;
+  margin-top: 20px;
+}
+
+/* Individual Comment Box */
+.comment-box {
+  background: #f9f9f9;
+  padding: 15px;
+  margin: 15px 0;
+  border-radius: 10px;
+  position: relative;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.comment-box:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Comment User Name */
+.comment-box strong {
+  font-size: 16px;
+  color: #007bff;
+  margin-bottom: 5px;
+}
+
+/* Comment Content */
+.comment-box p {
+  font-size: 15px;
+  color: #555;
+  margin: 5px 0;
+  line-height: 1.5;
+}
+
+/* Comment Timestamp */
+.comment-box small {
+  color: #888;
+  font-size: 12px;
+}
+
+/* Reply Section Container */
+.reply-section {
+  margin-top: 15px;
+  padding-left: 20px;
+  border-left: 3px solid #ccc;
+  width: 100%;
+  background: #f7f7f7;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Reply Input Container */
+.reply-input-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+.reply-input-container input {
+  flex-grow: 1;
+  padding: 12px;
+  border-radius: 10px;
+  background: #e9ecef;
+  color: #333;
+  border: 1px solid #ccc;
+  font-size: 15px;
+  transition: all 0.3s ease;
+}
+
+.reply-input-container input:focus {
+  background: #fff;
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.7);
+  border-color: #007bff;
+}
+
+.reply-input-container button {
+  padding: 12px 20px;
+  height: 50px;
+  width: 50px;
+  background: #28a745;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.reply-input-container button:hover {
+  background: #218838;
+}
+
+/* Individual Reply Box */
+.reply-box {
+  background: #f7f7f7;
+  padding: 12px;
+  margin-top: 8px;
+  border-radius: 8px;
+  width: 100%;
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.05);
+}
+
+/* No Comments / No Replies Text */
+.no-comments, .no-replies {
+  font-size: 14px;
+  color: #bbb;
+  text-align: center;
+  padding: 12px 0;
+}
+
+/* Modal Styles */
+.modal-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  transform: scale(0);
+}
+
+.modal-container.open {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  max-width: 600px;
+  width: 90%;
+  color: #333;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  position: relative;
+  transform: translateY(-50px);
+  animation: modalSlideUp 0.4s ease forwards;
+}
+
+@keyframes modalSlideUp {
+  from {
+    transform: translateY(50px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.modal-content h3 {
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+}
+
+.modal-content button.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: transparent;
+  color: #333;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.modal-content button.close-btn:hover {
+  color: #f44336;
+}

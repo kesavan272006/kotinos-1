@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, NavLink, useNavigate, useLocation } from 'react-router-dom';
-import { auth } from '../config/firebase';
+import { auth, database } from '../config/firebase';
 import { signOut } from 'firebase/auth';
 
 // Import icons
@@ -9,6 +9,7 @@ import { IoChatbubbleEllipses, IoPersonSharp } from "react-icons/io5";
 import { IoIosNotifications, IoIosPeople } from "react-icons/io";
 import { MdLogout } from "react-icons/md";
 import { FiSearch } from "react-icons/fi";
+import { doc, getDoc } from 'firebase/firestore';
 
 function Navbar() {
     const navigate = useNavigate();
@@ -17,7 +18,33 @@ function Navbar() {
     const [showProfile, setShowProfile] = useState(false);
     const [searchFocused, setSearchFocused] = useState(false);
     const [scrolled, setScrolled] = useState(false);
-
+    const [username, setUsername] = useState('');
+    const [role, setRole] = useState('');
+    const [email, setEmail] = useState('');
+    useEffect(() => {
+        const fetchUserData = async () => {
+          const currentUser = auth.currentUser;
+    
+          if (currentUser) {
+            const userRef = doc(database, "Users", currentUser.uid);
+            const userSnap = await getDoc(userRef);
+            if (userSnap.exists()) {
+              const userData = userSnap.data();
+              setUsername(userData.username || 'No Username');
+              setRole(userData.role || 'No Role');
+              setEmail(userData.email || 'No email found');
+              setprofiles(userData.profilePic);
+            } else {
+              navigate("/signin");
+            }
+          } else {
+            navigate("/signin");
+          }
+        };
+    
+        fetchUserData();
+      }, [navigate]);
+    
     // Handle scroll effect
     useEffect(() => {
         const handleScroll = () => {
@@ -137,7 +164,7 @@ function Navbar() {
                                         </div>
                                     </div>
                                     <div className="px-4 py-2 text-center">
-                                        <button className="text-sm text-blue-600 hover:text-blue-800">View all notifications</button>
+                                        <button onClick={()=>navigate('/invitation')} className="text-sm text-blue-600 hover:text-blue-800">View all notifications</button>
                                     </div>
                                 </div>
                             )}
