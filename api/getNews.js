@@ -2,7 +2,7 @@ const axios = require('axios');  // Use require instead of import
 
 export default async function handler(req, res) {
   try {
-    const apiKey = 'b3e69597246cc80b8fe2545e2039b979'; // your API key
+    const apiKey = 'ed97c7d8a0af0d9954cbe163c5e5eebc'; // your API key
     const apiUrl = `https://api.currentsapi.services/v1/latest-news?apiKey=${apiKey}`;
 
     // Fetch the data from the Currents API
