@@ -17,7 +17,7 @@ import { CiHeart } from "react-icons/ci";
 import liked from '../assets/liked.svg';
 import { BiCommentDetail } from "react-icons/bi";
 import CommentModal from './comments/commentmodal';
-
+import hearticon from '../assets/hearticon2.svg'
 
 const Middle = ({ userData }) => {
     const [username, setUsername] = useState('');
@@ -85,45 +85,51 @@ const Middle = ({ userData }) => {
         fetchUserData();
     }, [navigate]);
     const getPost = async () => {
-        setTimeout(async () => {
-            try {
-                const usersRef = collection(database, 'Users');
-                const usersSnapshot = await getDocs(usersRef);
-        
-                let allPosts = [];
-        
-                for (let userDoc of usersSnapshot.docs) {
-                    const userId = userDoc.id;
-                    const postRef = collection(database, 'Users', userId, 'Posts');
-                    const postSnapshot = await getDocs(postRef);
-                    const postsData = postSnapshot.docs.map(async (doc) => {
-                        const postData = doc.data();
-                        const postId = doc.id;
-                        const commentsRef = collection(database, 'Users', userId, 'Posts', postId, 'comments');
-                        const commentsSnapshot = await getDocs(commentsRef);
-                        const commentCount = commentsSnapshot.size; 
-                        return {
-                            ...postData,
-                            id: postId,
-                            userId: userId,
-                            commentCount: commentCount, 
-                        };
-                    });
-    
-                    const resolvedPosts = await Promise.all(postsData);
-                    allPosts = allPosts.concat(resolvedPosts);
-                }
-                const sortedPosts = allPosts.sort((a, b) => {
-                    const aTimestamp = a.timestamp?.seconds || 0;
-                    const bTimestamp = b.timestamp?.seconds || 0;
-                    return bTimestamp - aTimestamp;
+        try {
+            const usersRef = collection(database, 'Users');
+            const usersSnapshot = await getDocs(usersRef);
+
+            let allPosts = [];
+
+            for (let userDoc of usersSnapshot.docs) {
+                const userId = userDoc.id;
+                const postRef = collection(database, 'Users', userId, 'Posts');
+                const postSnapshot = await getDocs(postRef);
+                const postsData = postSnapshot.docs.map(async (doc) => {
+                    const postData = doc.data();
+                    const postId = doc.id;
+                    const commentsRef = collection(database, 'Users', userId, 'Posts', postId, 'comments');
+                    const commentsSnapshot = await getDocs(commentsRef);
+                    const commentCount = commentsSnapshot.size;
+
+                    // Fetch like status for the current user
+                    const likedBy = postData.likedBy || [];
+                    const liked = likedBy.includes(auth.currentUser?.uid);
+
+                    return {
+                        ...postData,
+                        id: postId,
+                        userId: userId,
+                        commentCount: commentCount,
+                        liked, // Track if the user has liked this post
+                        likesCount: postData.likes || 0, // Track the like count
+                    };
                 });
-        
-                setPosts(sortedPosts);
-            } catch (err) {
-                console.error("Error fetching posts:", err);
+
+                const resolvedPosts = await Promise.all(postsData);
+                allPosts = allPosts.concat(resolvedPosts);
             }
-        }, 1000);
+
+            const sortedPosts = allPosts.sort((a, b) => {
+                const aTimestamp = a.timestamp?.seconds || 0;
+                const bTimestamp = b.timestamp?.seconds || 0;
+                return bTimestamp - aTimestamp;
+            });
+
+            setPosts(sortedPosts);
+        } catch (err) {
+            console.error("Error fetching posts:", err);
+        }
     };
     
     useEffect(() => {
@@ -177,32 +183,40 @@ const Middle = ({ userData }) => {
     const handlelikes = async (id, posterId) => {
         const currentUserId = auth.currentUser?.uid;
         if (!currentUserId) return;
-    
+
         try {
             const postDocument = doc(database, 'Users', `${posterId}`, 'Posts', id);
-    
             const postSnapshot = await getDoc(postDocument);
+
             if (postSnapshot.exists()) {
                 const postData = postSnapshot.data();
-                const likedBy = postData.likedBy || []; 
-                
-                if (likedBy.includes(currentUserId)) {
-                    await updateDoc(postDocument, {
-                        likes: increment(-1),
-                        setlikeicon: false,
-                        likedBy: arrayRemove(currentUserId)
-                    });
-                } else {
-                    await updateDoc(postDocument, {
-                        likes: increment(1), 
-                        likedBy: arrayUnion(currentUserId),
-                        setlikeicon: true,
-                    });
-                }
+                const likedBy = postData.likedBy || [];
+
+                // Update the state to reflect the changes
+                const updatedPosts = posts.map(post => {
+                    if (post.id === id) {
+                        if (likedBy.includes(currentUserId)) {
+                            updateDoc(postDocument, {
+                                likes: increment(-1),
+                                likedBy: arrayRemove(currentUserId),
+                            });
+                            return { ...post, liked: false, likesCount: post.likesCount - 1 };
+                        } else {
+                            updateDoc(postDocument, {
+                                likes: increment(1),
+                                likedBy: arrayUnion(currentUserId),
+                            });
+                            return { ...post, liked: true, likesCount: post.likesCount + 1 };
+                        }
+                    }
+                    return post;
+                });
+
+                setPosts(updatedPosts);
+                getPost();
             }
-            getPost();
         } catch (err) {
-            console.error('Error toggling like:', err);
+            console.error("Error toggling like:", err);
         }
     };
     const [isEditing, setIsEditing]=useState(false);
@@ -211,7 +225,7 @@ const Middle = ({ userData }) => {
     }
     return (
         <>
-            <h1 className='russo text-center mt-2 text-4xl w-full '>POSTS</h1>
+            <h1 className='russo text-center mt-2 text-4xl w-full '>Kotinos</h1>
             <div className='w-[92%] ml-3 md:ml-5 md:mt-1 md:w-[50vw] h-[100vh] overflow-y-auto scrollbar-hide'>
             <div className="relative p-[2px] rounded-xl bg-gradient-to-r from-blue-900 via-blue-700 to-cyan-500">
                 
@@ -380,7 +394,16 @@ const Middle = ({ userData }) => {
                             
                             <div  className="gap-10" style={{display:'flex', flexDirection:'row',}}>
                                 <div className='mb-2 ml-5 mt-4 px-2 flex gap-1 items-center w-fit hover:bg-gradient-to-r hover:from-blue-900/20 hover:via-blue-700/20 hover:to-cyan-500/20 rounded-xl p-1'>
-                                    <CiHeart  onClick={() => handlelikes(post.id, post.userId)} className='h-8 w-8  cursor-pointer scale-[80%]'/>
+                                {!post.liked ? (
+                                    <CiHeart
+                                        onClick={() => handlelikes(post.id, post.userId)}
+                                        className='h-8 w-8 cursor-pointer scale-[80%]'
+                                    />
+                                ) : (
+                                    <div onClick={() => handlelikes(post.id, post.userId)}>
+                                        <img src={hearticon} alt="Liked" />
+                                    </div>
+                                )}
                                     {likeicon? <h1 className='text-blue-400'><strong>{post.likes}</strong></h1> : <h1><strong>{post.likes}</strong></h1>}
                                 </div>
                                 <div className='gap-3 mt-2' style={{marginLeft:'0%', display:'flex', flexDirection:'row', justifyContent:'start', alignItems:'center'}}>
