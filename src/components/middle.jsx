@@ -10,11 +10,7 @@ import { collection, doc, getDoc, getDocs, setDoc, updateDoc, increment, arrayRe
 import Posts from './posts';
 import FilePost from './FilePost';
 import Modal from 'react-modal';
-import { Button } from '@mui/material';
-import likebutton from '../assets/likebutton.svg'
-import commenticon from '../assets/comment.svg'
 import { CiHeart } from "react-icons/ci";
-import liked from '../assets/liked.svg';
 import { BiCommentDetail } from "react-icons/bi";
 import CommentModal from './comments/commentmodal';
 import hearticon from '../assets/hearticon2.svg'
@@ -101,8 +97,6 @@ const Middle = ({ userData }) => {
                     const commentsRef = collection(database, 'Users', userId, 'Posts', postId, 'comments');
                     const commentsSnapshot = await getDocs(commentsRef);
                     const commentCount = commentsSnapshot.size;
-
-                    // Fetch like status for the current user
                     const likedBy = postData.likedBy || [];
                     const liked = likedBy.includes(auth.currentUser?.uid);
 
@@ -111,8 +105,8 @@ const Middle = ({ userData }) => {
                         id: postId,
                         userId: userId,
                         commentCount: commentCount,
-                        liked, // Track if the user has liked this post
-                        likesCount: postData.likes || 0, // Track the like count
+                        liked,
+                        likesCount: postData.likes || 0,
                     };
                 });
 
@@ -191,8 +185,6 @@ const Middle = ({ userData }) => {
             if (postSnapshot.exists()) {
                 const postData = postSnapshot.data();
                 const likedBy = postData.likedBy || [];
-
-                // Update the state to reflect the changes
                 const updatedPosts = posts.map(post => {
                     if (post.id === id) {
                         if (likedBy.includes(currentUserId)) {
