@@ -217,7 +217,7 @@ const Middle = ({ userData }) => {
     }
     return (
         <>
-            <h1 className='russo text-center mt-2 text-4xl w-full '>Kotinos</h1>
+            <h1 className='russo text-center mt-2 text-4xl w-full '>POSTS</h1>
             <div className='w-[92%] ml-3 md:ml-5 md:mt-1 md:w-[50vw] h-[100vh] overflow-y-auto scrollbar-hide'>
             <div className="relative p-[2px] rounded-xl bg-gradient-to-r from-blue-900 via-blue-700 to-cyan-500">
                 

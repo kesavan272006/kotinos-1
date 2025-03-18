@@ -133,7 +133,8 @@ const Invitation = () => {
           user
             .filter((user) => user.status === "pending")
             .map((eachuser) => (
-              <Paper key={eachuser.id}>
+              <div className="flex justify-center w-full">
+                <Paper key={eachuser.id} className=" w-[95%] md:w-[70%]">
                 <List>
                   <ListItem
                     style={{ display: "flex", flexDirection: "row", justifyContent: "start" }}
@@ -171,6 +172,7 @@ const Invitation = () => {
                   </ListItem>
                 </List>
               </Paper>
+              </div>
             ))
         )}
 
