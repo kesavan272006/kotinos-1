@@ -16,6 +16,7 @@ import chat_bg from '../assets/chat_bg.png'
 import { ArrowLeft } from 'lucide-react';
 import { BiImageAdd } from "react-icons/bi";
 import { RiMoneyRupeeCircleLine } from "react-icons/ri";
+import { FiSearch } from 'react-icons/fi';
 const ChatPage = () => {
     const [user, setUser] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -266,6 +267,33 @@ const ChatPage = () => {
 
         fetchSenderNames();
     }, [messages, database]);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [filteredUsers, setFilteredUsers] = useState(groups);
+    const [defaults, setdefaults]=useState(true);
+    const handleSearchChange = (event) => {
+    setdefaults(false);
+    const query = event.target.value;
+    setSearchQuery(query);
+    const filtered = groups.filter(user => 
+        user.toLowerCase().includes(query.toLowerCase())
+    );
+    setFilteredUsers(filtered);
+    };
+    // seperating mobile queries by kesavan 😆
+    const [mobilesearchQuery, mobilesetSearchQuery] = useState('');
+    const [mobilefilteredUsers, mobilesetFilteredUsers] = useState(user);
+    const [mobiledefaults, mobilesetdefaults]=useState(true);
+    const mobilehandleSearchChange = (event) => {
+        mobilesetdefaults(false);
+    const query = event.target.value;
+    mobilesetSearchQuery(query);
+    const filtered = user.filter(user => 
+        user.username.toLowerCase().includes(query.toLowerCase()) || 
+        user.role.toLowerCase().includes(query.toLowerCase())
+    );
+    mobilesetFilteredUsers(filtered);
+    };
+
     const handleSendMessage = async (groupids) => {
         if (!grpmessage) {
             alert('Please enter a message!');
@@ -410,7 +438,6 @@ const ChatPage = () => {
         }
 
     };
-
     return (
         <div className='overflow-y-hidden'> {/* added to remove the input box being lifter above in phones */}
             <Navbar />
@@ -461,8 +488,20 @@ const ChatPage = () => {
                                     {groups.length}
                                 </span>
                             </h3>
+                            <div className="flex items-center border border-gray-300 bg-gray-100 rounded-full px-3 py-2">
+                                <FiSearch className="text-gray-500" />
+                                <input 
+                                    type="text" 
+                                    value={searchQuery}
+                                    onChange={handleSearchChange}
+                                    placeholder="Search groups" 
+                                    className="w-full ml-2 text-gray-700 outline-none bg-transparent" 
+                                />
+                            </div>
                             <List>
-                                {groups.map((groupId) => (
+                                {defaults && (
+                                    <>
+                                        {groups.map((groupId) => (
                                     <Paper
                                         key={groupId}
                                         style={{
@@ -497,6 +536,47 @@ const ChatPage = () => {
                                         </ListItem>
                                     </Paper>
                                 ))}
+                                    </>
+                                )}
+                                {!defaults && (
+                                    <>
+                                        {filteredUsers.map((groupId) => (
+                                    <Paper
+                                        key={groupId}
+                                        style={{
+                                            marginBottom: '8px',
+                                            borderRadius: '8px',
+                                            overflow: 'hidden',
+                                            transition: 'transform 0.2s, box-shadow 0.2s',
+                                            cursor: 'pointer'
+                                        }}
+                                        elevation={1}
+                                    >
+                                        <ListItem button onClick={() => handleGroupClick(groupId)} style={{ padding: '8px 12px' }}>
+                                            <Avatar style={{ backgroundColor: '#edf3fc', color: '#787cff' }}>
+                                                {(groupNames[groupId] || 'G')[0].toUpperCase()}
+                                            </Avatar>
+                                            <div style={{ marginLeft: '12px', overflow: 'hidden' }}>
+                                                <ListItemText
+                                                    primary={
+                                                        <span style={{ fontWeight: 500, color: '#424242' }}>
+                                                            {groupNames[groupId] || 'Loading...'}
+                                                        </span>
+                                                    }
+                                                    secondary={
+                                                        <span style={{ fontSize: '12px', color: '#757575' }}>
+                                                            Group conversation
+                                                        </span>
+                                                    }
+                                                    primaryTypographyProps={{ noWrap: true }}
+                                                    secondaryTypographyProps={{ noWrap: true }}
+                                                />
+                                            </div>
+                                        </ListItem>
+                                    </Paper>
+                                ))}
+                                    </>
+                                )}
                             </List>
                         </div>
 
@@ -519,46 +599,98 @@ const ChatPage = () => {
                                     {user.filter(user => user.status === 'connected').length}
                                 </span>
                             </h3>
-                            <List>
-                                {user.filter(user => user.status === 'connected').map((eachuser) => (
-                                    <Paper
-                                        key={eachuser.id}
-                                        style={{
-                                            marginBottom: '8px',
-                                            borderRadius: '8px',
-                                            overflow: 'hidden',
-                                            transition: 'transform 0.2s, box-shadow 0.2s',
-                                            cursor: 'pointer'
-                                        }}
-                                        elevation={1}
-                                    >
-                                        <ListItem button onClick={() => handleuserselection(eachuser)} style={{ padding: '8px 12px' }}>
-                                            <Avatar
-                                                src={eachuser.profilePic}
-                                                style={!eachuser.profilePic ? { backgroundColor: '#edf3fc', color: '#787cff' } : {}}
+                            <div className="flex items-center border border-gray-300 bg-gray-100 rounded-full px-3 py-2">
+                                    <FiSearch className="text-gray-500" />
+                                    <input 
+                                        type="text" 
+                                        value={mobilesearchQuery}
+                                        onChange={mobilehandleSearchChange}
+                                        placeholder="Search chats" 
+                                        className="w-full ml-2 text-gray-700 outline-none bg-transparent" 
+                                    />
+                                </div>
+                                <List>
+                                    {mobiledefaults && (
+                                        user.filter(user => user.status === 'connected').map((eachuser) => (
+                                            <Paper 
+                                                key={eachuser.id} 
+                                                style={{ 
+                                                    marginBottom: '8px', 
+                                                    borderRadius: '8px',
+                                                    overflow: 'hidden',
+                                                    transition: 'transform 0.2s, box-shadow 0.2s',
+                                                    cursor: 'pointer'
+                                                }}
+                                                elevation={1}
                                             >
-                                                {!eachuser.profilePic && eachuser.username[0].toUpperCase()}
-                                            </Avatar>
-                                            <div style={{ marginLeft: '12px', overflow: 'hidden' }}>
-                                                <ListItemText
-                                                    primary={
-                                                        <span style={{ fontWeight: 500, color: '#424242' }}>
-                                                            {eachuser.username}
-                                                        </span>
-                                                    }
-                                                    secondary={
-                                                        <span style={{ fontSize: '12px', color: '#757575' }}>
-                                                            {eachuser.role}
-                                                        </span>
-                                                    }
-                                                    primaryTypographyProps={{ noWrap: true }}
-                                                    secondaryTypographyProps={{ noWrap: true }}
-                                                />
-                                            </div>
-                                        </ListItem>
-                                    </Paper>
-                                ))}
-                            </List>
+                                                <ListItem button onClick={() => handleuserselection(eachuser)} style={{ padding: '8px 12px' }}>
+                                                    <Avatar 
+                                                        src={eachuser.profilePic}
+                                                        style={!eachuser.profilePic ? { backgroundColor: '#edf3fc', color: '#787cff' } : {}}
+                                                    >
+                                                        {!eachuser.profilePic && eachuser.username[0].toUpperCase()}
+                                                    </Avatar>
+                                                    <div style={{ marginLeft: '12px', overflow: 'hidden' }}>
+                                                        <ListItemText 
+                                                            primary={
+                                                                <span style={{ fontWeight: 500, color: '#424242' }}>
+                                                                    {eachuser.username}
+                                                                </span>
+                                                            } 
+                                                            secondary={
+                                                                <span style={{ fontSize: '12px', color: '#757575' }}>
+                                                                    {eachuser.role}
+                                                                </span>
+                                                            }
+                                                            primaryTypographyProps={{ noWrap: true }}
+                                                            secondaryTypographyProps={{ noWrap: true }}
+                                                        />
+                                                    </div>
+                                                </ListItem>
+                                            </Paper>
+                                        ))
+                                    )}
+                                    {!mobiledefaults && (
+                                        mobilefilteredUsers.filter(user => user.status === 'connected').map((eachuser) => (
+                                            <Paper 
+                                                key={eachuser.id} 
+                                                style={{ 
+                                                    marginBottom: '8px', 
+                                                    borderRadius: '8px',
+                                                    overflow: 'hidden',
+                                                    transition: 'transform 0.2s, box-shadow 0.2s',
+                                                    cursor: 'pointer'
+                                                }}
+                                                elevation={1}
+                                            >
+                                                <ListItem button onClick={() => handleuserselection(eachuser)} style={{ padding: '8px 12px' }}>
+                                                    <Avatar 
+                                                        src={eachuser.profilePic}
+                                                        style={!eachuser.profilePic ? { backgroundColor: '#edf3fc', color: '#787cff' } : {}}
+                                                    >
+                                                        {!eachuser.profilePic && eachuser.username[0].toUpperCase()}
+                                                    </Avatar>
+                                                    <div style={{ marginLeft: '12px', overflow: 'hidden' }}>
+                                                        <ListItemText 
+                                                            primary={
+                                                                <span style={{ fontWeight: 500, color: '#424242' }}>
+                                                                    {eachuser.username}
+                                                                </span>
+                                                            } 
+                                                            secondary={
+                                                                <span style={{ fontSize: '12px', color: '#757575' }}>
+                                                                    {eachuser.role}
+                                                                </span>
+                                                            }
+                                                            primaryTypographyProps={{ noWrap: true }}
+                                                            secondaryTypographyProps={{ noWrap: true }}
+                                                        />
+                                                    </div>
+                                                </ListItem>
+                                            </Paper>
+                                        ))
+                                    )}
+                                </List>
                         </div>
                     </div>
 
@@ -1033,8 +1165,59 @@ const ChatPage = () => {
                                         {groups.length}
                                     </span>
                                 </h3>
+                                <div className="flex items-center border border-gray-300 bg-gray-100 rounded-full px-3 py-2">
+                                    <FiSearch className="text-gray-500" />
+                                    <input 
+                                        type="text" 
+                                        value={searchQuery}
+                                        onChange={handleSearchChange}
+                                        placeholder="Search groups" 
+                                        className="w-full ml-2 text-gray-700 outline-none bg-transparent" 
+                                    />
+                                </div>
                                 <List>
-                                    {groups.map((groupId) => (
+                                    {defaults && (
+                                        <>
+                                            {groups.map((groupId) => (
+                                                <Paper 
+                                                    key={groupId} 
+                                                    style={{ 
+                                                        marginBottom: '8px', 
+                                                        borderRadius: '8px',
+                                                        overflow: 'hidden',
+                                                        transition: 'transform 0.2s, box-shadow 0.2s',
+                                                        cursor: 'pointer'
+                                                    }}
+                                                    elevation={1}
+                                                >
+                                                    <ListItem button onClick={() => handleGroupClick(groupId)} style={{ padding: '8px 12px' }}>
+                                                        <Avatar style={{ backgroundColor: '#edf3fc', color: '#787cff' }}>
+                                                            {(groupNames[groupId] || 'G')[0].toUpperCase()}
+                                                        </Avatar>
+                                                        <div style={{ marginLeft: '12px', overflow: 'hidden' }}>
+                                                            <ListItemText 
+                                                                primary={
+                                                                    <span style={{ fontWeight: 500, color: '#424242' }}>
+                                                                        {groupNames[groupId] || 'Loading...'}
+                                                                    </span>
+                                                                } 
+                                                                secondary={
+                                                                    <span style={{ fontSize: '12px', color: '#757575' }}>
+                                                                        Group conversation
+                                                                    </span>
+                                                                }
+                                                                primaryTypographyProps={{ noWrap: true }}
+                                                                secondaryTypographyProps={{ noWrap: true }}
+                                                            />
+                                                        </div>
+                                                    </ListItem>
+                                                </Paper>
+                                            ))}
+                                        </>
+                                    )}
+                                    {!defaults && (
+                                        <>
+                                            {filteredUsers.map((groupId) => (
                                         <Paper 
                                             key={groupId} 
                                             style={{ 
@@ -1069,6 +1252,8 @@ const ChatPage = () => {
                                             </ListItem>
                                         </Paper>
                                     ))}
+                                        </>
+                                    )}
                                 </List>
                             </div>
                             
@@ -1091,45 +1276,97 @@ const ChatPage = () => {
                                         {user.filter(user => user.status === 'connected').length}
                                     </span>
                                 </h3>
+                                <div className="flex items-center border border-gray-300 bg-gray-100 rounded-full px-3 py-2">
+                                    <FiSearch className="text-gray-500" />
+                                    <input 
+                                        type="text" 
+                                        value={mobilesearchQuery}
+                                        onChange={mobilehandleSearchChange}
+                                        placeholder="Search chats" 
+                                        className="w-full ml-2 text-gray-700 outline-none bg-transparent" 
+                                    />
+                                </div>
                                 <List>
-                                    {user.filter(user => user.status === 'connected').map((eachuser) => (
-                                        <Paper 
-                                            key={eachuser.id} 
-                                            style={{ 
-                                                marginBottom: '8px', 
-                                                borderRadius: '8px',
-                                                overflow: 'hidden',
-                                                transition: 'transform 0.2s, box-shadow 0.2s',
-                                                cursor: 'pointer'
-                                            }}
-                                            elevation={1}
-                                        >
-                                            <ListItem button onClick={() => handleuserselection(eachuser)} style={{ padding: '8px 12px' }}>
-                                                <Avatar 
-                                                    src={eachuser.profilePic}
-                                                    style={!eachuser.profilePic ? { backgroundColor: '#edf3fc', color: '#787cff' } : {}}
-                                                >
-                                                    {!eachuser.profilePic && eachuser.username[0].toUpperCase()}
-                                                </Avatar>
-                                                <div style={{ marginLeft: '12px', overflow: 'hidden' }}>
-                                                    <ListItemText 
-                                                        primary={
-                                                            <span style={{ fontWeight: 500, color: '#424242' }}>
-                                                                {eachuser.username}
-                                                            </span>
-                                                        } 
-                                                        secondary={
-                                                            <span style={{ fontSize: '12px', color: '#757575' }}>
-                                                                {eachuser.role}
-                                                            </span>
-                                                        }
-                                                        primaryTypographyProps={{ noWrap: true }}
-                                                        secondaryTypographyProps={{ noWrap: true }}
-                                                    />
-                                                </div>
-                                            </ListItem>
-                                        </Paper>
-                                    ))}
+                                    {mobiledefaults && (
+                                        user.filter(user => user.status === 'connected').map((eachuser) => (
+                                            <Paper 
+                                                key={eachuser.id} 
+                                                style={{ 
+                                                    marginBottom: '8px', 
+                                                    borderRadius: '8px',
+                                                    overflow: 'hidden',
+                                                    transition: 'transform 0.2s, box-shadow 0.2s',
+                                                    cursor: 'pointer'
+                                                }}
+                                                elevation={1}
+                                            >
+                                                <ListItem button onClick={() => handleuserselection(eachuser)} style={{ padding: '8px 12px' }}>
+                                                    <Avatar 
+                                                        src={eachuser.profilePic}
+                                                        style={!eachuser.profilePic ? { backgroundColor: '#edf3fc', color: '#787cff' } : {}}
+                                                    >
+                                                        {!eachuser.profilePic && eachuser.username[0].toUpperCase()}
+                                                    </Avatar>
+                                                    <div style={{ marginLeft: '12px', overflow: 'hidden' }}>
+                                                        <ListItemText 
+                                                            primary={
+                                                                <span style={{ fontWeight: 500, color: '#424242' }}>
+                                                                    {eachuser.username}
+                                                                </span>
+                                                            } 
+                                                            secondary={
+                                                                <span style={{ fontSize: '12px', color: '#757575' }}>
+                                                                    {eachuser.role}
+                                                                </span>
+                                                            }
+                                                            primaryTypographyProps={{ noWrap: true }}
+                                                            secondaryTypographyProps={{ noWrap: true }}
+                                                        />
+                                                    </div>
+                                                </ListItem>
+                                            </Paper>
+                                        ))
+                                    )}
+                                    {!mobiledefaults && (
+                                        mobilefilteredUsers.filter(user => user.status === 'connected').map((eachuser) => (
+                                            <Paper 
+                                                key={eachuser.id} 
+                                                style={{ 
+                                                    marginBottom: '8px', 
+                                                    borderRadius: '8px',
+                                                    overflow: 'hidden',
+                                                    transition: 'transform 0.2s, box-shadow 0.2s',
+                                                    cursor: 'pointer'
+                                                }}
+                                                elevation={1}
+                                            >
+                                                <ListItem button onClick={() => handleuserselection(eachuser)} style={{ padding: '8px 12px' }}>
+                                                    <Avatar 
+                                                        src={eachuser.profilePic}
+                                                        style={!eachuser.profilePic ? { backgroundColor: '#edf3fc', color: '#787cff' } : {}}
+                                                    >
+                                                        {!eachuser.profilePic && eachuser.username[0].toUpperCase()}
+                                                    </Avatar>
+                                                    <div style={{ marginLeft: '12px', overflow: 'hidden' }}>
+                                                        <ListItemText 
+                                                            primary={
+                                                                <span style={{ fontWeight: 500, color: '#424242' }}>
+                                                                    {eachuser.username}
+                                                                </span>
+                                                            } 
+                                                            secondary={
+                                                                <span style={{ fontSize: '12px', color: '#757575' }}>
+                                                                    {eachuser.role}
+                                                                </span>
+                                                            }
+                                                            primaryTypographyProps={{ noWrap: true }}
+                                                            secondaryTypographyProps={{ noWrap: true }}
+                                                        />
+                                                    </div>
+                                                </ListItem>
+                                            </Paper>
+                                        ))
+                                    )}
                                 </List>
                             </div>
                         </div>

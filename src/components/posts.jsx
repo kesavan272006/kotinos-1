@@ -101,9 +101,6 @@ const Posts = (props, ref) => {
       console.log(err);
     }
   };
-  const refreshPage = () => {
-    window.location.reload();
-  };
 
   const addPost = async () => {
     const postDocument = doc(database, 'Users', `${auth.currentUser?.uid}`);

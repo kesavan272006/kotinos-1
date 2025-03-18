@@ -14,6 +14,7 @@ import { CiHeart } from "react-icons/ci";
 import { BiCommentDetail } from "react-icons/bi";
 import CommentModal from './comments/commentmodal';
 import hearticon from '../assets/hearticon2.svg'
+import { FiSearch } from 'react-icons/fi';
 
 const Middle = ({ userData }) => {
     const [username, setUsername] = useState('');
@@ -215,6 +216,26 @@ const Middle = ({ userData }) => {
     const handleediting = ()=>{
         setIsEditing(!isEditing);
     }
+    const [searchQuery, setSearchQuery] = useState('');
+    const [filteredUsers, setFilteredUsers] = useState(posts);
+    const [defaults, setdefaults]=useState(true);
+    const handleSearchChange = (event) => {
+        const query = event.target.value;
+        if(query==''){
+            setdefaults(true);
+        }else{
+            setdefaults(false);
+        }
+        setSearchQuery(query);
+        const filtered = posts.filter(user => 
+            user.username.toLowerCase().includes(query.toLowerCase()) || 
+            user.title?.toLowerCase().includes(query.toLowerCase()) || 
+            user.description?.toLowerCase().includes(query.toLowerCase()) ||
+            user.textPost?.toLowerCase().includes(query.toLowerCase()) ||
+            user.role.toLowerCase().includes(query.toLowerCase())
+        );
+        setFilteredUsers(filtered);
+    };
     return (
         <>
             <h1 className='russo text-center mt-2 text-4xl w-full '>POSTS</h1>
@@ -247,8 +268,20 @@ const Middle = ({ userData }) => {
                     </div>
                 </div>
                 </div>
-
-                <div className='w-full mt-5 mb-7'>
+                <br />
+                <div className="flex items-center border border-gray-300 bg-gray-100 rounded-full px-3 py-2">
+                    <FiSearch className="text-gray-500" />
+                    <input 
+                        type="text" 
+                        value={searchQuery}
+                        onChange={handleSearchChange}
+                        placeholder="Search" 
+                        className="w-full ml-2 text-gray-700 outline-none bg-transparent" 
+                    />
+                </div>
+                <br />
+                {defaults && (
+                    <div className='w-full mt-5 mb-7'>
                     {posts.map((post) => (
                         <div key={post.id} className='bg-white rounded-xl border  mb-5'>
                             <div className='pl-5 pt-3'>
@@ -410,6 +443,171 @@ const Middle = ({ userData }) => {
                         </div>
                     ))}
                 </div>
+                )}
+                {!defaults && (
+                    <div className='w-full mt-5 mb-7'>
+                    {filteredUsers.map((post) => (
+                        <div key={post.id} className='bg-white rounded-xl border  mb-5'>
+                            <div className='pl-5 pt-3'>
+                                    <div style={{position:'relative'}} className='flex flex-row'>
+                                        <img src={post.profilepic||profileicon} alt={profileicon} className='mr-5 h-14 w-14 rounded-full bg-gray-300' onClick={() => openModals(post.profilepic||profileicon)}/>
+                                        {isModalOpened && (
+                                                <div
+                                                className=''
+                                                style={{
+                                                    position: 'fixed',
+                                                    top: 0,
+                                                    left: 0,
+                                                    right: 0,
+                                                    bottom: 0,
+                                                    backgroundColor: 'rgba(92, 91, 91, 0.01)',
+                                                    display: 'flex',
+                                                    justifyContent: 'center',
+                                                    alignItems: 'center',
+                                                    zIndex: 9999,
+                                                }}
+                                                onClick={closeModals}
+                                                >
+                                                <div className='mb-14 max-w-[80vw] max-h-[80vh]'
+                                                    
+                                                    onClick={(e) => e.stopPropagation()} 
+                                                >
+                                                    <img
+                                                    className=''
+                                                    src={modalImages}
+                                                    alt={profileicon}
+                                                    style={{
+                                                        width: '100%',
+                                                        height: '90vh',
+                                                        borderRadius: '4px',
+                                                        
+                                                    }}
+                                                    />
+                                                    <button
+                                                    onClick={closeModals}
+                                                    style={{
+                                                        position: 'absolute',
+                                                        top: '10px',
+                                                        right: '10px',
+                                                        background: 'black',
+                                                        color: 'white',
+                                                        border: 'none',
+                                                        borderRadius: '50%',
+                                                        width: '30px',
+                                                        height: '30px',
+                                                        fontSize: '18px',
+                                                        fontWeight: 'bold',
+                                                        cursor: 'pointer',
+                                                    }}
+                                                    >
+                                                    X
+                                                    </button>
+                                                </div>
+                                                </div>
+                                            )}
+                                        <Link to={`/otherprofile/${post.Id}`}>
+                                            <div style={{display:'flex', flexDirection:'row'}}>
+                                                <div
+                                                    style={{
+                                                        display: 'flex',
+                                                        flexDirection: 'column',
+                                                        justifyContent: 'center',
+                                                        marginRight:'20px'
+                                                    }}
+                                                >
+                                                    <h1 className='font-bold'>{post.username}</h1>
+                                                    <h1>{post.role}</h1>
+                                                    
+                                                </div>
+                                                <h3 className='absolute md:relative m-1 top-full md:ml-6 mt-1 text-sm text-gray-400'>{formatTimestamp(post.timestamp)}</h3>
+                                            </div>
+                                        </Link>
+                                    </div>
+                                {post.enableCrowdFunding && (
+                                        <>
+                                            <button
+                                            onClick={() => handlenavigation(post.Id)}
+                                            className="mt-1 -translate-y-14 -translate-x-4 md:translate-x-20 hover:scale-105 relative group left-[75%] px-2 bg-gradient-to-r from-blue-900 via-blue-700 to-cyan-500 text-white h-7 p-2 font-bold text-sm transition-all duration-300 rounded-lg overflow-hidden flex items-center justify-center pr-4 origin-right"
+                                          >
+                                            {/* <span className="group-hover:hidden text-xl ">₹</span> */}
+                                            <span className=" px-2 ml-2">FUND</span>
+                                          </button>
+                                          </>
+                                          
+                                            
+                                    )}
+                                <h1 className='pt-5 mt-4'>{post.textPost}</h1>
+                            </div>
+                            <div>
+                                <strong className='text-2xl text-center pl-6'>
+                                    {post.title}
+                                </strong>
+                                <h2 className='pl-7 text-lg'>{post.description}</h2>
+                            </div>
+                            {post.images && post.images.length > 0 && (
+                                <div className='flex flex-col pl-5 py-1 pr-5'>
+                                    {post.images.slice(0, 1).map((image, index) => (
+                                        <div className="flex bg-gray-50 justify-center rounded-lg py-2">
+                                            <img
+                                                key={index}
+                                                src={image}
+                                                alt={`Post Image ${index}`}
+                                                className='w-fit h-fit md:max-h-[550px] md:max-w-[700px] rounded object-cover cursor-pointer'
+                                                onClick={() => openModal(post.images, index)}
+                                            />
+                                        </div>
+
+                                    ))}
+                                    <br />
+                                    <div className='flex gap-2 justify-start '>
+                                        {post.images.slice(1, 3).map((image, index) => (
+                                            <img
+                                                key={index}
+                                                src={image}
+                                                alt={`Post Image ${index}`}
+                                                className='w-[100px] h-[100px] rounded object-cover cursor-pointer mb-4 border '
+                                                onClick={() => openModal(post.images, index)}
+                                            />
+                                        ))}
+                                        {post.images.length > 3 && (
+                                            <div
+                                                onClick={() => openModal(post.images, 3)}
+                                                className='flex justify-center items-center w-[100px] h-[100px] bg-gray-300 rounded cursor-pointer'
+                                            >
+                                                <span>+{post.images.length - 3}</span>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            )}
+                            
+                            <div  className="gap-10" style={{display:'flex', flexDirection:'row',}}>
+                                <div className='mb-2 ml-5 mt-4 px-2 flex gap-1 items-center w-fit hover:bg-gradient-to-r hover:from-blue-900/20 hover:via-blue-700/20 hover:to-cyan-500/20 rounded-xl p-1'>
+                                {!post.liked ? (
+                                    <CiHeart
+                                        onClick={() => handlelikes(post.id, post.userId)}
+                                        className='h-8 w-8 cursor-pointer scale-[80%]'
+                                    />
+                                ) : (
+                                    <div onClick={() => handlelikes(post.id, post.userId)}>
+                                        <img src={hearticon} alt="Liked" />
+                                    </div>
+                                )}
+                                    {likeicon? <h1 className='text-blue-400'><strong>{post.likes}</strong></h1> : <h1><strong>{post.likes}</strong></h1>}
+                                </div>
+                                <div className='gap-3 mt-2' style={{marginLeft:'0%', display:'flex', flexDirection:'row', justifyContent:'start', alignItems:'center'}}>
+                                    <button onClick={()=>{
+                                        setOpenComment(true);
+                                        setpostId(post.id);
+                                        setPosterId(post.Id)
+                                    }}><BiCommentDetail className='scale-125' /></button>
+                                    <h1 className='font-bold'> {post.commentCount} </h1>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+                )}
             </div>
             {openComment && postId && (
                 <CommentModal
