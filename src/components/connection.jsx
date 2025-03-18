@@ -10,6 +10,7 @@ import { setDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import { getDoc } from 'firebase/firestore';
 import { IoPersonAddSharp } from "react-icons/io5";
+import { FiSearch } from 'react-icons/fi';
 const Connection = () => {
   const [userData, setuserdata] = useState([]);
   const navigate = useNavigate();
@@ -54,17 +55,9 @@ const Connection = () => {
 
     fetchUserData();
   }, [navigate]);
-  // const getPendingRequests = async () => {
-  //   const requestOutRef = collection(database, "Users", auth.currentUser?.uid, "RequestOut");
-  //   try {
-  //     const data = await getDocs(requestOutRef);
-  //     const requests = data.docs.map(doc => doc.data());
-  //     setPendingRequests(requests);
-  //   } catch (err) {
-  //     console.error("Error fetching requests:", err);
-  //   }
-  // };
-
+  useEffect(()=>{
+    setFilteredUsers(userData)
+  }, [])
   const sendRequest = async (userId) => {
     const requestDoc = doc(database, "Users", `${userId}`);
     const connectRef = collection(requestDoc, "RequestIn");
@@ -101,7 +94,18 @@ const Connection = () => {
     }
   }
   const [profilePics, setProfilePics] = useState({});
-
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filteredUsers, setFilteredUsers] = useState(userData);
+  const [defaults, setdefaults]=useState(true);
+  const handleSearchChange = (event) => {
+    setdefaults(false);
+    const query = event.target.value;
+    setSearchQuery(query);
+    const filtered = userData.filter(user => 
+      user.username.toLowerCase().includes(query.toLowerCase())
+    );
+    setFilteredUsers(filtered);
+  };
   useEffect(() => {
     const fetchProfilePics = async () => {
       const newProfilePics = {};
@@ -136,45 +140,99 @@ const Connection = () => {
           <h2 className='text-gray-700 text-base mt-10 mb-10 font-medium ml-3 md:ml-2'>
             Find new people to connect with and grow your network.
           </h2>
-          {userData.filter(user => user.id !== auth.currentUser?.uid).map((users) => {
-            const isRequestAlreadySent = isRequestSent(users.id);
-
-            return (
-              <div key={users.id} className=''>
-
-                <Paper className='hover:bg-blue-50'>
-                  <List>
-                    <ListItem className='' style={{ display: 'flex', flexDirection: 'row', justifyContent: 'start' }}>
-                      <Link to={`/otherprofile/${users.id}`}>
-                        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'start', alignItems: 'center' }}>
-                          <Avatar className='bg-gray-100' src={profilePics[users.id] || profileicon} sx={{ width: 48, height: 48,}} />
-                          <div style={{ marginLeft: '10px' }}>
-                            <ListItemText primary={users.username} secondary={users.role} />
+          <div className="flex items-center border border-gray-300 bg-gray-100 rounded-full px-3 py-2">
+              <FiSearch className="text-gray-500" />
+              <input 
+                  type="text" 
+                  value={searchQuery}
+                  onChange={handleSearchChange}
+                  placeholder="Search" 
+                  className="w-full ml-2 text-gray-700 outline-none bg-transparent" 
+              />
+          </div>
+          <br />
+          {!defaults && (
+            filteredUsers.filter(user => user.id !== auth.currentUser?.uid).map((users) => {
+              const isRequestAlreadySent = isRequestSent(users.id);
+  
+              return (
+                <div key={users.id} className=''>
+  
+                  <Paper className='hover:bg-blue-50'>
+                    <List>
+                      <ListItem className='' style={{ display: 'flex', flexDirection: 'row', justifyContent: 'start' }}>
+                        <Link to={`/otherprofile/${users.id}`}>
+                          <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'start', alignItems: 'center' }}>
+                            <Avatar className='bg-gray-100' src={profilePics[users.id] || profileicon} sx={{ width: 48, height: 48,}} />
+                            <div style={{ marginLeft: '10px' }}>
+                              <ListItemText primary={users.username} secondary={users.role} />
+                            </div>
                           </div>
-                        </div>
-                      </Link>
-                      {!isRequestAlreadySent && (
-                        <button
-                          onClick={() => sendRequest(users.id)}
-                          className='ml-auto text-blue-500 hover:bg-white hover:border hover:border-blue-500 rounded-full px-2 py-1 transform transition duration-100 ease-in-out'
-                        >
-                          Connect
-                        </button>
-                      )}
-                      {isRequestAlreadySent && (
-                        <Button
-                          disabled
-                          style={{ backgroundColor: 'grey', color: 'white', fontSize: '20px', marginLeft: 'auto' }}
-                        >
-                          Request Sent
-                        </Button>
-                      )}
-                    </ListItem>
-                  </List>
-                </Paper>
-              </div>
-            );
-          })}
+                        </Link>
+                        {!isRequestAlreadySent && (
+                          <button
+                            onClick={() => sendRequest(users.id)}
+                            className='ml-auto text-blue-500 hover:bg-white hover:border hover:border-blue-500 rounded-full px-2 py-1 transform transition duration-100 ease-in-out'
+                          >
+                            Connect
+                          </button>
+                        )}
+                        {isRequestAlreadySent && (
+                          <Button
+                            disabled
+                            style={{ backgroundColor: 'grey', color: 'white', fontSize: '20px', marginLeft: 'auto' }}
+                          >
+                            Request Sent
+                          </Button>
+                        )}
+                      </ListItem>
+                    </List>
+                  </Paper>
+                </div>
+              );
+            })
+          )}
+          {defaults && (
+            userData.filter(user => user.id !== auth.currentUser?.uid).map((users) => {
+              const isRequestAlreadySent = isRequestSent(users.id);
+  
+              return (
+                <div key={users.id} className=''>
+  
+                  <Paper className='hover:bg-blue-50'>
+                    <List>
+                      <ListItem className='' style={{ display: 'flex', flexDirection: 'row', justifyContent: 'start' }}>
+                        <Link to={`/otherprofile/${users.id}`}>
+                          <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'start', alignItems: 'center' }}>
+                            <Avatar className='bg-gray-100' src={profilePics[users.id] || profileicon} sx={{ width: 48, height: 48,}} />
+                            <div style={{ marginLeft: '10px' }}>
+                              <ListItemText primary={users.username} secondary={users.role} />
+                            </div>
+                          </div>
+                        </Link>
+                        {!isRequestAlreadySent && (
+                          <button
+                            onClick={() => sendRequest(users.id)}
+                            className='ml-auto text-blue-500 hover:bg-white hover:border hover:border-blue-500 rounded-full px-2 py-1 transform transition duration-100 ease-in-out'
+                          >
+                            Connect
+                          </button>
+                        )}
+                        {isRequestAlreadySent && (
+                          <Button
+                            disabled
+                            style={{ backgroundColor: 'grey', color: 'white', fontSize: '20px', marginLeft: 'auto' }}
+                          >
+                            Request Sent
+                          </Button>
+                        )}
+                      </ListItem>
+                    </List>
+                  </Paper>
+                </div>
+              );
+            })
+          )}
         </div>
       </div>
     </div>

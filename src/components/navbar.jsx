@@ -21,6 +21,15 @@ function Navbar() {
     const [username, setUsername] = useState('');
     const [role, setRole] = useState('');
     const [email, setEmail] = useState('');
+    const [isMobile, setIsMobile] = useState(false);
+
+    const checkScreenSize = () => {
+        if (window.innerWidth <= 480) {
+            setIsMobile(true);
+        } else {
+            setIsMobile(false);
+        }
+    };
     useEffect(() => {
         const fetchUserData = async () => {
           const currentUser = auth.currentUser;
@@ -33,7 +42,6 @@ function Navbar() {
               setUsername(userData.username || 'No Username');
               setRole(userData.role || 'No Role');
               setEmail(userData.email || 'No email found');
-            //   setprofiles(userData.profilePic);
             } else {
               navigate("/signin");
             }
@@ -44,8 +52,13 @@ function Navbar() {
     
         fetchUserData();
       }, [navigate]);
-    
-    // Handle scroll effect
+      useEffect(() => {
+            checkScreenSize();
+            window.addEventListener('resize', checkScreenSize);
+            return () => {
+                window.removeEventListener('resize', checkScreenSize);
+            };
+        }, []);
     useEffect(() => {
         const handleScroll = () => {
             if (window.scrollY > 10) {
@@ -58,8 +71,6 @@ function Navbar() {
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
-
-    // Close dropdowns when clicking outside
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (showNotifications || showProfile) {
@@ -82,51 +93,49 @@ function Navbar() {
             console.error("Error signing out:", error);
         }
     };
-
-    // Check if a navigation link is active
     const isActive = (path) => location.pathname === path;
 
     return (
         <div className={`sticky top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-white/95 backdrop-blur-sm shadow-lg' : 'bg-white shadow-md'}`}>
             <nav className='w-full flex items-center justify-between py-3 px-4'>
-                {/* Left Side: Logo */}
                 <div className="flex items-center">
                     <Link to='/about' className="flex items-center">
                         <div className="h-10 w-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-xl transition-transform hover:scale-105">
                             K
                         </div>
                         <span className="ml-2 text-lg font-semibold hidden md:block text-gray-800">Kotinos</span>
+                        {isMobile && (
+                            <strong className="ml-2 text-lg font-semibold text-gray-800">Kotinos</strong>
+                        )}
                     </Link>
-                    <div className={`hidden md:flex items-center relative mx-4 flex-1 max-w-md transition-all ${searchFocused ? 'scale-105' : ''}`}>
-                    <div className={`flex items-center w-full border ${searchFocused ? 'border-blue-500 bg-blue-50' : 'border-gray-300 bg-gray-100'} rounded-full px-4 py-2 transition-all`}>
-                        <FiSearch className={`${searchFocused ? 'text-blue-500' : 'text-gray-500'} transition-colors`} />
-                        <input 
-                            type="text" 
-                            placeholder="Search" 
-                            className="w-full ml-2 text-gray-700 outline-none bg-transparent" 
-                            onFocus={() => setSearchFocused(true)}
-                            onBlur={() => setSearchFocused(false)}
-                        />
+                    {!isMobile && (
+                        <div className={`hidden md:flex items-center relative mx-4 flex-1 max-w-md transition-all ${searchFocused ? 'scale-105' : ''}`}>
+                            <div className={`flex items-center w-full border ${searchFocused ? 'border-blue-500 bg-blue-50' : 'border-gray-300 bg-gray-100'} rounded-full px-4 py-2 transition-all`}>
+                                <FiSearch className={`${searchFocused ? 'text-blue-500' : 'text-gray-500'} transition-colors`} />
+                                <input 
+                                    type="text" 
+                                    placeholder="Search" 
+                                    className="w-full ml-2 text-gray-700 outline-none bg-transparent" 
+                                    onFocus={() => setSearchFocused(true)}
+                                    onBlur={() => setSearchFocused(false)}
+                                />
+                            </div>
+                        </div>
+                    )}
+                </div>
+                {!isMobile && (
+                    <div className="md:hidden flex-1 mx-3">
+                        <div className="flex items-center border border-gray-300 bg-gray-100 rounded-full px-3 py-2">
+                            <FiSearch className="text-gray-500" />
+                            <input 
+                                type="text" 
+                                placeholder="Search" 
+                                className="w-full ml-2 text-gray-700 outline-none bg-transparent" 
+                            />
+                        </div>
                     </div>
-                </div>
-                </div>
-
-                {/* Middle: Search Bar */}
+                )}
                 
-
-                {/* Mobile Search */}
-                <div className="md:hidden flex-1 mx-3">
-                    <div className="flex items-center border border-gray-300 bg-gray-100 rounded-full px-3 py-2">
-                        <FiSearch className="text-gray-500" />
-                        <input 
-                            type="text" 
-                            placeholder="Search" 
-                            className="w-full ml-2 text-gray-700 outline-none bg-transparent" 
-                        />
-                    </div>
-                </div>
-
-                {/* Right Side: Navigation Links */}
                 <div className="flex items-center">
                     <ul className='flex items-center space-x-1 md:space-x-3'>
                         <li>
@@ -140,8 +149,6 @@ function Navbar() {
                                 <IoChatbubbleEllipses className='text-xl md:text-2xl' />
                             </NavLink>
                         </li>
-
-                        {/* Notification Dropdown */}
                         <li className="dropdown-container relative">
                             <button 
                                 onClick={() => {
@@ -174,8 +181,6 @@ function Navbar() {
                                 <IoIosPeople className='text-xl md:text-2xl' />
                             </NavLink>
                         </li>
-
-                        {/* Profile Dropdown */}
                         <li className="dropdown-container relative">
                             <button 
                                 onClick={() => {
@@ -187,10 +192,11 @@ function Navbar() {
                                 <IoPersonSharp className='text-xl md:text-2xl' />
                             </button>
                             {showProfile && (
-                                <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-gray-200 overflow-hidden">
+                                <div style={{width:'max-width'}} className="absolute right-0 mt-2 bg-white rounded-lg shadow-xl border border-gray-200 overflow-hidden">
                                     <div className="px-4 py-3 border-b border-gray-200">
-                                        <p className="font-semibold text-gray-800">John Doe</p>
-                                        <p className="text-sm text-gray-500">john.doe@example.com</p>
+                                        <p className="font-semibold text-gray-800">{username}</p>
+                                        <p className="text-sm text-gray-500">{role}</p>
+                                        <p className="text-sm text-gray-500">{email}</p>
                                     </div>
                                     <div>
                                         <NavLink to='/profile' className="flex items-center px-4 py-3 hover:bg-gray-100 transition-colors">

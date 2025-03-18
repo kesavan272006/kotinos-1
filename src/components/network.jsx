@@ -9,6 +9,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { IoPersonAdd } from "react-icons/io5";
 import { IoIosPeople } from "react-icons/io";
+import { FiSearch } from 'react-icons/fi';
 
 const Network = () => {
     const navigate = useNavigate();
@@ -53,7 +54,18 @@ const Network = () => {
 
         return () => unsubscribe();
     }, []);
-
+    const [searchQuery, setSearchQuery] = useState('');
+    const [filteredUsers, setFilteredUsers] = useState(user);
+    const [defaults, setdefaults]=useState(true);
+    const handleSearchChange = (event) => {
+    setdefaults(false);
+    const query = event.target.value;
+    setSearchQuery(query);
+    const filtered = user.filter(user => 
+        user.username.toLowerCase().includes(query.toLowerCase())
+    );
+    setFilteredUsers(filtered);
+    };
     if (loading) {
         return <Loading />;
     }
@@ -97,41 +109,88 @@ const Network = () => {
                     <div className="bg-white rounded-lg shadow-sm overflow-hidden">
                         <div className="px-4 py-3 bg-gray-50 border-b border-gray-100">
                             <h2 className="font-medium text-gray-700">Your Connections</h2>
+                        <div className="flex items-center border border-gray-300 bg-gray-100 rounded-full px-3 py-2">
+                            <FiSearch className="text-gray-500" />
+                            <input 
+                                type="text" 
+                                value={searchQuery}
+                                onChange={handleSearchChange}
+                                placeholder="Search" 
+                                className="w-full ml-2 text-gray-700 outline-none bg-transparent" 
+                            />
+                        </div>
                         </div>
                         <div className="divide-y divide-gray-100">
-                            {user.filter(user => user.status === 'connected').map((eachuser) => (
-                                <Link 
-                                    to={`/otherprofile/${eachuser.id}`} 
-                                    key={eachuser.id} 
-                                    className="block hover:bg-blue-50 transition-colors duration-200"
-                                >
-                                    <div className="px-4 py-3 flex items-center justify-between">
-                                        <div className="flex items-center">
-                                            <Avatar className='bg-gray-100'
-                                                src={profileicon} 
-                                                sx={{ 
-                                                    width: 48, 
-                                                    height: 48,
-                                                    
-                                                }}
-                                            />
-                                            <div className="ml-3">
-                                                <p className="font-medium text-gray-800">{eachuser.username}</p>
-                                                <p className="text-sm text-gray-500">{eachuser.role}</p>
+                            {defaults && (
+                                user.filter(user => user.status === 'connected').map((eachuser) => (
+                                    <Link 
+                                        to={`/otherprofile/${eachuser.id}`} 
+                                        key={eachuser.id} 
+                                        className="block hover:bg-blue-50 transition-colors duration-200"
+                                    >
+                                        <div className="px-4 py-3 flex items-center justify-between">
+                                            <div className="flex items-center">
+                                                <Avatar className='bg-gray-100'
+                                                    src={profileicon} 
+                                                    sx={{ 
+                                                        width: 48, 
+                                                        height: 48,
+                                                        
+                                                    }}
+                                                />
+                                                <div className="ml-3">
+                                                    <p className="font-medium text-gray-800">{eachuser.username}</p>
+                                                    <p className="text-sm text-gray-500">{eachuser.role}</p>
+                                                </div>
                                             </div>
+                                            <Button 
+                                                variant="text" 
+                                                className="text-blue-500 hover:bg-blue-50"
+                                                style={{ minWidth: 'auto', padding: '6px' }}
+                                            >
+                                                <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
+                                                </svg>
+                                            </Button>
                                         </div>
-                                        <Button 
-                                            variant="text" 
-                                            className="text-blue-500 hover:bg-blue-50"
-                                            style={{ minWidth: 'auto', padding: '6px' }}
-                                        >
-                                            <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
-                                            </svg>
-                                        </Button>
-                                    </div>
-                                </Link>
-                            ))}
+                                    </Link>
+                                ))
+                            )}
+                            {!defaults && (
+                                filteredUsers.filter(user => user.status === 'connected').map((eachuser) => (
+                                    <Link 
+                                        to={`/otherprofile/${eachuser.id}`} 
+                                        key={eachuser.id} 
+                                        className="block hover:bg-blue-50 transition-colors duration-200"
+                                    >
+                                        <div className="px-4 py-3 flex items-center justify-between">
+                                            <div className="flex items-center">
+                                                <Avatar className='bg-gray-100'
+                                                    src={profileicon} 
+                                                    sx={{ 
+                                                        width: 48, 
+                                                        height: 48,
+                                                        
+                                                    }}
+                                                />
+                                                <div className="ml-3">
+                                                    <p className="font-medium text-gray-800">{eachuser.username}</p>
+                                                    <p className="text-sm text-gray-500">{eachuser.role}</p>
+                                                </div>
+                                            </div>
+                                            <Button 
+                                                variant="text" 
+                                                className="text-blue-500 hover:bg-blue-50"
+                                                style={{ minWidth: 'auto', padding: '6px' }}
+                                            >
+                                                <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
+                                                </svg>
+                                            </Button>
+                                        </div>
+                                    </Link>
+                                ))
+                            )}
                         </div>
                     </div>
                 )}
