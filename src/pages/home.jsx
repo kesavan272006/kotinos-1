@@ -7,7 +7,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { auth, database } from "../config/firebase";
 
 function Home() {
-    const [userData, setUserData] = useState([]);
+    const [userData, setUserData] = useState(null);
     const [loading, setLoading] = useState(true);
 
     const getUser = async () => {
@@ -15,17 +15,12 @@ function Home() {
             const userdocument = doc(database, "Users", `${auth.currentUser?.uid}`);
             const data = await getDoc(userdocument);
             setUserData(data.data());
+            setLoading(false);
         } catch (err) {
             console.log(err);
+            setLoading(false);
         }
     };
-
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setLoading(false);
-        }, 3000);
-        return () => clearTimeout(timer); 
-    }, []);
 
     useEffect(() => {
         getUser();

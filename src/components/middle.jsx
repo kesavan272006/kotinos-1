@@ -128,7 +128,7 @@ const Middle = ({ userData }) => {
     
     useEffect(() => {
         getPost();
-    }, []);
+    }, [posts]);
     
 
     const handlePost = async () => {

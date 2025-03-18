@@ -33,7 +33,7 @@ function Navbar() {
               setUsername(userData.username || 'No Username');
               setRole(userData.role || 'No Role');
               setEmail(userData.email || 'No email found');
-              setprofiles(userData.profilePic);
+            //   setprofiles(userData.profilePic);
             } else {
               navigate("/signin");
             }

@@ -154,6 +154,7 @@ const Profile = () => {
                         setProfile(docSnap.data());
                         const profilepicref = docSnap.data();
                         setphotourl(profilepicref.profilePic || profileicon);
+                        setLoading(false);
                     }
                 } catch (error) {
                     console.error('Error fetching profile:', error);
@@ -179,6 +180,7 @@ const Profile = () => {
                         setUsername(reference.username)
                         setRole(reference.role);
                         setemail(reference.email)
+                        setLoading(false);
                     }
                 } catch (error) {
                     console.error('Error fetching profile:', error);
@@ -294,7 +296,6 @@ const Profile = () => {
         }
     };
     const [achievementPost, setAchievementPost]=useState([]);
-    // Type of Services Offered (Checkbox options)
     const servicesOffered = [
         "Event Hosting",
         "Athlete Training",
