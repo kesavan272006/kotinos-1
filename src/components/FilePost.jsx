@@ -85,9 +85,6 @@ const FilePost = (props, ref) => {
   useEffect(() => {
     getUserData();
   }, []);
-  const refreshPage = () => {
-    window.location.reload();
-  };
   const openModal = () => {
     setTimeout(() => {
       if (fileRef.current) {
@@ -185,7 +182,6 @@ const FilePost = (props, ref) => {
         setFiles([]);
         setIsfunding(false);
         setAchievement(false);
-        refreshPage();
       } catch (err) {
         console.log(err);
       }
