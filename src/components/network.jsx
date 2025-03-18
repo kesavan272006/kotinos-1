@@ -5,12 +5,13 @@ import profileicon from '../assets/profileicon.svg';
 import { collection, doc, getDocs } from 'firebase/firestore';
 import { database, auth } from '../config/firebase';
 import Loading from './Loading';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { IoPersonAdd } from "react-icons/io5";
 import { IoIosPeople } from "react-icons/io";
 
 const Network = () => {
+    const navigate = useNavigate();
     const [user, setUser] = useState([]);
     const [loading, setLoading] = useState(true);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -79,6 +80,7 @@ const Network = () => {
                         <h2 className="text-xl font-semibold mb-2">Your network is empty</h2>
                         <p className="text-gray-500 mb-6">Connect with others to build your professional network</p>
                         <Button 
+                            onClick={()=>navigate('/connection')}
                             variant="contained" 
                             style={{ 
                                 backgroundColor: '#2BCEE0', 

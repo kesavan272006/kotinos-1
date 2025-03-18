@@ -115,6 +115,7 @@ const Posts = (props, ref) => {
           profilepic: profilepic,
           Id: auth.currentUser?.uid,
           enableCrowdFunding: isfunding,
+          isAchievement: achievement,
           likes: 0,
           likedBy: [],
         });
@@ -122,6 +123,7 @@ const Posts = (props, ref) => {
       } else {
         alert('Trying to post?? but without adding your thoughts through text??...');
       }
+      
     } catch (err) {
       console.log(err);
     }
@@ -133,6 +135,14 @@ const Posts = (props, ref) => {
       setIsfunding(true);
     } else {
       setIsfunding(false);  
+    }
+  };
+  const [achievement, setAchievement]=useState(false);
+  const handleAchievement = (event) => {
+    if (event.target.checked) {
+      setAchievement(true);
+    } else {
+      setAchievement(false);  
     }
   };
   useEffect(() => {
@@ -175,28 +185,55 @@ const Posts = (props, ref) => {
         />
         <br />
         {decidingathlete && (
-          <div style={{display:'flex',flexDirection:'row', justifyContent:'center'}}>
-          <Switch
-            onChange={handleSwitchChange} 
-          />
-          <h1 style={{color:'black'}}><strong>Enable Crowdfunding for this post</strong></h1>
-        </div>
+          <>
+              <div style={{display:'flex',flexDirection:'row', justifyContent:'center'}}>
+                <Switch
+                  onChange={handleSwitchChange} 
+                />
+                <h1 style={{color:'black'}}><strong>Enable Crowdfunding for this post</strong></h1>
+              </div>
+              <br />
+              <div style={{display:'flex',flexDirection:'row', justifyContent:'center'}}>
+                <Switch
+                  onChange={handleAchievement} 
+                />
+                <h1 style={{color:'black'}}><strong>Add this post to your achievements section</strong></h1>
+              </div>
+          </>
         )}
         {decidingcoach && (
-          <div style={{display:'flex',flexDirection:'row', justifyContent:'center'}}>
-          <Switch
-            onChange={handleSwitchChange} 
-          />
-          <h1 style={{color:'black'}}><strong>Enable Crowdfunding for this post</strong></h1>
-        </div>
+          <>
+              <div style={{display:'flex',flexDirection:'row', justifyContent:'center'}}>
+                <Switch
+                  onChange={handleSwitchChange} 
+                />
+                <h1 style={{color:'black'}}><strong>Enable Crowdfunding for this post</strong></h1>
+              </div>
+              <br />
+              <div style={{display:'flex',flexDirection:'row', justifyContent:'center'}}>
+                <Switch
+                  onChange={handleAchievement} 
+                />
+                <h1 style={{color:'black'}}><strong>Add this post to your achievements section</strong></h1>
+              </div>
+          </>
         )}
         {decidingorganization && (
-          <div style={{display:'flex',flexDirection:'row', justifyContent:'center'}}>
-          <Switch
-            onChange={handleSwitchChange} 
-          />
-          <h1 style={{color:'black'}}><strong>Enable Crowdfunding for this post</strong></h1>
-        </div>
+          <>
+              <div style={{display:'flex',flexDirection:'row', justifyContent:'center'}}>
+                <Switch
+                  onChange={handleSwitchChange} 
+                />
+                <h1 style={{color:'black'}}><strong>Enable Crowdfunding for this post</strong></h1>
+              </div>
+              <br />
+              <div style={{display:'flex',flexDirection:'row', justifyContent:'center'}}>
+                <Switch
+                  onChange={handleAchievement} 
+                />
+                <h1 style={{color:'black'}}><strong>Add this post to your achievements section</strong></h1>
+              </div>
+          </>
         )}
         <div className="modal-buttons mt-5 ml-1 mr-1">
           <Button variant="outlined" className="closeButton " onClick={closeModal}>
