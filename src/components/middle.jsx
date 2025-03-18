@@ -275,11 +275,10 @@ const Middle = ({ userData }) => {
                         type="text" 
                         value={searchQuery}
                         onChange={handleSearchChange}
-                        placeholder="Search" 
+                        placeholder="Search posts by username or role" 
                         className="w-full ml-2 text-gray-700 outline-none bg-transparent" 
                     />
                 </div>
-                <br />
                 {defaults && (
                     <div className='w-full mt-5 mb-7'>
                     {posts.map((post) => (
