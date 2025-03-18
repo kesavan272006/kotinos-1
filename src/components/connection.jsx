@@ -1,5 +1,6 @@
 import { addDoc, collection, doc, getDocs, query, where } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
+import Navbar from '../components/navbar';
 import { auth, database } from '../config/firebase';
 import { Avatar, Button, ListItem, ListItemText, Paper, List } from '@mui/material';
 import profileicon from '../assets/profileicon.svg';
@@ -8,6 +9,7 @@ import { useRequestContext } from '../context/RequestContext';
 import { setDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import { getDoc } from 'firebase/firestore';
+import { IoPersonAddSharp } from "react-icons/io5";
 const Connection = () => {
   const [userData, setuserdata] = useState([]);
   const navigate = useNavigate();
@@ -31,27 +33,27 @@ const Connection = () => {
     }
   };
   useEffect(() => {
-      const fetchUserData = async () => {
-        const currentUser = auth.currentUser;
-  
-        if (currentUser) {
-          const userRef = doc(database, "Users", currentUser.uid);
-          const userSnap = await getDoc(userRef);
-          if (userSnap.exists()) {
-            const userData = userSnap.data();
-            setUsername(userData.username || 'No Username');
-            setRole(userData.role || 'No Role');
-            setEmail(userData.email || 'No email found');
-          } else {
-            navigate("/signin");
-          }
+    const fetchUserData = async () => {
+      const currentUser = auth.currentUser;
+
+      if (currentUser) {
+        const userRef = doc(database, "Users", currentUser.uid);
+        const userSnap = await getDoc(userRef);
+        if (userSnap.exists()) {
+          const userData = userSnap.data();
+          setUsername(userData.username || 'No Username');
+          setRole(userData.role || 'No Role');
+          setEmail(userData.email || 'No email found');
         } else {
           navigate("/signin");
         }
-      };
-  
-      fetchUserData();
-    }, [navigate]);
+      } else {
+        navigate("/signin");
+      }
+    };
+
+    fetchUserData();
+  }, [navigate]);
   // const getPendingRequests = async () => {
   //   const requestOutRef = collection(database, "Users", auth.currentUser?.uid, "RequestOut");
   //   try {
@@ -72,31 +74,31 @@ const Connection = () => {
     const querySnapshot = await getDocs(q);
 
     if (querySnapshot.empty) {
-        try {
-            await setDoc(requestDocRef, {
-                username: username,
-                role: role,
-                status: 'pending',
-                requestSenderId: auth.currentUser?.uid,
-            });
-            setOppId(auth.currentUser?.uid);
-            alert(`Request sent successfully!`);
-        } catch (err) {
-            console.error(err);
-        }
+      try {
+        await setDoc(requestDocRef, {
+          username: username,
+          role: role,
+          status: 'pending',
+          requestSenderId: auth.currentUser?.uid,
+        });
+        setOppId(auth.currentUser?.uid);
+        alert(`Request sent successfully!`);
+      } catch (err) {
+        console.error(err);
+      }
     } else {
-        alert('Request already sent!');
+      alert('Request already sent!');
     }
-};
-  const fetchingProfilePic = async (userIds) =>{
-      const userRef = doc(database, "Users", userIds);
-        const userSnap = await getDoc(userRef);
-        if (userSnap.exists()) {
-          const userData = userSnap.data();
-          return userData.profilePic
-        } else {
-          return profileicon
-        }
+  };
+  const fetchingProfilePic = async (userIds) => {
+    const userRef = doc(database, "Users", userIds);
+    const userSnap = await getDoc(userRef);
+    if (userSnap.exists()) {
+      const userData = userSnap.data();
+      return userData.profilePic
+    } else {
+      return profileicon
+    }
   }
   const [profilePics, setProfilePics] = useState({});
 
@@ -105,63 +107,76 @@ const Connection = () => {
       const newProfilePics = {};
 
       for (const user of userData) {
-        const pic = await fetchingProfilePic(user.id); 
-        newProfilePics[user.id] = pic; 
+        const pic = await fetchingProfilePic(user.id);
+        newProfilePics[user.id] = pic;
       }
 
-      setProfilePics(newProfilePics); 
+      setProfilePics(newProfilePics);
     };
 
     fetchProfilePics();
   }, [userData]);
   const isRequestSent = (userId) => {
-      return pendingRequests.some(request => request.userId === userId && request.status === 'pending');
-    };
+    return pendingRequests.some(request => request.userId === userId && request.status === 'pending');
+  };
 
-    useEffect(() => {
-      getUsers();
-    }, []);
+  useEffect(() => {
+    getUsers();
+  }, []);
 
   return (
-    <div>
-      {userData.filter(user => user.id !== auth.currentUser?.uid).map((users) => {
-        const isRequestAlreadySent = isRequestSent(users.id);
-
-        return (
-          <div key={users.id}>
-            <Paper>
-              <List>
-                <ListItem style={{ display: 'flex', flexDirection: 'row', justifyContent: 'start' }}>
-                  <Link to={`/otherprofile/${users.id}`}>
-                    <div style={{display:'flex', flexDirection:'row', justifyContent:'start', alignItems:'center'}}>
-                      <Avatar src={profilePics[users.id] || profileicon} />
-                      <div style={{ marginLeft: '10px' }}>
-                        <ListItemText primary={users.username} secondary={users.role} />
-                      </div>
-                    </div>
-                  </Link>
-                  {!isRequestAlreadySent && (
-                    <Button
-                      onClick={() => sendRequest(users.id)}
-                      style={{ backgroundColor: 'green', color: 'white', fontSize: '20px', marginLeft: 'auto' }}
-                    >
-                      Connect
-                    </Button>
-                  )}
-                  {isRequestAlreadySent && (
-                    <Button
-                      disabled
-                      style={{ backgroundColor: 'grey', color: 'white', fontSize: '20px', marginLeft: 'auto' }}
-                    >
-                      Request Sent
-                    </Button>
-                  )}
-                </ListItem>
-              </List>
-            </Paper>
+    <div className='bg-gray-50'>
+      <Navbar />
+      <div className="flex justify-center">
+        <div className="w-[90%] md:w-[40%]">
+          <div className="flex items-center mt-10">
+            <IoPersonAddSharp className='text-2xl text-blue-500 mt-1' />
+            <h1 className='pl-2 text-gray-800 text-3xl font-bold'>Connect with Others</h1>
           </div>
-        );
-      })}
+          <h2 className='text-gray-700 text-base mt-10 mb-10 font-medium ml-3 md:ml-2'>
+            Find new people to connect with and grow your network.
+          </h2>
+          {userData.filter(user => user.id !== auth.currentUser?.uid).map((users) => {
+            const isRequestAlreadySent = isRequestSent(users.id);
+
+            return (
+              <div key={users.id} className=''>
+
+                <Paper className='hover:bg-blue-50'>
+                  <List>
+                    <ListItem className='' style={{ display: 'flex', flexDirection: 'row', justifyContent: 'start' }}>
+                      <Link to={`/otherprofile/${users.id}`}>
+                        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'start', alignItems: 'center' }}>
+                          <Avatar className='bg-gray-100' src={profilePics[users.id] || profileicon} sx={{ width: 48, height: 48,}} />
+                          <div style={{ marginLeft: '10px' }}>
+                            <ListItemText primary={users.username} secondary={users.role} />
+                          </div>
+                        </div>
+                      </Link>
+                      {!isRequestAlreadySent && (
+                        <button
+                          onClick={() => sendRequest(users.id)}
+                          className='ml-auto text-blue-500 hover:bg-white hover:border hover:border-blue-500 rounded-full px-2 py-1 transform transition duration-100 ease-in-out'
+                        >
+                          Connect
+                        </button>
+                      )}
+                      {isRequestAlreadySent && (
+                        <Button
+                          disabled
+                          style={{ backgroundColor: 'grey', color: 'white', fontSize: '20px', marginLeft: 'auto' }}
+                        >
+                          Request Sent
+                        </Button>
+                      )}
+                    </ListItem>
+                  </List>
+                </Paper>
+              </div>
+            );
+          })}
+        </div>
+      </div>
     </div>
   );
 };

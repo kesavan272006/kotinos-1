@@ -989,34 +989,149 @@ const ChatPage = () => {
                 <div className='flex h-[90vh]'>
 
                     {(!selectedGroup && !selectedUser) && (
-                        <div style={{ overflowY: 'auto', maxHeight: '100vh', width: '100%' }}>
-                            <Button onClick={handleOpen}>Create a Group</Button>
-                            <h3 className="font-bold pl-1">Groups</h3>
-                            <List>
-                                {groups.map((groupId) => (
-                                    <Paper key={groupId} style={{ marginBottom: '10px' }}>
-                                        <ListItem button onClick={() => handleGroupClick(groupId)}>
-                                            <Avatar />
-                                            <div style={{ marginLeft: '10px' }}>
-                                                <ListItemText primary={groupNames[groupId] || 'Loading...'} />
-                                            </div>
-                                        </ListItem>
-                                    </Paper>
-                                ))}
-                            </List>
-                            <h3 className='font-bold pl-1'>Chats</h3>
-                            <List>
-                                {user.filter(user => user.status === 'connected').map((eachuser) => (
-                                    <Paper key={eachuser.id} style={{ marginBottom: '10px' }}>
-                                        <ListItem button onClick={() => handleuserselection(eachuser)}>
-                                            <Avatar src={eachuser.profilePic} />
-                                            <div style={{ marginLeft: "10px" }}>
-                                                <ListItemText primary={eachuser.username} secondary={eachuser.role} />
-                                            </div>
-                                        </ListItem>
-                                    </Paper>
-                                ))}
-                            </List>
+                        <div style={{ 
+                            overflowY: 'auto', 
+                            maxHeight: '100vh', 
+                            width: '100%',
+                            backgroundColor: '#f8f9fa',
+                            padding: '8px'
+                        }}>
+                            <div style={{ padding: '12px 8px', borderBottom: '1px solid #eaeaea', marginBottom: '16px' }}>
+                                <Button 
+                                    onClick={handleOpen}
+                                    variant="contained"
+                                    fullWidth
+                                    style={{ 
+                                        backgroundColor: '', 
+                                        color: 'white',
+                                        textTransform: 'none',
+                                        fontWeight: 'bold',
+                                        borderRadius: '8px',
+                                        padding: '10px'
+                                    }}
+                                >
+                                    Create a Group
+                                </Button>
+                            </div>
+                            
+                            <div style={{ padding: '4px 8px' }}>
+                                <h3 className="font-bold pl-2" style={{ 
+                                    color: '#424242', 
+                                    marginBottom: '10px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'space-between'
+                                }}>
+                                    Groups
+                                    <span style={{ 
+                                        backgroundColor: '#edf3fc', 
+                                        color: '#787cff', 
+                                        fontSize: '12px', 
+                                        padding: '2px 8px', 
+                                        borderRadius: '12px'
+                                    }}>
+                                        {groups.length}
+                                    </span>
+                                </h3>
+                                <List>
+                                    {groups.map((groupId) => (
+                                        <Paper 
+                                            key={groupId} 
+                                            style={{ 
+                                                marginBottom: '8px', 
+                                                borderRadius: '8px',
+                                                overflow: 'hidden',
+                                                transition: 'transform 0.2s, box-shadow 0.2s',
+                                                cursor: 'pointer'
+                                            }}
+                                            elevation={1}
+                                        >
+                                            <ListItem button onClick={() => handleGroupClick(groupId)} style={{ padding: '8px 12px' }}>
+                                                <Avatar style={{ backgroundColor: '#edf3fc', color: '#787cff' }}>
+                                                    {(groupNames[groupId] || 'G')[0].toUpperCase()}
+                                                </Avatar>
+                                                <div style={{ marginLeft: '12px', overflow: 'hidden' }}>
+                                                    <ListItemText 
+                                                        primary={
+                                                            <span style={{ fontWeight: 500, color: '#424242' }}>
+                                                                {groupNames[groupId] || 'Loading...'}
+                                                            </span>
+                                                        } 
+                                                        secondary={
+                                                            <span style={{ fontSize: '12px', color: '#757575' }}>
+                                                                Group conversation
+                                                            </span>
+                                                        }
+                                                        primaryTypographyProps={{ noWrap: true }}
+                                                        secondaryTypographyProps={{ noWrap: true }}
+                                                    />
+                                                </div>
+                                            </ListItem>
+                                        </Paper>
+                                    ))}
+                                </List>
+                            </div>
+                            
+                            <div style={{ padding: '4px 8px' }}>
+                                <h3 className='font-bold pl-2' style={{ 
+                                    color: '#424242', 
+                                    marginBottom: '10px',
+                                    marginTop: '12px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'space-between'
+                                }}>
+                                    Chats
+                                    <span style={{ 
+                                        backgroundColor: '#edf3fc', color: '#787cff', 
+                                        fontSize: '12px', 
+                                        padding: '2px 8px', 
+                                        borderRadius: '12px'
+                                    }}>
+                                        {user.filter(user => user.status === 'connected').length}
+                                    </span>
+                                </h3>
+                                <List>
+                                    {user.filter(user => user.status === 'connected').map((eachuser) => (
+                                        <Paper 
+                                            key={eachuser.id} 
+                                            style={{ 
+                                                marginBottom: '8px', 
+                                                borderRadius: '8px',
+                                                overflow: 'hidden',
+                                                transition: 'transform 0.2s, box-shadow 0.2s',
+                                                cursor: 'pointer'
+                                            }}
+                                            elevation={1}
+                                        >
+                                            <ListItem button onClick={() => handleuserselection(eachuser)} style={{ padding: '8px 12px' }}>
+                                                <Avatar 
+                                                    src={eachuser.profilePic}
+                                                    style={!eachuser.profilePic ? { backgroundColor: '#edf3fc', color: '#787cff' } : {}}
+                                                >
+                                                    {!eachuser.profilePic && eachuser.username[0].toUpperCase()}
+                                                </Avatar>
+                                                <div style={{ marginLeft: '12px', overflow: 'hidden' }}>
+                                                    <ListItemText 
+                                                        primary={
+                                                            <span style={{ fontWeight: 500, color: '#424242' }}>
+                                                                {eachuser.username}
+                                                            </span>
+                                                        } 
+                                                        secondary={
+                                                            <span style={{ fontSize: '12px', color: '#757575' }}>
+                                                                {eachuser.role}
+                                                            </span>
+                                                        }
+                                                        primaryTypographyProps={{ noWrap: true }}
+                                                        secondaryTypographyProps={{ noWrap: true }}
+                                                    />
+                                                </div>
+                                            </ListItem>
+                                        </Paper>
+                                    ))}
+                                </List>
+                            </div>
                         </div>
 
                     )}
