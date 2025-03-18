@@ -128,6 +128,14 @@ const FilePost = (props, ref) => {
       setIsfunding(false);  
     }
   };
+  const [achievement, setAchievement]=useState(false);
+  const handleAchievement = (event) => {
+    if (event.target.checked) {
+      setAchievement(true);
+    } else {
+      setAchievement(false);  
+    }
+  };
   const handleFileChange = (e) => {
     const selectedFiles = e.target.files;
     if (selectedFiles.length) {
@@ -164,6 +172,7 @@ const FilePost = (props, ref) => {
           profilepic: `${profiledata}`,
           Id: auth.currentUser?.uid,
           enableCrowdFunding: isfunding,
+          isAchievement: achievement,
           likes: 0,
           likedBy: [],
           comments: [],
@@ -173,6 +182,7 @@ const FilePost = (props, ref) => {
         setDescription('');
         setFiles([]);
         setIsfunding(false);
+        setAchievement(false);
       } catch (err) {
         console.log(err);
       }
@@ -282,28 +292,56 @@ const FilePost = (props, ref) => {
         </div>
         <br />
         {decidingathlete && (
-          <div style={{display:'flex',flexDirection:'row', justifyContent:'center'}}>
-          <Switch
-            onChange={handleSwitchChange} 
-          />
-          <h1 style={{color:'black'}}><strong>Enable Crowdfunding for this post</strong></h1>
-        </div>
+          <>
+              <div style={{display:'flex',flexDirection:'row', justifyContent:'center'}}>
+                <Switch
+                  onChange={handleSwitchChange} 
+                />
+                <h1 style={{color:'black'}}><strong>Enable Crowdfunding for this post</strong></h1>
+              </div>
+              <br />
+              <div style={{display:'flex',flexDirection:'row', justifyContent:'center'}}>
+                <Switch
+                  onChange={handleAchievement} 
+                />
+                <h1 style={{color:'black'}}><strong>Add this post to your achievements section</strong></h1>
+              </div>
+          </>
+        
         )}
         {decidingcoach && (
-          <div style={{display:'flex',flexDirection:'row', justifyContent:'center'}}>
-          <Switch
-            onChange={handleSwitchChange} 
-          />
-          <h1 style={{color:'black'}}><strong>Enable Crowdfunding for this post</strong></h1>
-        </div>
+          <>
+              <div style={{display:'flex',flexDirection:'row', justifyContent:'center'}}>
+                <Switch
+                  onChange={handleSwitchChange} 
+                />
+                <h1 style={{color:'black'}}><strong>Enable Crowdfunding for this post</strong></h1>
+              </div>
+              <br />
+              <div style={{display:'flex',flexDirection:'row', justifyContent:'center'}}>
+                <Switch
+                  onChange={handleAchievement} 
+                />
+                <h1 style={{color:'black'}}><strong>Add this post to your achievements section</strong></h1>
+              </div>
+          </>
         )}
         {decidingorganization && (
-          <div style={{display:'flex',flexDirection:'row', justifyContent:'center'}}>
-          <Switch
-            onChange={handleSwitchChange} 
-          />
-          <h1 style={{color:'black'}}><strong>Enable Crowdfunding for this post</strong></h1>
-        </div>
+          <>
+              <div style={{display:'flex',flexDirection:'row', justifyContent:'center'}}>
+                <Switch
+                  onChange={handleSwitchChange} 
+                />
+                <h1 style={{color:'black'}}><strong>Enable Crowdfunding for this post</strong></h1>
+              </div>
+              <br />
+              <div style={{display:'flex',flexDirection:'row', justifyContent:'center'}}>
+                <Switch
+                  onChange={handleAchievement} 
+                />
+                <h1 style={{color:'black'}}><strong>Add this post to your achievements section</strong></h1>
+              </div>
+          </>
         )}
         <div className="modal-buttons" style={{ display: 'flex', justifyContent: 'space-between' }}>
           <Button variant="outlined" className="closeButton" onClick={closeModal}>
