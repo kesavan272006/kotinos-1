@@ -338,8 +338,7 @@ const Profile = () => {
             <Navbar />
             <h1 style={{ textAlign: 'center', opacity: '0.8', paddingTop: '1%' }}>If you find any error, just refresh the page.</h1>
             <div className="grid md:grid-cols-2 gap-6 m-5 md:px-10">
-                <div className="bg-gradient-to-r from-blue-900 via-blue-700 to-cyan-500 p-[1px] rounded-lg">
-                    <div className="bg-white p-4 rounded-lg relative shadow-sm">
+                    <div className="bg-white p-4 rounded-lg relative shadow-sm border_grad">
                         <div className="flex flex-col items-center mb-4">
                             <label className="relative cursor-pointer">
                                 <img src={profile.profilePic || profileicon} alt="Profile" onClick={() => openModals(profile.profilePic || profileicon)} className="w-24 h-24 rounded-full object-cover border-2 border-blue-300" />
@@ -349,7 +348,7 @@ const Profile = () => {
                             <>
                                 <h2 className="text-xl font-semibold mb-4 flex justify-between items-center">
                                     Personal Information
-                                    <button onClick={() => setIsEditing(true)} className="flex items-center text-sm text-blue-700 hover:text-green-600 transition-colors">
+                                    <button onClick={() => setIsEditing(true)} className="flex items-center text-sm text-blue-700 hover:text-blue-300 transition-colors">
                                         <span>Edit Profile</span>
                                     </button>
                                 </h2>
@@ -367,7 +366,7 @@ const Profile = () => {
                             <>
                                 <h2 className="text-xl font-semibold mb-4 flex justify-between items-center">
                                     Organization Information
-                                    <button onClick={() => setIsEditing(true)} className="flex items-center text-sm text-blue-700 hover:text-green-600 transition-colors">
+                                    <button onClick={() => setIsEditing(true)} className="flex items-center text-sm text-blue-700 hover:text-blue-400 transition-colors">
                                         <span>Edit Profile</span>
                                     </button>
                                 </h2>
@@ -386,11 +385,9 @@ const Profile = () => {
                             </>
                         )}
                     </div>
-                </div>
 
                 {decidingathlete && (
-                    <div className="bg-gradient-to-r from-blue-900 via-blue-700 to-cyan-500 p-1 rounded-lg">
-                    <div className="bg-white shadow-sm p-4 rounded-lg h-full">
+                    <div className="bg-white shadow-sm p-4 rounded-lg h-full border_grad"> 
                         <h2 className="text-xl font-semibold mb-4">Sports Information</h2>
                         <div className="space-y-3">
                             <p><strong>Primary Sport:</strong> {profile.primarySport || "None"}</p>
@@ -402,12 +399,10 @@ const Profile = () => {
                             <Button onClick={handleNavigation}>Upload QR Code</Button>
                         </div>
                     </div>
-                </div>
                 
                 )}
                 {decidingcoach && (
-                    <div className="bg-gradient-to-r from-blue-900 via-blue-700 to-cyan-500 p-1 rounded-lg">
-                    <div className="bg-white shadow-sm p-4 rounded-lg h-full">
+                    <div className="bg-white shadow-sm p-4 rounded-lg h-full border_grad">
                         <h2 className="text-xl font-semibold mb-4">Sports Information</h2>
                         <div className="space-y-3">
                             <p><strong>Your primary Sport of coaching: </strong> {profile.primarySport || "None"}</p>
@@ -419,12 +414,11 @@ const Profile = () => {
                             <Button onClick={handleNavigation}>Upload QR Code</Button>
                         </div>
                     </div>
-                </div>
+                
                 
                 )}
                 {decidinguser && (
-                    <div className="bg-gradient-to-r from-cyan-500 via-blue-700 to-blue-900 p-[1px] rounded-lg">
-                    <div className="bg-white shadow-sm p-4 rounded-lg h-full">
+                    <div className="bg-white shadow-sm p-4 rounded-lg h-full border_grad">
                         <h2 className="text-xl font-semibold mb-4">Sports Information</h2>
                         <div className="space-y-3">
                             <p><strong>The sports which majorly interest you: </strong> {profile.primarySport || "None"}</p>
@@ -434,12 +428,10 @@ const Profile = () => {
                             <p><strong>Approximate number of years you have been interested in these sports: </strong> {profile.experience || "None"}</p>
                         </div>
                     </div>
-                </div>
                 
                 )}
                 {decidingorganization && (
-                    <div className="bg-gradient-to-r from-blue-900 via-blue-700 to-cyan-500 p-1 rounded-lg">
-                    <div className="bg-white shadow-sm p-4 rounded-lg h-full">
+                    <div className="bg-white shadow-sm p-4 rounded-lg h-full border_grad">
                         <h2 className="text-xl font-semibold mb-4">Sports Information</h2>
                         <div className="space-y-3">
                             <p><strong>The sports which you focus primarily: </strong> {profile.primarySport || "None"}</p>
@@ -448,7 +440,6 @@ const Profile = () => {
                             <p><strong>Achievement Highlights: </strong> {profile.achievements || "None"}</p>
                         </div>
                     </div>
-                </div>
                 
                 )}
                 {isEditing && (
