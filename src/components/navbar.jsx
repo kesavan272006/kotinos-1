@@ -100,7 +100,7 @@ function Navbar() {
             <nav className='w-full flex items-center justify-between py-3 px-4'>
                 <div className="flex items-center">
                     <Link to='/about' className="flex items-center">
-                        <div className="h-10 w-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-xl transition-transform hover:scale-105">
+                        <div className="h-10 w-10 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-xl transition-transform hover:scale-105">
                             K
                         </div>
                         <span className="ml-2 text-lg font-semibold hidden md:block text-gray-800">Kotinos</span>
@@ -139,13 +139,13 @@ function Navbar() {
                 <div className="flex items-center">
                     <ul className='flex items-center space-x-1 md:space-x-3'>
                         <li>
-                            <NavLink to='/home' className={`p-2 rounded-full flex items-center justify-center transition-colors ${isActive('/home') ? 'bg-blue-100 text-blue-600' : 'text-gray-700 hover:bg-gray-100'}`}>
+                            <NavLink to='/home' className={`p-2 rounded-full flex items-center justify-center transition-colors ${isActive('/home') ? 'bg-cyan-100 text-cyan-600' : 'text-gray-700 hover:bg-gray-100'}`}>
                                 <GoHomeFill className='text-xl md:text-2xl' />
                             </NavLink>
                         </li>
 
                         <li>
-                            <NavLink to='/chatpage' className={`p-2 rounded-full flex items-center justify-center transition-colors ${isActive('/chatpage') ? 'bg-blue-100 text-blue-600' : 'text-gray-700 hover:bg-gray-100'}`}>
+                            <NavLink to='/chatpage' className={`p-2 rounded-full flex items-center justify-center transition-colors ${isActive('/chatpage') ? 'bg-cyan-100 text-cyan-600' : 'text-gray-700 hover:bg-gray-100'}`}>
                                 <IoChatbubbleEllipses className='text-xl md:text-2xl' />
                             </NavLink>
                         </li>
@@ -155,7 +155,7 @@ function Navbar() {
                                     setShowNotifications(!showNotifications);
                                     setShowProfile(false);
                                 }}
-                                className={`p-2 rounded-full flex items-center justify-center transition-colors ${showNotifications ? 'bg-blue-100 text-blue-600' : 'text-gray-700 hover:bg-gray-100'}`}
+                                className={`p-2 rounded-full flex items-center justify-center transition-colors ${showNotifications ? 'bg-cyan-100 text-cyan-600' : 'text-gray-700 hover:bg-gray-100'}`}
                             >
                                 <IoIosNotifications className='text-xl md:text-2xl' />
                             </button>
@@ -163,7 +163,7 @@ function Navbar() {
                                 <div className="absolute right-0 mt-2 w-72 bg-white rounded-lg shadow-xl border border-gray-200 overflow-hidden transition-all">
                                     <div className="px-4 py-3 border-b border-gray-200 flex justify-between items-center">
                                         <h3 className="font-semibold text-gray-800">Notifications</h3>
-                                        <button className="text-xs text-blue-600 hover:text-blue-800">Mark all as read</button>
+                                        <button className="text-xs text-cyan-600 hover:text-blue-800">Mark all as read</button>
                                     </div>
                                     <div className="max-h-72 overflow-y-auto">
                                         <div className="px-4 py-3 bg-gray-50 hover:bg-gray-100 border-b border-gray-100 cursor-pointer">
@@ -171,13 +171,13 @@ function Navbar() {
                                         </div>
                                     </div>
                                     <div className="px-4 py-2 text-center">
-                                        <button onClick={()=>navigate('/invitation')} className="text-sm text-blue-600 hover:text-blue-800">View all notifications</button>
+                                        <button onClick={()=>navigate('/invitation')} className="text-sm text-cyan-600 hover:text-blue-800">View all notifications</button>
                                     </div>
                                 </div>
                             )}
                         </li>
                         <li>
-                            <NavLink to='/network' className={`p-2 rounded-full flex items-center justify-center transition-colors ${isActive('/network') ? 'bg-blue-100 text-blue-600' : 'text-gray-700 hover:bg-gray-100'}`}>
+                            <NavLink to='/network' className={`p-2 rounded-full flex items-center justify-center transition-colors ${isActive('/network') ? 'bg-cyan-100 text-cyan-600' : 'text-gray-700 hover:bg-gray-100'}`}>
                                 <IoIosPeople className='text-xl md:text-2xl' />
                             </NavLink>
                         </li>
@@ -187,7 +187,7 @@ function Navbar() {
                                     setShowProfile(!showProfile);
                                     setShowNotifications(false);
                                 }}
-                                className={`p-2 rounded-full flex items-center justify-center transition-colors ${showProfile ? 'bg-blue-100 text-blue-600' : 'text-gray-700 hover:bg-gray-100'}`}
+                                className={`p-2 rounded-full flex items-center justify-center transition-colors ${showProfile ? 'bg-cyan-100 text-cyan-600' : 'text-gray-700 hover:bg-gray-100'}`}
                             >
                                 <IoPersonSharp className='text-xl md:text-2xl' />
                             </button>

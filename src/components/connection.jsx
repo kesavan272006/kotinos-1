@@ -134,7 +134,7 @@ const Connection = () => {
       <div className="flex justify-center">
         <div className="w-[90%] md:w-[40%]">
           <div className="flex items-center mt-10">
-            <IoPersonAddSharp className='text-2xl text-blue-500 mt-1' />
+            <IoPersonAddSharp className='text-2xl text-cyan-500 mt-1' />
             <h1 className='pl-2 text-gray-800 text-3xl font-bold'>Connect with Others</h1>
           </div>
           <h2 className='text-gray-700 text-base mt-10 mb-10 font-medium ml-3 md:ml-2'>
@@ -158,7 +158,7 @@ const Connection = () => {
               return (
                 <div key={users.id} className=''>
   
-                  <Paper className='hover:bg-blue-50'>
+                  <div className='hover:bg-cyan-50 bg-white mb-1 rounded'>
                     <List>
                       <ListItem className='' style={{ display: 'flex', flexDirection: 'row', justifyContent: 'start' }}>
                         <Link to={`/otherprofile/${users.id}`}>
@@ -172,22 +172,22 @@ const Connection = () => {
                         {!isRequestAlreadySent && (
                           <button
                             onClick={() => sendRequest(users.id)}
-                            className='ml-auto text-blue-500 hover:bg-white hover:border hover:border-blue-500 rounded-full px-2 py-1 transform transition duration-100 ease-in-out'
+                            className='ml-auto text-cyan-500 hover:bg-white hover:border hover:border-cyan-500 rounded-full px-2 py-1 transform transition duration-100 ease-in-out'
                           >
                             Connect
                           </button>
                         )}
                         {isRequestAlreadySent && (
-                          <Button
+                          <button
                             disabled
                             style={{ backgroundColor: 'grey', color: 'white', fontSize: '20px', marginLeft: 'auto' }}
                           >
                             Request Sent
-                          </Button>
+                          </button>
                         )}
                       </ListItem>
                     </List>
-                  </Paper>
+                  </div>
                 </div>
               );
             })
@@ -199,7 +199,7 @@ const Connection = () => {
               return (
                 <div key={users.id} className=''>
   
-                  <Paper className='hover:bg-blue-50'>
+                  <div className='hover:bg-cyan-50 bg-white mb-1 rounded'>
                     <List>
                       <ListItem className='' style={{ display: 'flex', flexDirection: 'row', justifyContent: 'start' }}>
                         <Link to={`/otherprofile/${users.id}`}>
@@ -213,7 +213,7 @@ const Connection = () => {
                         {!isRequestAlreadySent && (
                           <button
                             onClick={() => sendRequest(users.id)}
-                            className='ml-auto text-blue-500 hover:bg-white hover:border hover:border-blue-500 rounded-full px-2 py-1 transform transition duration-100 ease-in-out'
+                            className='ml-auto text-cyan-500 hover:bg-white hover:border hover:border-cyan-500 rounded-full px-2 py-1 transform transition duration-100 ease-in-out'
                           >
                             Connect
                           </button>
@@ -228,7 +228,7 @@ const Connection = () => {
                         )}
                       </ListItem>
                     </List>
-                  </Paper>
+                  </div>
                 </div>
               );
             })
