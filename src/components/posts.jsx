@@ -118,6 +118,7 @@ const Posts = (props, ref) => {
           isAchievement: achievement,
           likes: 0,
           likedBy: [],
+          isEvent: false,
         });
         getAllPosts(userData.connections);
       } else {

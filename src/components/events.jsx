@@ -10,6 +10,7 @@ import profileicon from '../assets/profileicon.svg';
 import { alpha, styled } from '@mui/material/styles';
 import { pink } from '@mui/material/colors';
 import Switch from '@mui/material/Switch';
+import trophyicon from '../assets/trophyicon.svg'
 const customStyles = {
   content: {
     top: '50%',
@@ -30,7 +31,7 @@ const customStyles = {
 
 Modal.setAppElement('#root');
 
-const FilePost = (props, ref) => {
+const Events = (props, ref) => {
   const fileRef = useRef(null);
   const [modalIsOpen, setIsOpen] = useState(false);
   const [files, setFiles] = useState([]);
@@ -65,6 +66,7 @@ const FilePost = (props, ref) => {
     
     fetchProfile2();
   }, [role]);
+  const [organizer, setorganizer]=useState('');
   const getUserData = async () => {
     try {
       const userDocument = doc(database, 'Users', `${auth.currentUser?.uid}`);
@@ -99,7 +101,13 @@ const FilePost = (props, ref) => {
     setTitle("");
     setIsfunding(false);
     setFiles([]);
+    setorganizer('');
     setIsOpen(false);
+    seteventstartdate(null);
+    seteventenddate(null);
+    seteventstarttime(null);
+    seteventendtime(null);
+    seteventlocation(null);
   };
 
   const openImageModal = (index) => {
@@ -155,9 +163,13 @@ const FilePost = (props, ref) => {
   const deleteFile = (index) => {
     setFiles(files.filter((_, idx) => idx !== index));
   };
-
+  const [eventstartdate,seteventstartdate]=useState(null);
+  const [eventenddate, seteventenddate]=useState(null);
+  const [eventstarttime, seteventstarttime]=useState(null);
+  const [eventendtime, seteventendtime]=useState(null);
+  const [eventlocation,seteventlocation]=useState(null);
   const addPost = async () => {
-    if (files.length > 0 && title !== '' && description !== '') {
+    if (title !== '' && description !== '' && eventstartdate!==null) {
       try {
         const postDocument = doc(database, 'Users', `${auth.currentUser?.uid}`);
         const postRef = doc(postDocument, 'Posts', `${Math.random()}`);
@@ -171,11 +183,16 @@ const FilePost = (props, ref) => {
           profilepic: `${profiledata}`,
           Id: auth.currentUser?.uid,
           enableCrowdFunding: isfunding,
-          isAchievement: achievement,
           likes: 0,
           likedBy: [],
           comments: [],
-          isEvent: false,
+          isEvent: true,
+          organizer: organizer,
+          eventstartdate: eventstartdate,
+          eventenddate: eventenddate,
+          eventstarttime: eventstarttime,
+          eventendtime: eventendtime,
+          eventlocation: eventlocation,
         });
         setIsOpen(false);
         setTitle('');
@@ -183,6 +200,12 @@ const FilePost = (props, ref) => {
         setFiles([]);
         setIsfunding(false);
         setAchievement(false);
+        setorganizer('');
+        seteventstartdate(null);
+        seteventenddate(null);
+        seteventstarttime(null);
+        seteventendtime(null);
+        seteventlocation(null);
       } catch (err) {
         console.log(err);
       }
@@ -198,12 +221,105 @@ const FilePost = (props, ref) => {
       </button>
       <Modal isOpen={modalIsOpen} onRequestClose={closeModal} style={customStyles} contentLabel="Add Images">
         <input onChange={handleFileChange} type="file" multiple style={{ display: 'none' }} ref={fileRef} />
-        <h2 style={{ color: 'black', fontSize: '30px', marginBottom: '20px' }}>Add a post</h2>
+        <div style={{display:'flex', flexDirection:'row', justifyContent:'center', alignItems:'center'}}>
+            <h2 style={{ color: 'black', fontSize: '30px', marginBottom: '20px' }}>Post about an Event</h2>
+            <img src={trophyicon} style={{ marginBottom: '6px', verticalAlign: 'middle', marginLeft: '10px' }} />
+        </div>
+
         <input
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          placeholder="Post Title"
+          placeholder="Name of the event"
+          style={{
+            width: '100%',
+            padding: '10px',
+            marginBottom: '10px',
+            borderRadius: '10px',
+            fontSize: '16px',
+            border: '1px solid #ddd',
+          }}
+        />
+        <input
+          type="text"
+          value={organizer}
+          onChange={(e) => setorganizer(e.target.value)}
+          placeholder="Event Organizer"
+          style={{
+            width: '100%',
+            padding: '10px',
+            marginBottom: '10px',
+            borderRadius: '10px',
+            fontSize: '16px',
+            border: '1px solid #ddd',
+          }}
+        />
+        <h1>starting date of the event</h1>
+        <input
+          type="date"
+          value={eventstartdate}
+          onChange={(e) => seteventstartdate(e.target.value)}
+          placeholder="Event starting Date"
+          style={{
+            width: '100%',
+            padding: '10px',
+            marginBottom: '10px',
+            borderRadius: '10px',
+            fontSize: '16px',
+            border: '1px solid #ddd',
+          }}
+        />
+        <h1>possible starting time of the event</h1>
+        <input
+          type="time"
+          value={eventstarttime}
+          onChange={(e) => seteventstarttime(e.target.value)}
+          placeholder="Event starting Time"
+          style={{
+            width: '100%',
+            padding: '10px',
+            marginBottom: '10px',
+            borderRadius: '10px',
+            fontSize: '16px',
+            border: '1px solid #ddd',
+          }}
+        />
+        <h1>Ending date of the event</h1>
+        <input
+          type="date"
+          value={eventenddate}
+          onChange={(e) => seteventenddate(e.target.value)}
+          placeholder="Event ending Date"
+          style={{
+            width: '100%',
+            padding: '10px',
+            marginBottom: '10px',
+            borderRadius: '10px',
+            fontSize: '16px',
+            border: '1px solid #ddd',
+          }}
+        />
+        <h1>possible ending time of the event</h1>
+        <input
+          type="time"
+          value={eventendtime}
+          onChange={(e) => seteventendtime(e.target.value)}
+          placeholder="Event starting Time"
+          style={{
+            width: '100%',
+            padding: '10px',
+            marginBottom: '10px',
+            borderRadius: '10px',
+            fontSize: '16px',
+            border: '1px solid #ddd',
+          }}
+        />
+        <h1>Event venue: </h1>
+        <input
+          type="location"
+          value={eventlocation}
+          onChange={(e) => seteventlocation(e.target.value)}
+          placeholder="Event venue"
           style={{
             width: '100%',
             padding: '10px',
@@ -216,7 +332,7 @@ const FilePost = (props, ref) => {
         <textarea
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          placeholder="Post Description"
+          placeholder="Give information about the event"
           style={{
             width: '100%',
             padding: '10px',
@@ -288,61 +404,15 @@ const FilePost = (props, ref) => {
           >
             <img src={addicon} alt="Add files" style={{ width: '30px', height: '30px' }} />
           </button>
-          <h1><strong>Add Images</strong></h1>
+          <h1><strong>Add Images about the event</strong></h1>
         </div>
         <br />
-        {decidingathlete && (
-          <>
-              <div style={{display:'flex',flexDirection:'row', justifyContent:'center'}}>
-                <Switch
-                  onChange={handleSwitchChange} 
-                />
-                <h1 style={{color:'black'}}><strong>Enable Crowdfunding for this post</strong></h1>
-              </div>
-              <br />
-              <div style={{display:'flex',flexDirection:'row', justifyContent:'center'}}>
-                <Switch
-                  onChange={handleAchievement} 
-                />
-                <h1 style={{color:'black'}}><strong>Add this post to your achievements section</strong></h1>
-              </div>
-          </>
-        
-        )}
-        {decidingcoach && (
-          <>
-              <div style={{display:'flex',flexDirection:'row', justifyContent:'center'}}>
-                <Switch
-                  onChange={handleSwitchChange} 
-                />
-                <h1 style={{color:'black'}}><strong>Enable Crowdfunding for this post</strong></h1>
-              </div>
-              <br />
-              <div style={{display:'flex',flexDirection:'row', justifyContent:'center'}}>
-                <Switch
-                  onChange={handleAchievement} 
-                />
-                <h1 style={{color:'black'}}><strong>Add this post to your achievements section</strong></h1>
-              </div>
-          </>
-        )}
-        {decidingorganization && (
-          <>
-              <div style={{display:'flex',flexDirection:'row', justifyContent:'center'}}>
-                <Switch
-                  onChange={handleSwitchChange} 
-                />
-                <h1 style={{color:'black'}}><strong>Enable Crowdfunding for this post</strong></h1>
-              </div>
-              <br />
-              <div style={{display:'flex',flexDirection:'row', justifyContent:'center'}}>
-                <Switch
-                  onChange={handleAchievement} 
-                />
-                <h1 style={{color:'black'}}><strong>Add this post to your achievements section</strong></h1>
-              </div>
-          </>
-        )}
+        <div style={{display:'flex',flexDirection:'row', justifyContent:'center'}}>
+            <Switch
+            onChange={handleSwitchChange} 
+            />
+            <h1 style={{color:'black'}}><strong>Enable crowdfunding for this event</strong></h1>
+        </div>
         <div className="modal-buttons" style={{ display: 'flex', justifyContent: 'space-between' }}>
           <Button variant="outlined" className="closeButton" onClick={closeModal}>
             Close
@@ -404,4 +474,4 @@ const FilePost = (props, ref) => {
   );
 };
 
-export default forwardRef(FilePost);
+export default forwardRef(Events);
