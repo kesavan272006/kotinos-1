@@ -76,7 +76,7 @@ const Network = () => {
             <div className="max-w-3xl mx-auto pt-20 px-4 pb-12">
                 <div className="flex items-center justify-between mb-6">
                     <h1 className="text-2xl font-bold text-gray-800 flex items-center">
-                        <IoIosPeople className="mr-2 text-blue-500 text-3xl" />
+                        <IoIosPeople className="mr-2 text-cyan-500 text-3xl" />
                         My Network
                     </h1>
                     <div className="text-sm text-gray-500 bg-white px-3 py-1 rounded-full shadow-sm">
@@ -87,11 +87,12 @@ const Network = () => {
                 {user.length === 0 ? (
                     <div className="bg-white rounded-lg shadow-sm p-12 text-center">
                         <div className="w-24 h-24 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <IoIosPeople className="text-blue-400 text-5xl" />
+                            <IoIosPeople className="text-cyan-400 text-5xl" />
                         </div>
                         <h2 className="text-xl font-semibold mb-2">Your network is empty</h2>
                         <p className="text-gray-500 mb-6">Connect with others to build your professional network</p>
                         <Button 
+                            className=''
                             onClick={()=>navigate('/connection')}
                             variant="contained" 
                             style={{ 
@@ -109,7 +110,7 @@ const Network = () => {
                     <div className="bg-white rounded-lg shadow-sm overflow-hidden">
                         <div className="px-4 py-3 bg-gray-50 border-b border-gray-100">
                             <h2 className="font-medium text-gray-700">Your Connections</h2>
-                        <div className="flex items-center border border-gray-300 bg-gray-100 rounded-full px-3 py-2">
+                        <div className="flex items-center border border-gray-300 bg-gray-100 rounded-full px-3 py-2 focus-within:bg-blue-100 focus-within:border-blue-300">
                             <FiSearch className="text-gray-500" />
                             <input 
                                 type="text" 
@@ -126,7 +127,7 @@ const Network = () => {
                                     <Link 
                                         to={`/otherprofile/${eachuser.id}`} 
                                         key={eachuser.id} 
-                                        className="block hover:bg-blue-50 transition-colors duration-200"
+                                        className="block hover:bg-cyan-50 transition-colors duration-200"
                                     >
                                         <div className="px-4 py-3 flex items-center justify-between">
                                             <div className="flex items-center">

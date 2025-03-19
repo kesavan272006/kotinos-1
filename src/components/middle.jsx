@@ -240,7 +240,22 @@ useEffect(() => {
     const [showevents, setshowevents]=useState(false)
     return (
         <>
-            <h1 className='russo text-center mt-2 text-4xl w-full '>POSTS</h1>
+        <div className='w-full flex justify-center items-center flex-col  pb-3 pt-0'>
+        <h1 className='russo text-center pt-2 text-4xl w-full bg-white'>POSTS</h1>
+
+            <div className="flex items-center border border-gray-700 bg-gray-100 rounded-full px-3 mt-4 py-2 w-[90%] md:w-1/2 focus-within:border-blue-600 focus-within:bg-blue-100 focus-within:scale-[101%] md:ml-3">
+                    <FiSearch className="text-gray-500" />
+                    <input 
+                        type="text" 
+                        value={searchQuery}
+                        onChange={handleSearchChange}
+                        placeholder="Search posts by username or role" 
+                        className=" ml-2 text-gray-700 outline-none bg-transparent w-full" 
+                    />
+                </div>
+
+                </div>
+            
             <div className='w-[92%] ml-3 md:ml-5 md:mt-1 md:w-[50vw] h-[100vh] overflow-y-auto scrollbar-hide'>
             <div className="relative p-[2px] rounded-xl bg-gradient-to-r from-blue-900 via-blue-700 to-cyan-500">
                 
@@ -272,16 +287,7 @@ useEffect(() => {
                 </div>
                 <br />
                 <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: '15px' }}>
-                <div className="flex items-center border border-gray-300 bg-gray-100 rounded-full px-4 py-3 w-full max-w-3xl">
-                    <FiSearch className="text-gray-500" />
-                    <input 
-                        type="text" 
-                        value={searchQuery}
-                        onChange={handleSearchChange}
-                        placeholder="Search posts by username or role" 
-                        className="w-full ml-3 text-lg text-gray-700 outline-none bg-transparent" 
-                    />
-                </div>
+                
                 <div style={{display:'flex', flexDirection:'row', justifyContent:'space-between'}}>
                     <button style={{marginRight: '10px'}} onClick={()=> setshowevents(true)} className="px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition duration-300">
                         View Events

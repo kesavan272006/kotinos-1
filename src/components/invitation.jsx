@@ -68,8 +68,8 @@ const Invitation = () => {
   const location = useLocation();
   const acceptReq = async (user) => {
     const acceptDoc = doc(database, "Users", `${auth.currentUser?.uid}`);
-    const connectionDoc = doc(acceptDoc, "RequestIn", `${user.id}`); 
-    
+    const connectionDoc = doc(acceptDoc, "RequestIn", `${user.id}`);
+
     try {
       await setDoc(connectionDoc, {
         role: user.role,
@@ -79,17 +79,17 @@ const Invitation = () => {
       });
       alert(`Accepted the request from ${user.username}`);
       showrequest();
-      addConnect(user.id, user); 
+      addConnect(user.id, user);
     } catch (err) {
       console.log(err);
     }
   };
-  
+
 
   const addConnect = async (requestId, user) => {
     const acceptDoc = doc(database, "Users", `${requestId}`);
     const connectionDoc = doc(acceptDoc, "RequestIn", `${auth.currentUser?.uid}`);
-    
+
     try {
       await setDoc(connectionDoc, {
         id: auth.currentUser?.uid,
@@ -103,78 +103,78 @@ const Invitation = () => {
       console.log(err);
     }
   };
-  
-  
+
+
 
   return (
-    <div>
+    <div className="bg-gray-50 h-screen">
       <Navbar />
       {user.filter((eachuser) => eachuser.status === "pending").length === 0 ? (
-          <div
-          className=""
-            style={{
-              width: "100%",
-              height: "40vw",
-              backgroundColor: "#F1F8F9",
-              textAlign: "center",
-              justifyContent: "center",
-              alignItems: "center",
-              alignSelf: "center",
-              display: "flex",
-              flexDirection: "row",
-              fontWeight: "bolder",
-              fontSize: "40px",
-            }}
-          >
-            <span className="lexend hidden md:block" style={{ color: "#2BCEE0", marginRight: "10px" }}>No </span><p className="lexend"><span className="md:hidden text-[#2BCEE0]">No </span>invitations
+        <div
+          className="bg-gray-50"
+          style={{
+            width: "100%",
+            height: "40vw",
+            backgroundColor: "#F1F8F9",
+            textAlign: "center",
+            justifyContent: "center",
+            alignItems: "center",
+            alignSelf: "center",
+            display: "flex",
+            flexDirection: "row",
+            fontWeight: "bolder",
+            fontSize: "40px",
+          }}
+        >
+          <span className="lexend hidden md:block" style={{ color: "#2BCEE0", marginRight: "10px" }}>No </span><p className="lexend"><span className="md:hidden text-[#2BCEE0]">No </span>invitations
             available!</p>
-          </div>
-        ) : (
-          user
-            .filter((user) => user.status === "pending")
-            .map((eachuser) => (
+        </div>
+      ) : (
+        user
+          .filter((user) => user.status === "pending")
+          .map((eachuser) => (
+            <>
+              <div className="md:flex justify-center">
+                <div className="md:w-1/2 ">
+                <h1 className="text-2xl md:ml-1 ml-3 mb-5 font-bold text-gray-800 mt-10">
+                  Incoming Invitations
+                </h1>
+                </div>
+              </div>
               <div className="flex justify-center w-full">
-                <Paper key={eachuser.id} className=" w-[95%] md:w-[70%]">
-                <List>
-                  <ListItem
-                    style={{ display: "flex", flexDirection: "row", justifyContent: "start" }}
-                  >
-                    <Link to={`/otherprofile/${eachuser.id}`}>
-                        <div style={{display:'flex', flexDirection:'row', justifyContent:'start', alignItems:'center'}}>
-                          <Avatar src={profileicon} />
+
+                <div key={eachuser.id} className=" w-[95%] md:w-[50%] bg-white m-0.5">
+                  <List>
+                    <ListItem
+                      style={{ display: "flex", flexDirection: "row", justifyContent: "start" }}
+                    >
+                      <Link to={`/otherprofile/${eachuser.id}`}>
+                        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'start', alignItems: 'center' }}>
+                          <Avatar src={profileicon} className="bg-gray-100" sx={{ width: 48, height: 48,}} />
                           <div style={{ marginLeft: "10px" }}>
                             <ListItemText primary={eachuser.username} secondary={eachuser.role} />
                           </div>
                         </div>
-                    </Link>
-                    <Button
-                      style={{
-                        backgroundColor: "red",
-                        color: "white",
-                        fontSize: "20px",
-                        marginLeft: "auto",
-                      }}
-                      onClick={() => deleteRequest(eachuser.id)}
-                    >
-                      Reject
-                    </Button>
-                    <Button
-                      style={{
-                        backgroundColor: "#01D836",
-                        color: "white",
-                        fontSize: "20px",
-                        marginLeft: "15px",
-                      }}
-                      onClick={() => acceptReq(eachuser)}
-                    >
-                      Connect
-                    </Button>
-                  </ListItem>
-                </List>
-              </Paper>
+                      </Link>
+                      <button className="ml-auto rounded-full bg-gray-100 px-5 py-1 border border-gray-100 hover:border-gray-400"
+
+                        onClick={() => deleteRequest(eachuser.id)}
+                      >
+                        Reject
+                      </button>
+                      <button className="border border-blue-300 hover:border-blue-700 rounded-full px-4 py-1 hover:scale- ml-2 "
+
+                        onClick={() => acceptReq(eachuser)}
+                      >
+                        Connect
+                      </button>
+                    </ListItem>
+                  </List>
+                </div>
               </div>
-            ))
-        )}
+            </>
+          ))
+      )}
 
     </div>
   );

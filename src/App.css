@@ -64,6 +64,11 @@ body {
   padding: 4px;
 }
 
+.border_grad {
+  border: 3px solid transparent;
+  border-image: linear-gradient(to right, rgb(30 58 138), rgb(29 78 216), rgb(6 182 212));
+  border-image-slice: 1;
+}
 
 
 .typewriter {
