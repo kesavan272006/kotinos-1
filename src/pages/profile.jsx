@@ -15,6 +15,7 @@ import Footer from '../components/footer';
 import { getDocs } from 'firebase/firestore';
 import Modal from 'react-modal';
 import { signOut } from 'firebase/auth';
+import deleteicon from '../assets/deleteicon.svg'
 const Profile = () => {
     const handleNavigation = () => {
         navigate('/addQR');
@@ -108,7 +109,15 @@ const Profile = () => {
             }
         }, 1000);
     };
-    
+    const deletePost = async (postId) => {
+        try {
+            const postRef = doc(database, "Users", `${auth.currentUser?.uid}`, "Posts", `${postId}`);
+            await deleteDoc(postRef);
+            getPost();
+        } catch (err) {
+            console.error("Error fetching posts:", err);
+        }
+    };
     useEffect(() => {
         getPost();
     }, []);
@@ -131,17 +140,26 @@ const Profile = () => {
     const handledisplaypost = ()=>{
         setdisplaypost(true);
         setdisplayachievement(false);
-        setdisplaycrowdfunding(false)
+        setdisplaycrowdfunding(false);
+        setdisplayevent(false);
     }
     const handledisplayachievements = ()=>{
         setdisplaypost(false);
         setdisplayachievement(true);
-        setdisplaycrowdfunding(false)
+        setdisplaycrowdfunding(false);
+        setdisplayevent(false);
     }
     const handledisplaycrowd = ()=>{
         setdisplaypost(false);
         setdisplayachievement(false);
-        setdisplaycrowdfunding(true)
+        setdisplaycrowdfunding(true);
+        setdisplayevent(false);
+    }
+    const handledisplayevent = ()=>{
+        setdisplayevent(true);
+        setdisplaypost(false);
+        setdisplayachievement(false);
+        setdisplaycrowdfunding(false);
     }
     useEffect(() => {
         const fetchProfile = async () => {
@@ -329,7 +347,7 @@ const Profile = () => {
             };
         });
     };
-
+    const [displayevent, setdisplayevent]=useState(false);
     if (loading) {
         return <Loading />
     }
@@ -572,517 +590,855 @@ const Profile = () => {
                 <div className=' mt-5 mb-7 md:col-span-2 flex flex-col items-center'>
                     {decidinguser && (
                         <>
-                            <h1 className='russo' style={{ textAlign: 'center', fontSize: '40px', color: 'black' }}>Your Posts</h1>
-                            {posts.map((post) => (
-                            
-                            <div
-                                key={post.id}
-                                className='bg-white rounded-xl mb-5 w-[50%]'
-                            >
-                                <div className='pl-5'>
-                                    <div className='flex flex-row'>
-                                        <img
-                                            src={profile.profilePic||profileicon}
-                                            alt={profileicon}
-                                            style={{
-                                                height: '80px',
-                                                width: '80px',
-                                                borderRadius: '50%',
-                                                backgroundColor: 'gray',
-                                                marginRight: '20px',
-                                            }}
-                                            onClick={() => openModals(profile.profilePic||profileicon)}
-                                        />
-                                        {isModalOpened && (
-                                                <div
-                                                style={{
-                                                    position: 'fixed',
-                                                    top: 0,
-                                                    left: 0,
-                                                    right: 0,
-                                                    bottom: 0,
-                                                    backgroundColor: 'rgba(86, 84, 84, 0.7)',
-                                                    display: 'flex',
-                                                    justifyContent: 'center',
-                                                    alignItems: 'center',
-                                                    zIndex: 9999,
-                                                }}
-                                                onClick={closeModals}
-                                                >
-                                                <div
-                                                    style={{
-                                                    position: 'relative',
-                                                    maxWidth: '90%',
-                                                    maxHeight: '90%',
-                                                    }}
-                                                    onClick={(e) => e.stopPropagation()} 
-                                                >
-                                                    <img
-                                                    src={modalImages}
-                                                    alt={profileicon}
-                                                    style={{
-                                                        width: '100%',
-                                                        height: 'auto',
-                                                        borderRadius: '8px',
-                                                    }}
-                                                    />
-                                                    <button
-                                                    onClick={closeModals}
-                                                    style={{
-                                                        position: 'absolute',
-                                                        top: '10px',
-                                                        right: '10px',
-                                                        background: 'red',
-                                                        color: 'white',
-                                                        border: 'none',
-                                                        borderRadius: '50%',
-                                                        width: '30px',
-                                                        height: '30px',
-                                                        fontSize: '18px',
-                                                        cursor: 'pointer',
-                                                    }}
-                                                    >
-                                                    X
-                                                    </button>
+                            <nav style={{justifyContent:'space-evenly'}} className="flex items-center w-full max-w-full p-2 border-2 border-gray-800 rounded-lg bg-gradient-to-r from-blue-800 via-black to-gray-900 shadow-lg justify-center">
+                                <button onClick={()=>setdisplayevent(true)} className="text-white text-sm font-semibold hover:bg-blue-700 rounded-lg py-1 px-3 transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-300"><h1 className="pr-4">Events</h1></button>
+                                <button onClick={()=>setdisplayevent(false)} className="text-white text-sm font-semibold hover:bg-blue-700 rounded-lg py-1 px-3 transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-300"><h1 className="pr-4">All Posts</h1></button>
+                            </nav>
+                            {!displayevent && (
+                                <>
+                                    {posts.map((post) => (
+                                        <div
+                                            key={post.id}
+                                            className='bg-white rounded-xl mb-5 w-[50%]'
+                                        >
+                                            <div className='pl-5'>
+                                                <div className='flex flex-row' style={{justifyContent:'space-between'}}>
+                                                    <div style={{display:'flex', flexDirection:'row', justifyContent:'center'}}>
+                                                        <img
+                                                            src={profile.profilePic||profileicon}
+                                                            alt={profileicon}
+                                                            style={{
+                                                                height: '80px',
+                                                                width: '80px',
+                                                                borderRadius: '50%',
+                                                                backgroundColor: 'gray',
+                                                                marginRight: '20px',
+                                                            }}
+                                                            onClick={() => openModals(profile.profilePic||profileicon)}
+                                                        />
+                                                        {isModalOpened && (
+                                                                <div
+                                                                style={{
+                                                                    position: 'fixed',
+                                                                    top: 0,
+                                                                    left: 0,
+                                                                    right: 0,
+                                                                    bottom: 0,
+                                                                    backgroundColor: 'rgba(86, 84, 84, 0.7)',
+                                                                    display: 'flex',
+                                                                    justifyContent: 'center',
+                                                                    alignItems: 'center',
+                                                                    zIndex: 9999,
+                                                                }}
+                                                                onClick={closeModals}
+                                                                >
+                                                                <div
+                                                                    style={{
+                                                                    position: 'relative',
+                                                                    maxWidth: '90%',
+                                                                    maxHeight: '90%',
+                                                                    }}
+                                                                    onClick={(e) => e.stopPropagation()} 
+                                                                >
+                                                                    <img
+                                                                    src={modalImages}
+                                                                    alt={profileicon}
+                                                                    style={{
+                                                                        width: '100%',
+                                                                        height: 'auto',
+                                                                        borderRadius: '8px',
+                                                                    }}
+                                                                    />
+                                                                    <button
+                                                                    onClick={closeModals}
+                                                                    style={{
+                                                                        position: 'absolute',
+                                                                        top: '10px',
+                                                                        right: '10px',
+                                                                        background: 'red',
+                                                                        color: 'white',
+                                                                        border: 'none',
+                                                                        borderRadius: '50%',
+                                                                        width: '30px',
+                                                                        height: '30px',
+                                                                        fontSize: '18px',
+                                                                        cursor: 'pointer',
+                                                                    }}
+                                                                    >
+                                                                    X
+                                                                    </button>
+                                                                </div>
+                                                                </div>
+                                                            )}
+                                                        <div
+                                                            style={{
+                                                                display: 'flex',
+                                                                flexDirection: 'column',
+                                                                justifyContent: 'center',
+                                                            }}
+                                                        >
+                                                            <h1>{post.username}</h1>
+                                                            <h1>{post.role}</h1>
+                                                            <h3>{formatTimestamp(post.timestamp)}</h3>
+                                                        </div>
+                                                    </div>
+                                                    <button onClick={()=>deletePost(post.id)}><img src={deleteicon}/></button>
                                                 </div>
+                                                {post.isEvent && (
+                                                    <strong>Event ✅🏆</strong>
+                                                )}
+                                                <br />
+                                                <h1>{post.textPost}</h1>
+                                            </div>
+                                            <div>
+                                                <strong className='text-2xl text-center'>
+                                                    {post.title}
+                                                </strong>
+                                                {post.isEvent && (
+                                                    <div style={{paddingLeft:'22px',display:'flex', flexDirection:'row', justifyContent:'start', alignItems:'center', alignContent:'center'}}>
+                                                        <h1>
+                                                            <strong>organized by: {post.organizer}</strong> 
+                                                        </h1>
+                                                    </div>
+                                                )}
+                                                {post.isEvent && (
+                                                    <div style={{marginLeft:'22px'}}>
+                                                        <h1><strong>{post.eventstartdate && 'Event starts on '}</strong> {post.eventstartdate} {post.eventstarttime && 'at'} {post.eventstarttime}</h1>
+                                                        <h1><strong>{post.eventstartdate && 'Event ends on '}</strong> {post.eventenddate} {post.eventendtime && 'at'} {post.eventendtime}</h1>
+                                                        <h1><strong>{post.eventlocation && 'Event venue: '}</strong> {post.eventlocation} </h1>
+                                                    </div>
+                                                )}
+                                                <br />
+                                                <h2>{post.description}</h2>
+                                            </div>
+                                            <br />
+                                            <br />
+                                            {post.images && post.images.length > 0 && (
+                                                <div className='flex flex-wrap gap-2 pl-2'>
+                                                    {post.images.slice(0, 3).map((image, index) => (
+                                                        <img
+                                                            key={index}
+                                                            src={image}
+                                                            alt={`Post Image ${index}`}
+                                                            className='w-[100px] h-[100px] object-cover cursor-pointer'
+                                                            onClick={() => openModal(post.images, index)}
+                                                        />
+                                                    ))}
+                                                    {post.images.length > 3 && (
+                                                        <div
+                                                            onClick={() => openModal(post.images, 3)}
+                                                            className='flex justify-center items-center w-[100px] h-[100px] bg-gray-300 rounded cursor-pointer'
+                                                        >
+                                                            <span>+{post.images.length - 3}</span>
+                                                        </div>
+                                                    )}
                                                 </div>
                                             )}
-                                        <div
-                                            style={{
-                                                display: 'flex',
-                                                flexDirection: 'column',
-                                                justifyContent: 'center',
-                                            }}
-                                        >
-                                            <h1>{post.username}</h1>
-                                            <h1>{post.role}</h1>
-                                            <h3>{formatTimestamp(post.timestamp)}</h3>
+                                            <br />
+                                            <br />
                                         </div>
-                                    </div>
-                                    <br />
-                                    <h1>{post.textPost}</h1>
-                                </div>
-                                <div>
-                                    <strong className='text-2xl text-center'>
-                                        {post.title}
-                                    </strong>
-                                    <h2>{post.description}</h2>
-                                </div>
-                                <br />
-                                <br />
-                                {post.images && post.images.length > 0 && (
-                                    <div className='flex flex-wrap gap-2 pl-2'>
-                                        {post.images.slice(0, 3).map((image, index) => (
-                                            <img
-                                                key={index}
-                                                src={image}
-                                                alt={`Post Image ${index}`}
-                                                className='w-[100px] h-[100px] object-cover cursor-pointer'
-                                                onClick={() => openModal(post.images, index)}
-                                            />
-                                        ))}
-                                        {post.images.length > 3 && (
-                                            <div
-                                                onClick={() => openModal(post.images, 3)}
-                                                className='flex justify-center items-center w-[100px] h-[100px] bg-gray-300 rounded cursor-pointer'
-                                            >
-                                                <span>+{post.images.length - 3}</span>
+                                    ))}
+                                </>
+                            )}
+                            {displayevent && (
+                                <>
+                                {posts.filter(post => post.isEvent === true).map((post) => (
+                                    <div
+                                        key={post.id}
+                                        className='bg-white rounded-xl mb-5 w-[50%]'
+                                    >
+                                        <div className='pl-5'>
+                                            <div className='flex flex-row' style={{justifyContent:'space-between'}}>
+                                                <div style={{display:'flex', flexDirection:'row', justifyContent:'center'}}>
+                                                <img
+                                                    src={profile.profilePic||profileicon}
+                                                    alt={profileicon}
+                                                    style={{
+                                                        height: '80px',
+                                                        width: '80px',
+                                                        borderRadius: '50%',
+                                                        backgroundColor: 'gray',
+                                                        marginRight: '20px',
+                                                    }}
+                                                    onClick={() => openModals(profile.profilePic||profileicon)}
+                                                />
+                                                {isModalOpened && (
+                                                        <div
+                                                        style={{
+                                                            position: 'fixed',
+                                                            top: 0,
+                                                            left: 0,
+                                                            right: 0,
+                                                            bottom: 0,
+                                                            backgroundColor: 'rgba(86, 84, 84, 0.7)',
+                                                            display: 'flex',
+                                                            justifyContent: 'center',
+                                                            alignItems: 'center',
+                                                            zIndex: 9999,
+                                                        }}
+                                                        onClick={closeModals}
+                                                        >
+                                                        <div
+                                                            style={{
+                                                            position: 'relative',
+                                                            maxWidth: '90%',
+                                                            maxHeight: '90%',
+                                                            }}
+                                                            onClick={(e) => e.stopPropagation()} 
+                                                        >
+                                                            <img
+                                                            src={modalImages}
+                                                            alt={profileicon}
+                                                            style={{
+                                                                width: '100%',
+                                                                height: 'auto',
+                                                                borderRadius: '8px',
+                                                            }}
+                                                            />
+                                                            <button
+                                                            onClick={closeModals}
+                                                            style={{
+                                                                position: 'absolute',
+                                                                top: '10px',
+                                                                right: '10px',
+                                                                background: 'red',
+                                                                color: 'white',
+                                                                border: 'none',
+                                                                borderRadius: '50%',
+                                                                width: '30px',
+                                                                height: '30px',
+                                                                fontSize: '18px',
+                                                                cursor: 'pointer',
+                                                            }}
+                                                            >
+                                                            X
+                                                            </button>
+                                                        </div>
+                                                        </div>
+                                                    )}
+                                                <div
+                                                    style={{
+                                                        display: 'flex',
+                                                        flexDirection: 'column',
+                                                        justifyContent: 'center',
+                                                    }}
+                                                >
+                                                    <h1>{post.username}</h1>
+                                                    <h1>{post.role}</h1>
+                                                    <h3>{formatTimestamp(post.timestamp)}</h3>
+                                                </div>
+                                                </div>
+                                                <button onClick={()=>deletePost(post.id)}><img src={deleteicon}/></button>
+                                            </div>
+                                            {post.isEvent && (
+                                                <strong>Event ✅🏆</strong>
+                                            )}
+                                            <br />
+                                            <h1>{post.textPost}</h1>
+                                        </div>
+                                        <div>
+                                            <strong className='text-2xl text-center'>
+                                                {post.title}
+                                            </strong>
+                                            {post.isEvent && (
+                                                <div style={{paddingLeft:'22px',display:'flex', flexDirection:'row', justifyContent:'start', alignItems:'center', alignContent:'center'}}>
+                                                    <h1>
+                                                        <strong>organized by: {post.organizer}</strong> 
+                                                    </h1>
+                                                </div>
+                                            )}
+                                            {post.isEvent && (
+                                                <div style={{marginLeft:'22px'}}>
+                                                    <h1><strong>{post.eventstartdate && 'Event starts on '}</strong> {post.eventstartdate} {post.eventstarttime && 'at'} {post.eventstarttime}</h1>
+                                                    <h1><strong>{post.eventstartdate && 'Event ends on '}</strong> {post.eventenddate} {post.eventendtime && 'at'} {post.eventendtime}</h1>
+                                                    <h1><strong>{post.eventlocation && 'Event venue: '}</strong> {post.eventlocation} </h1>
+                                                </div>
+                                            )}
+                                            <br />
+                                            <h2>{post.description}</h2>
+                                        </div>
+                                        <br />
+                                        <br />
+                                        {post.images && post.images.length > 0 && (
+                                            <div className='flex flex-wrap gap-2 pl-2'>
+                                                {post.images.slice(0, 3).map((image, index) => (
+                                                    <img
+                                                        key={index}
+                                                        src={image}
+                                                        alt={`Post Image ${index}`}
+                                                        className='w-[100px] h-[100px] object-cover cursor-pointer'
+                                                        onClick={() => openModal(post.images, index)}
+                                                    />
+                                                ))}
+                                                {post.images.length > 3 && (
+                                                    <div
+                                                        onClick={() => openModal(post.images, 3)}
+                                                        className='flex justify-center items-center w-[100px] h-[100px] bg-gray-300 rounded cursor-pointer'
+                                                    >
+                                                        <span>+{post.images.length - 3}</span>
+                                                    </div>
+                                                )}
                                             </div>
                                         )}
+                                        <br />
+                                        <br />
                                     </div>
-                                )}
-                                <br />
-                                <br />
-                            </div>
-                        ))}
+                                ))}
+                            </>
+                            )}
                         </>
                     )}
                     {!decidinguser && (
                         <>
-                            <nav style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', width: '100%', padding: '10px', boxSizing: 'border-box', border: '2px solid black' }}>
-                        <button onClick={()=>handledisplaypost()}><h1 style={{ borderRight: '2px solid black', paddingRight: '20px' }}>Posts</h1></button>
-                        <button onClick={()=>handledisplayachievements()}><h1 style={{ borderRight: '2px solid black', paddingRight: '20px' }}>Achievements</h1></button>
-                        <button onClick={()=>handledisplaycrowd()}><h1>Crowdfunding</h1></button>
-                    </nav>
-                    
-                    {displaypost && (
-                        <>
-                            {posts.map((post) => (
-                        
-                                <div
-                                    key={post.id}
-                                    className='bg-white rounded-xl mb-5 w-[50%]'
-                                >
-                                    <div className='pl-5'>
-                                        <div className='flex flex-row'>
-                                            <img
-                                                src={profile.profilePic||profileicon}
-                                                alt={profileicon}
-                                                style={{
-                                                    height: '80px',
-                                                    width: '80px',
-                                                    borderRadius: '50%',
-                                                    backgroundColor: 'gray',
-                                                    marginRight: '20px',
-                                                }}
-                                                onClick={() => openModals(profile.profilePic||profileicon)}
-                                            />
-                                            {isModalOpened && (
-                                                    <div
-                                                    style={{
-                                                        position: 'fixed',
-                                                        top: 0,
-                                                        left: 0,
-                                                        right: 0,
-                                                        bottom: 0,
-                                                        backgroundColor: 'rgba(86, 84, 84, 0.7)',
-                                                        display: 'flex',
-                                                        justifyContent: 'center',
-                                                        alignItems: 'center',
-                                                        zIndex: 9999,
-                                                    }}
-                                                    onClick={closeModals}
-                                                    >
-                                                    <div
-                                                        style={{
-                                                        position: 'relative',
-                                                        maxWidth: '90%',
-                                                        maxHeight: '90%',
-                                                        }}
-                                                        onClick={(e) => e.stopPropagation()} 
-                                                    >
-                                                        <img
-                                                        src={modalImages}
+                           <nav style={{justifyContent:'space-evenly'}} className="flex items-center w-full max-w-full p-2 border-2 border-gray-800 rounded-lg bg-gradient-to-r from-blue-800 via-black to-gray-900 shadow-lg justify-center">
+                                <button onClick={() => handledisplaypost()} className="text-white text-sm font-semibold hover:bg-blue-700 rounded-lg py-1 px-3 transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-300">
+                                    <h1 className="pr-4">Posts</h1>
+                                </button>
+                                <button onClick={() => handledisplayachievements()} className="text-white text-sm font-semibold hover:bg-blue-700 rounded-lg py-1 px-3 transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-300">
+                                    <h1 className="pr-4">Achievement</h1>
+                                </button>
+                                <button onClick={() => handledisplayevent()} className="text-white text-sm font-semibold hover:bg-blue-700 rounded-lg py-1 px-3 transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-300">
+                                    <h1 className="pr-4">Events</h1>
+                                </button>
+                                <button onClick={() => handledisplaycrowd()} className="text-white text-sm font-semibold hover:bg-blue-700 rounded-lg py-1 px-3 transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-300">
+                                    <h1>Crowdfunding</h1>
+                                </button>
+                            </nav>
+
+                            <br />
+                            {displayevent && (
+                                <>
+                                    {posts.filter(post => post.isEvent === true).map((post) => (
+                                        <div
+                                            key={post.id}
+                                            className='bg-white rounded-xl mb-5 w-[50%]'
+                                        >
+                                            <div className='pl-5'>
+                                                <div className='flex flex-row' style={{justifyContent:'center'}}>
+                                                    <div style={{display:'flex', flexDirection:'row', justifyContent:'center'}}>
+                                                    <img
+                                                        src={profile.profilePic||profileicon}
                                                         alt={profileicon}
                                                         style={{
-                                                            width: '100%',
-                                                            height: 'auto',
-                                                            borderRadius: '8px',
-                                                        }}
-                                                        />
-                                                        <button
-                                                        onClick={closeModals}
-                                                        style={{
-                                                            position: 'absolute',
-                                                            top: '10px',
-                                                            right: '10px',
-                                                            background: 'red',
-                                                            color: 'white',
-                                                            border: 'none',
+                                                            height: '80px',
+                                                            width: '80px',
                                                             borderRadius: '50%',
-                                                            width: '30px',
-                                                            height: '30px',
-                                                            fontSize: '18px',
-                                                            cursor: 'pointer',
+                                                            backgroundColor: 'gray',
+                                                            marginRight: '20px',
                                                         }}
-                                                        >
-                                                        X
-                                                        </button>
+                                                        onClick={() => openModals(profile.profilePic||profileicon)}
+                                                    />
+                                                    {isModalOpened && (
+                                                            <div
+                                                            style={{
+                                                                position: 'fixed',
+                                                                top: 0,
+                                                                left: 0,
+                                                                right: 0,
+                                                                bottom: 0,
+                                                                backgroundColor: 'rgba(86, 84, 84, 0.7)',
+                                                                display: 'flex',
+                                                                justifyContent: 'center',
+                                                                alignItems: 'center',
+                                                                zIndex: 9999,
+                                                            }}
+                                                            onClick={closeModals}
+                                                            >
+                                                            <div
+                                                                style={{
+                                                                position: 'relative',
+                                                                maxWidth: '90%',
+                                                                maxHeight: '90%',
+                                                                }}
+                                                                onClick={(e) => e.stopPropagation()} 
+                                                            >
+                                                                <img
+                                                                src={modalImages}
+                                                                alt={profileicon}
+                                                                style={{
+                                                                    width: '100%',
+                                                                    height: 'auto',
+                                                                    borderRadius: '8px',
+                                                                }}
+                                                                />
+                                                                <button
+                                                                onClick={closeModals}
+                                                                style={{
+                                                                    position: 'absolute',
+                                                                    top: '10px',
+                                                                    right: '10px',
+                                                                    background: 'red',
+                                                                    color: 'white',
+                                                                    border: 'none',
+                                                                    borderRadius: '50%',
+                                                                    width: '30px',
+                                                                    height: '30px',
+                                                                    fontSize: '18px',
+                                                                    cursor: 'pointer',
+                                                                }}
+                                                                >
+                                                                X
+                                                                </button>
+                                                            </div>
+                                                            </div>
+                                                        )}
+                                                    <div
+                                                        style={{
+                                                            display: 'flex',
+                                                            flexDirection: 'column',
+                                                            justifyContent: 'center',
+                                                        }}
+                                                    >
+                                                        <h1>{post.username}</h1>
+                                                        <h1>{post.role}</h1>
+                                                        <h3>{formatTimestamp(post.timestamp)}</h3>
                                                     </div>
+                                                    </div>
+                                                    <button onClick={()=>deletePost(post.id)}><img src={deleteicon}/></button>
+                                                </div>
+                                                {post.isEvent && (
+                                                    <strong>Event ✅🏆</strong>
+                                                )}
+                                                <br />
+                                                <h1>{post.textPost}</h1>
+                                            </div>
+                                            <div>
+                                                <strong className='text-2xl text-center'>
+                                                    {post.title}
+                                                </strong>
+                                                {post.isEvent && (
+                                                    <div style={{paddingLeft:'22px',display:'flex', flexDirection:'row', justifyContent:'start', alignItems:'center', alignContent:'center'}}>
+                                                        <h1>
+                                                            <strong>organized by: {post.organizer}</strong> 
+                                                        </h1>
                                                     </div>
                                                 )}
-                                            <div
-                                                style={{
-                                                    display: 'flex',
-                                                    flexDirection: 'column',
-                                                    justifyContent: 'center',
-                                                }}
-                                            >
-                                                <h1>{post.username}</h1>
-                                                <h1>{post.role}</h1>
-                                                <h3>{formatTimestamp(post.timestamp)}</h3>
+                                                {post.isEvent && (
+                                                    <div style={{marginLeft:'22px'}}>
+                                                        <h1><strong>{post.eventstartdate && 'Event starts on '}</strong> {post.eventstartdate} {post.eventstarttime && 'at'} {post.eventstarttime}</h1>
+                                                        <h1><strong>{post.eventstartdate && 'Event ends on '}</strong> {post.eventenddate} {post.eventendtime && 'at'} {post.eventendtime}</h1>
+                                                        <h1><strong>{post.eventlocation && 'Event venue: '}</strong> {post.eventlocation} </h1>
+                                                    </div>
+                                                )}
+                                                <br />
+                                                <h2>{post.description}</h2>
                                             </div>
-                                        </div>
-                                        <br />
-                                        <h1>{post.textPost}</h1>
-                                    </div>
-                                    <div>
-                                        <strong className='text-2xl text-center'>
-                                            {post.title}
-                                        </strong>
-                                        <h2>{post.description}</h2>
-                                    </div>
-                                    <br />
-                                    <br />
-                                    {post.images && post.images.length > 0 && (
-                                        <div className='flex flex-wrap gap-2 pl-2'>
-                                            {post.images.slice(0, 3).map((image, index) => (
-                                                <img
-                                                    key={index}
-                                                    src={image}
-                                                    alt={`Post Image ${index}`}
-                                                    className='w-[100px] h-[100px] object-cover cursor-pointer'
-                                                    onClick={() => openModal(post.images, index)}
-                                                />
-                                            ))}
-                                            {post.images.length > 3 && (
-                                                <div
-                                                    onClick={() => openModal(post.images, 3)}
-                                                    className='flex justify-center items-center w-[100px] h-[100px] bg-gray-300 rounded cursor-pointer'
-                                                >
-                                                    <span>+{post.images.length - 3}</span>
+                                            <br />
+                                            <br />
+                                            {post.images && post.images.length > 0 && (
+                                                <div className='flex flex-wrap gap-2 pl-2'>
+                                                    {post.images.slice(0, 3).map((image, index) => (
+                                                        <img
+                                                            key={index}
+                                                            src={image}
+                                                            alt={`Post Image ${index}`}
+                                                            className='w-[100px] h-[100px] object-cover cursor-pointer'
+                                                            onClick={() => openModal(post.images, index)}
+                                                        />
+                                                    ))}
+                                                    {post.images.length > 3 && (
+                                                        <div
+                                                            onClick={() => openModal(post.images, 3)}
+                                                            className='flex justify-center items-center w-[100px] h-[100px] bg-gray-300 rounded cursor-pointer'
+                                                        >
+                                                            <span>+{post.images.length - 3}</span>
+                                                        </div>
+                                                    )}
                                                 </div>
                                             )}
+                                            <br />
+                                            <br />
                                         </div>
-                                    )}
-                                    <br />
-                                    <br />
-                                </div>
-                            ))}
-                        </>
-                    )}
-                    {displayachievement && (
-                        <>
-                            {achievementPost.map((post) => (
-                                    
-                                <div
-                                    key={post.id}
-                                    className='bg-white rounded-xl mb-5 w-[50%]'
-                                >
-                                    <div className='pl-5'>
-                                        <div className='flex flex-row'>
-                                            <img
-                                                src={profile.profilePic||profileicon}
-                                                alt={profileicon}
-                                                style={{
-                                                    height: '80px',
-                                                    width: '80px',
-                                                    borderRadius: '50%',
-                                                    backgroundColor: 'gray',
-                                                    marginRight: '20px',
-                                                }}
-                                                onClick={() => openModals(profile.profilePic||profileicon)}
-                                            />
-                                            {isModalOpened && (
-                                                    <div
-                                                    style={{
-                                                        position: 'fixed',
-                                                        top: 0,
-                                                        left: 0,
-                                                        right: 0,
-                                                        bottom: 0,
-                                                        backgroundColor: 'rgba(86, 84, 84, 0.7)',
-                                                        display: 'flex',
-                                                        justifyContent: 'center',
-                                                        alignItems: 'center',
-                                                        zIndex: 9999,
-                                                    }}
-                                                    onClick={closeModals}
-                                                    >
-                                                    <div
-                                                        style={{
-                                                        position: 'relative',
-                                                        maxWidth: '90%',
-                                                        maxHeight: '90%',
-                                                        }}
-                                                        onClick={(e) => e.stopPropagation()} 
-                                                    >
-                                                        <img
-                                                        src={modalImages}
+                                    ))}
+                                </>
+                            )}
+                            {displaypost && (
+                                <>
+                                    {posts.map((post) => (
+                                
+                                        <div
+                                            key={post.id}
+                                            className='bg-white rounded-xl mb-5 w-[50%]'
+                                        >
+                                            <div className='pl-5'>
+                                                <div className='flex flex-row' style={{justifyContent:'space-between'}}>
+                                                    <div style={{display:'flex', flexDirection:'row', justifyContent:'center'}}>
+                                                    <img
+                                                        src={profile.profilePic||profileicon}
                                                         alt={profileicon}
                                                         style={{
-                                                            width: '100%',
-                                                            height: 'auto',
-                                                            borderRadius: '8px',
-                                                        }}
-                                                        />
-                                                        <button
-                                                        onClick={closeModals}
-                                                        style={{
-                                                            position: 'absolute',
-                                                            top: '10px',
-                                                            right: '10px',
-                                                            background: 'red',
-                                                            color: 'white',
-                                                            border: 'none',
+                                                            height: '80px',
+                                                            width: '80px',
                                                             borderRadius: '50%',
-                                                            width: '30px',
-                                                            height: '30px',
-                                                            fontSize: '18px',
-                                                            cursor: 'pointer',
+                                                            backgroundColor: 'gray',
+                                                            marginRight: '20px',
                                                         }}
-                                                        >
-                                                        X
-                                                        </button>
+                                                        onClick={() => openModals(profile.profilePic||profileicon)}
+                                                    />
+                                                    {isModalOpened && (
+                                                            <div
+                                                            style={{
+                                                                position: 'fixed',
+                                                                top: 0,
+                                                                left: 0,
+                                                                right: 0,
+                                                                bottom: 0,
+                                                                backgroundColor: 'rgba(86, 84, 84, 0.7)',
+                                                                display: 'flex',
+                                                                justifyContent: 'center',
+                                                                alignItems: 'center',
+                                                                zIndex: 9999,
+                                                            }}
+                                                            onClick={closeModals}
+                                                            >
+                                                            <div
+                                                                style={{
+                                                                position: 'relative',
+                                                                maxWidth: '90%',
+                                                                maxHeight: '90%',
+                                                                }}
+                                                                onClick={(e) => e.stopPropagation()} 
+                                                            >
+                                                                <img
+                                                                src={modalImages}
+                                                                alt={profileicon}
+                                                                style={{
+                                                                    width: '100%',
+                                                                    height: 'auto',
+                                                                    borderRadius: '8px',
+                                                                }}
+                                                                />
+                                                                <button
+                                                                onClick={closeModals}
+                                                                style={{
+                                                                    position: 'absolute',
+                                                                    top: '10px',
+                                                                    right: '10px',
+                                                                    background: 'red',
+                                                                    color: 'white',
+                                                                    border: 'none',
+                                                                    borderRadius: '50%',
+                                                                    width: '30px',
+                                                                    height: '30px',
+                                                                    fontSize: '18px',
+                                                                    cursor: 'pointer',
+                                                                }}
+                                                                >
+                                                                X
+                                                                </button>
+                                                            </div>
+                                                            </div>
+                                                        )}
+                                                    <div
+                                                        style={{
+                                                            display: 'flex',
+                                                            flexDirection: 'column',
+                                                            justifyContent: 'center',
+                                                        }}
+                                                    >
+                                                        <h1>{post.username}</h1>
+                                                        <h1>{post.role}</h1>
+                                                        <h3>{formatTimestamp(post.timestamp)}</h3>
                                                     </div>
                                                     </div>
-                                                )}
-                                            <div
-                                                style={{
-                                                    display: 'flex',
-                                                    flexDirection: 'column',
-                                                    justifyContent: 'center',
-                                                }}
-                                            >
-                                                <h1>{post.username}</h1>
-                                                <h1>{post.role}</h1>
-                                                <h3>{formatTimestamp(post.timestamp)}</h3>
+                                                    <button onClick={()=>deletePost(post.id)}><img src={deleteicon}/></button>
+                                                </div>
+                                                <br />
+                                                <h1>{post.textPost}</h1>
                                             </div>
-                                        </div>
-                                        <br />
-                                        <h1>{post.textPost}</h1>
-                                    </div>
-                                    <div>
-                                        <strong className='text-2xl text-center'>
-                                            {post.title}
-                                        </strong>
-                                        <h2>{post.description}</h2>
-                                    </div>
-                                    <br />
-                                    <br />
-                                    {post.images && post.images.length > 0 && (
-                                        <div className='flex flex-wrap gap-2 pl-2'>
-                                            {post.images.slice(0, 3).map((image, index) => (
-                                                <img
-                                                    key={index}
-                                                    src={image}
-                                                    alt={`Post Image ${index}`}
-                                                    className='w-[100px] h-[100px] object-cover cursor-pointer'
-                                                    onClick={() => openModal(post.images, index)}
-                                                />
-                                            ))}
-                                            {post.images.length > 3 && (
-                                                <div
-                                                    onClick={() => openModal(post.images, 3)}
-                                                    className='flex justify-center items-center w-[100px] h-[100px] bg-gray-300 rounded cursor-pointer'
-                                                >
-                                                    <span>+{post.images.length - 3}</span>
+                                            <div>
+                                                <strong className='text-2xl text-center'>
+                                                    {post.title}
+                                                </strong>
+                                                <h2>{post.description}</h2>
+                                            </div>
+                                            <br />
+                                            <br />
+                                            {post.images && post.images.length > 0 && (
+                                                <div className='flex flex-wrap gap-2 pl-2'>
+                                                    {post.images.slice(0, 3).map((image, index) => (
+                                                        <img
+                                                            key={index}
+                                                            src={image}
+                                                            alt={`Post Image ${index}`}
+                                                            className='w-[100px] h-[100px] object-cover cursor-pointer'
+                                                            onClick={() => openModal(post.images, index)}
+                                                        />
+                                                    ))}
+                                                    {post.images.length > 3 && (
+                                                        <div
+                                                            onClick={() => openModal(post.images, 3)}
+                                                            className='flex justify-center items-center w-[100px] h-[100px] bg-gray-300 rounded cursor-pointer'
+                                                        >
+                                                            <span>+{post.images.length - 3}</span>
+                                                        </div>
+                                                    )}
                                                 </div>
                                             )}
+                                            <br />
+                                            <br />
                                         </div>
-                                    )}
-                                    <br />
-                                    <br />
-                                </div>
-                            ))}
-                        </>
-                    )}
-                    {displaycrowdfunding && (
-                        <>
-                            {CrowdfundingPost.map((post) => (
-                                    
-                                <div
-                                    key={post.id}
-                                    className='bg-white rounded-xl mb-5 w-[50%]'
-                                >
-                                    <div className='pl-5'>
-                                        <div className='flex flex-row'>
-                                            <img
-                                                src={profile.profilePic||profileicon}
-                                                alt={profileicon}
-                                                style={{
-                                                    height: '80px',
-                                                    width: '80px',
-                                                    borderRadius: '50%',
-                                                    backgroundColor: 'gray',
-                                                    marginRight: '20px',
-                                                }}
-                                                onClick={() => openModals(profile.profilePic||profileicon)}
-                                            />
-                                            {isModalOpened && (
-                                                    <div
-                                                    style={{
-                                                        position: 'fixed',
-                                                        top: 0,
-                                                        left: 0,
-                                                        right: 0,
-                                                        bottom: 0,
-                                                        backgroundColor: 'rgba(86, 84, 84, 0.7)',
-                                                        display: 'flex',
-                                                        justifyContent: 'center',
-                                                        alignItems: 'center',
-                                                        zIndex: 9999,
-                                                    }}
-                                                    onClick={closeModals}
-                                                    >
-                                                    <div
-                                                        style={{
-                                                        position: 'relative',
-                                                        maxWidth: '90%',
-                                                        maxHeight: '90%',
-                                                        }}
-                                                        onClick={(e) => e.stopPropagation()} 
-                                                    >
-                                                        <img
-                                                        src={modalImages}
+                                    ))}
+                                </>
+                            )}
+                            {displayachievement && (
+                                <>
+                                    {achievementPost.map((post) => (
+                                            
+                                        <div
+                                            key={post.id}
+                                            className='bg-white rounded-xl mb-5 w-[50%]'
+                                        >
+                                            <div className='pl-5'>
+                                                <div className='flex flex-row' style={{justifyContent:'space-between'}}>
+                                                    <div style={{display:'flex', flexDirection:'row', justifyContent:'center'}}>
+                                                    <img
+                                                        src={profile.profilePic||profileicon}
                                                         alt={profileicon}
                                                         style={{
-                                                            width: '100%',
-                                                            height: 'auto',
-                                                            borderRadius: '8px',
-                                                        }}
-                                                        />
-                                                        <button
-                                                        onClick={closeModals}
-                                                        style={{
-                                                            position: 'absolute',
-                                                            top: '10px',
-                                                            right: '10px',
-                                                            background: 'red',
-                                                            color: 'white',
-                                                            border: 'none',
+                                                            height: '80px',
+                                                            width: '80px',
                                                             borderRadius: '50%',
-                                                            width: '30px',
-                                                            height: '30px',
-                                                            fontSize: '18px',
-                                                            cursor: 'pointer',
+                                                            backgroundColor: 'gray',
+                                                            marginRight: '20px',
                                                         }}
-                                                        >
-                                                        X
-                                                        </button>
+                                                        onClick={() => openModals(profile.profilePic||profileicon)}
+                                                    />
+                                                    {isModalOpened && (
+                                                            <div
+                                                            style={{
+                                                                position: 'fixed',
+                                                                top: 0,
+                                                                left: 0,
+                                                                right: 0,
+                                                                bottom: 0,
+                                                                backgroundColor: 'rgba(86, 84, 84, 0.7)',
+                                                                display: 'flex',
+                                                                justifyContent: 'center',
+                                                                alignItems: 'center',
+                                                                zIndex: 9999,
+                                                            }}
+                                                            onClick={closeModals}
+                                                            >
+                                                            <div
+                                                                style={{
+                                                                position: 'relative',
+                                                                maxWidth: '90%',
+                                                                maxHeight: '90%',
+                                                                }}
+                                                                onClick={(e) => e.stopPropagation()} 
+                                                            >
+                                                                <img
+                                                                src={modalImages}
+                                                                alt={profileicon}
+                                                                style={{
+                                                                    width: '100%',
+                                                                    height: 'auto',
+                                                                    borderRadius: '8px',
+                                                                }}
+                                                                />
+                                                                <button
+                                                                onClick={closeModals}
+                                                                style={{
+                                                                    position: 'absolute',
+                                                                    top: '10px',
+                                                                    right: '10px',
+                                                                    background: 'red',
+                                                                    color: 'white',
+                                                                    border: 'none',
+                                                                    borderRadius: '50%',
+                                                                    width: '30px',
+                                                                    height: '30px',
+                                                                    fontSize: '18px',
+                                                                    cursor: 'pointer',
+                                                                }}
+                                                                >
+                                                                X
+                                                                </button>
+                                                            </div>
+                                                            </div>
+                                                        )}
+                                                    <div
+                                                        style={{
+                                                            display: 'flex',
+                                                            flexDirection: 'column',
+                                                            justifyContent: 'center',
+                                                        }}
+                                                    >
+                                                        <h1>{post.username}</h1>
+                                                        <h1>{post.role}</h1>
+                                                        <h3>{formatTimestamp(post.timestamp)}</h3>
                                                     </div>
                                                     </div>
-                                                )}
-                                            <div
-                                                style={{
-                                                    display: 'flex',
-                                                    flexDirection: 'column',
-                                                    justifyContent: 'center',
-                                                }}
-                                            >
-                                                <h1>{post.username}</h1>
-                                                <h1>{post.role}</h1>
-                                                <h3>{formatTimestamp(post.timestamp)}</h3>
+                                                    <button onClick={()=>deletePost(post.id)}><img src={deleteicon}/></button>
+                                                </div>
+                                                <br />
+                                                <h1>{post.textPost}</h1>
                                             </div>
-                                        </div>
-                                        <br />
-                                        <h1>{post.textPost}</h1>
-                                    </div>
-                                    <div>
-                                        <strong className='text-2xl text-center'>
-                                            {post.title}
-                                        </strong>
-                                        <h2>{post.description}</h2>
-                                    </div>
-                                    <br />
-                                    <br />
-                                    {post.images && post.images.length > 0 && (
-                                        <div className='flex flex-wrap gap-2 pl-2'>
-                                            {post.images.slice(0, 3).map((image, index) => (
-                                                <img
-                                                    key={index}
-                                                    src={image}
-                                                    alt={`Post Image ${index}`}
-                                                    className='w-[100px] h-[100px] object-cover cursor-pointer'
-                                                    onClick={() => openModal(post.images, index)}
-                                                />
-                                            ))}
-                                            {post.images.length > 3 && (
-                                                <div
-                                                    onClick={() => openModal(post.images, 3)}
-                                                    className='flex justify-center items-center w-[100px] h-[100px] bg-gray-300 rounded cursor-pointer'
-                                                >
-                                                    <span>+{post.images.length - 3}</span>
+                                            <div>
+                                                <strong className='text-2xl text-center'>
+                                                    {post.title}
+                                                </strong>
+                                                <h2>{post.description}</h2>
+                                            </div>
+                                            <br />
+                                            <br />
+                                            {post.images && post.images.length > 0 && (
+                                                <div className='flex flex-wrap gap-2 pl-2'>
+                                                    {post.images.slice(0, 3).map((image, index) => (
+                                                        <img
+                                                            key={index}
+                                                            src={image}
+                                                            alt={`Post Image ${index}`}
+                                                            className='w-[100px] h-[100px] object-cover cursor-pointer'
+                                                            onClick={() => openModal(post.images, index)}
+                                                        />
+                                                    ))}
+                                                    {post.images.length > 3 && (
+                                                        <div
+                                                            onClick={() => openModal(post.images, 3)}
+                                                            className='flex justify-center items-center w-[100px] h-[100px] bg-gray-300 rounded cursor-pointer'
+                                                        >
+                                                            <span>+{post.images.length - 3}</span>
+                                                        </div>
+                                                    )}
                                                 </div>
                                             )}
+                                            <br />
+                                            <br />
                                         </div>
-                                    )}
-                                    <br />
-                                    <br />
-                                </div>
-                            ))}
-                        </>
-                    )}
+                                    ))}
+                                </>
+                            )}
+                            {displaycrowdfunding && (
+                                <>
+                                    {CrowdfundingPost.map((post) => (
+                                            
+                                        <div
+                                            key={post.id}
+                                            className='bg-white rounded-xl mb-5 w-[50%]'
+                                        >
+                                            <div className='pl-5'>
+                                                <div className='flex flex-row' style={{justifyContent:'center'}}>
+                                                    <div style={{display:'flex', flexDirection:'row', justifyContent:'center'}}>
+                                                    <img
+                                                        src={profile.profilePic||profileicon}
+                                                        alt={profileicon}
+                                                        style={{
+                                                            height: '80px',
+                                                            width: '80px',
+                                                            borderRadius: '50%',
+                                                            backgroundColor: 'gray',
+                                                            marginRight: '20px',
+                                                        }}
+                                                        onClick={() => openModals(profile.profilePic||profileicon)}
+                                                    />
+                                                    {isModalOpened && (
+                                                            <div
+                                                            style={{
+                                                                position: 'fixed',
+                                                                top: 0,
+                                                                left: 0,
+                                                                right: 0,
+                                                                bottom: 0,
+                                                                backgroundColor: 'rgba(86, 84, 84, 0.7)',
+                                                                display: 'flex',
+                                                                justifyContent: 'center',
+                                                                alignItems: 'center',
+                                                                zIndex: 9999,
+                                                            }}
+                                                            onClick={closeModals}
+                                                            >
+                                                            <div
+                                                                style={{
+                                                                position: 'relative',
+                                                                maxWidth: '90%',
+                                                                maxHeight: '90%',
+                                                                }}
+                                                                onClick={(e) => e.stopPropagation()} 
+                                                            >
+                                                                <img
+                                                                src={modalImages}
+                                                                alt={profileicon}
+                                                                style={{
+                                                                    width: '100%',
+                                                                    height: 'auto',
+                                                                    borderRadius: '8px',
+                                                                }}
+                                                                />
+                                                                <button
+                                                                onClick={closeModals}
+                                                                style={{
+                                                                    position: 'absolute',
+                                                                    top: '10px',
+                                                                    right: '10px',
+                                                                    background: 'red',
+                                                                    color: 'white',
+                                                                    border: 'none',
+                                                                    borderRadius: '50%',
+                                                                    width: '30px',
+                                                                    height: '30px',
+                                                                    fontSize: '18px',
+                                                                    cursor: 'pointer',
+                                                                }}
+                                                                >
+                                                                X
+                                                                </button>
+                                                            </div>
+                                                            </div>
+                                                        )}
+                                                    <div
+                                                        style={{
+                                                            display: 'flex',
+                                                            flexDirection: 'column',
+                                                            justifyContent: 'center',
+                                                        }}
+                                                    >
+                                                        <h1>{post.username}</h1>
+                                                        <h1>{post.role}</h1>
+                                                        <h3>{formatTimestamp(post.timestamp)}</h3>
+                                                    </div>
+                                                    </div>
+                                                    <button onClick={()=>deletePost(post.id)}><img src={deleteicon}/></button>
+                                                </div>
+                                                <br />
+                                                <h1>{post.textPost}</h1>
+                                            </div>
+                                            <div>
+                                                <strong className='text-2xl text-center'>
+                                                    {post.title}
+                                                </strong>
+                                                <h2>{post.description}</h2>
+                                            </div>
+                                            <br />
+                                            <br />
+                                            {post.images && post.images.length > 0 && (
+                                                <div className='flex flex-wrap gap-2 pl-2'>
+                                                    {post.images.slice(0, 3).map((image, index) => (
+                                                        <img
+                                                            key={index}
+                                                            src={image}
+                                                            alt={`Post Image ${index}`}
+                                                            className='w-[100px] h-[100px] object-cover cursor-pointer'
+                                                            onClick={() => openModal(post.images, index)}
+                                                        />
+                                                    ))}
+                                                    {post.images.length > 3 && (
+                                                        <div
+                                                            onClick={() => openModal(post.images, 3)}
+                                                            className='flex justify-center items-center w-[100px] h-[100px] bg-gray-300 rounded cursor-pointer'
+                                                        >
+                                                            <span>+{post.images.length - 3}</span>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            )}
+                                            <br />
+                                            <br />
+                                        </div>
+                                    ))}
+                                </>
+                            )}
                         </>
                     )}
                 </div>

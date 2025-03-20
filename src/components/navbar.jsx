@@ -96,7 +96,7 @@ function Navbar() {
     const isActive = (path) => location.pathname === path;
 
     return (
-        <div className={`sticky top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-white/95 backdrop-blur-sm shadow-lg' : 'bg-white shadow-md'}`}>
+        <div className={`sticky w-full top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-white/95 backdrop-blur-sm shadow-lg' : 'bg-white shadow-md'}`}>
             <nav className='w-full flex items-center justify-between py-3 px-4'>
                 <div className="flex items-center">
                     <Link to='/about' className="flex items-center">

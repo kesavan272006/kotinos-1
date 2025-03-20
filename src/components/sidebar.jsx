@@ -6,7 +6,7 @@ import { auth } from '../config/firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import { database } from '../config/firebase';
 import { Link } from 'react-router-dom';
-import { FaBars, FaNewspaper } from 'react-icons/fa';
+import { FaBars, FaNewspaper, FaRobot } from 'react-icons/fa';
 import { IoClose } from 'react-icons/io5';
 import Loading from "../components/Loading";
 import logo from '../assets/logo.png';
@@ -23,7 +23,7 @@ import { ImNewspaper } from "react-icons/im";
 import { IoGameController } from "react-icons/io5";
 import { MdKeyboardArrowLeft } from "react-icons/md";
 import { signOut } from 'firebase/auth';
-
+import boticon from '../assets/boticon.svg'
 const Sidebar = () => {
   const [username, setUsername] = useState('');
   const [role, setRole] = useState('');
@@ -188,7 +188,7 @@ const Sidebar = () => {
           <Link to='/aichatbot' className=' russo inverter' state={{ username: username, role: role, email: email }}>
             <div className="flex items-center hover:scale-105 hover:bg-black hover:bg-opacity-5 rounded-full p-1 my-3 transition-all cursor-pointer gap-5 md:gap-5 pl-4">
               <div>
-                <IoIosPeople className='scale-[180%]' />
+                <FaRobot className='scale-[180%]' />
               </div>
               <div className='russo mt-1 text-xl'>Chatbot</div>
             </div>
