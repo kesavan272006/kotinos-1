@@ -257,7 +257,7 @@ useEffect(() => {
                 </div>
             
             <div className='w-[92%] ml-3 md:ml-5 md:mt-1 md:w-[50vw] h-[100vh] overflow-y-auto scrollbar-hide'>
-            <div className="relative p-[2px] rounded-xl bg-gradient-to-r from-blue-900 via-blue-700 to-cyan-500">
+            <div className="relative p-[2px] rounded-xl bg-gradient-to-r from-cyan-900 via-cyan-700 to-cyan-500">
                 
                 <div className='bg-white rounded-xl p-4'>
                     <div className='flex justify-evenly pt-4'>
@@ -292,7 +292,7 @@ useEffect(() => {
                     <button style={{marginRight: '10px'}} onClick={()=> setshowevents(true)} className="px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition duration-300">
                         View Events
                     </button>
-                    <button onClick={()=> setshowevents(false)} className="px-4 py-2 bg-green-500 text-white rounded-full hover:bg-green-600 transition duration-300">
+                    <button onClick={()=> setshowevents(false)} className="px-4 py-2 bg-blue-100 text-blue-700 rounded-full hover:bg-blue-200 transition duration-300">
                         View All Posts
                     </button>
                 </div>
@@ -383,10 +383,10 @@ useEffect(() => {
                                         <button
                                             onClick={() => handlenavigation(post.Id)}
                                             style={{marginLeft:'5px'}}
-                                            className="mt-1 -translate-y-14 -translate-x-4 md:translate-x-20 hover:scale-105 relative group left-[75%] px-2 bg-gradient-to-r from-blue-900 via-blue-700 to-cyan-500 text-white h-7 p-2 font-bold text-sm transition-all duration-300 rounded-lg overflow-hidden flex items-center justify-center pr-4 origin-right"
+                                            className="mt-1 -translate-y-14 -translate-x-4 md:translate-x-20 relative group left-[75%] px-2 border border-blue-300 text-blue-700 hover:border-blue-500 rounded-full h-7 p-2 font-bold text-sm flex items-center justify-center pr-4 origin-right"
                                             >
                                             {/* <span className="group-hover:hidden text-xl ">₹</span> */}
-                                            <span className=" px-2 ml-2">FUND</span>
+                                            <span className="px-2 ml-2">Fund</span>
                                         </button>
                                     </>   
                             )}
@@ -567,10 +567,10 @@ useEffect(() => {
                                         <button
                                             onClick={() => handlenavigation(post.Id)}
                                             style={{marginLeft:'5px'}}
-                                            className="mt-1 -translate-y-14 -translate-x-4 md:translate-x-20 hover:scale-105 relative group left-[75%] px-2 bg-gradient-to-r from-blue-900 via-blue-700 to-cyan-500 text-white h-7 p-2 font-bold text-sm transition-all duration-300 rounded-lg overflow-hidden flex items-center justify-center pr-4 origin-right"
+                                            className="mt-1 -translate-y-14 -translate-x-4 md:translate-x-20 border border-blue-300 hover:border-blue-500 relative group left-[75%] px-2 text-blue-700 h-7 p-2 font-bold text-sm rounded-full flex items-center justify-center pr-4 origin-right"
                                             >
                                             {/* <span className="group-hover:hidden text-xl ">₹</span> */}
-                                            <span className=" px-2 ml-2">FUND</span>
+                                            <span className=" px-2 ml-2">Fund</span>
                                         </button>
                                     </>   
                             )}
