@@ -194,7 +194,6 @@ const Events = (props, ref) => {
           eventendtime: eventendtime,
           eventlocation: eventlocation,
         });
-        setIsOpen(false);
         setTitle('');
         setDescription('');
         setFiles([]);
@@ -206,6 +205,7 @@ const Events = (props, ref) => {
         seteventstarttime(null);
         seteventendtime(null);
         seteventlocation(null);
+        setIsOpen(false);
       } catch (err) {
         console.log(err);
       }
