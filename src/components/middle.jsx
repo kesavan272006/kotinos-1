@@ -406,10 +406,6 @@ useEffect(() => {
                                     </h1>
                                 </div>
                             )}
-                            {/* eventstartdate: eventstartdate,
-                            eventenddate: eventenddate,
-                            eventstarttime: eventstarttime,
-                            eventendtime: eventendtime */}
                             {post.isEvent && (
                                 <div style={{marginLeft:'22px'}}>
                                     <h1><strong>{post.eventstartdate && 'Event starts on '}</strong> {post.eventstartdate} {post.eventstarttime && 'at'} {post.eventstarttime}</h1>
