@@ -104,9 +104,9 @@ function Navbar() {
                             K
                         </div>
                         <span className="ml-2 text-lg font-semibold hidden md:block text-gray-800">Kotinos</span>
-                        {isMobile && (
+                        {/* {isMobile && (
                             <strong className="ml-2 text-lg font-semibold text-gray-800">Kotinos</strong>
-                        )}
+                        )} */}
                     </Link>
                     {!isMobile && (
                         <div className={`hidden md:flex items-center relative mx-4 flex-1 max-w-md transition-all ${searchFocused ? 'scale-105' : ''}`}>
