@@ -166,7 +166,20 @@ useEffect(() => {
     };
     const [isModalOpened, setIsModalOpened] = useState(false);
     const [modalImages, setModalImages] = useState('');
-
+    const capital = (role)=>{
+        if(role==='user'){
+            return 'User'
+        }
+        else if(role==='coach'){
+            return 'Coach'
+        }
+        else if(role==='athlete'){
+            return 'Athlete'
+        }
+        else if(role==='organization'){
+            return 'Organization '
+        }
+    }
     const openModals = (imageUrl) => {
         setModalImages(imageUrl);
         setIsModalOpened(true);
@@ -241,7 +254,7 @@ useEffect(() => {
     return (
         <>
         <div className='w-full flex justify-center items-center flex-col  pb-3 pt-0'>
-        <h1 className='russo text-center pt-2 text-4xl w-full bg-white'>POSTS</h1>
+        <h1 className='russo text-center pt-2 text-4xl w-full bg-white/70 shadow-sm'>POSTS</h1>
 
             <div className="flex items-center border border-gray-700 bg-gray-100 rounded-full px-3 mt-4 py-2 w-[90%] md:w-1/2 focus-within:border-blue-600 focus-within:bg-blue-100 focus-within:scale-[101%] md:ml-3">
                     <FiSearch className="text-gray-500" />
@@ -257,9 +270,9 @@ useEffect(() => {
                 </div>
             
             <div className='w-[92%] ml-3 md:ml-5 md:mt-1 md:w-[50vw] h-[100vh] overflow-y-auto scrollbar-hide'>
-            <div className="relative p-[2px] rounded-xl bg-gradient-to-r from-cyan-900 via-cyan-700 to-cyan-500">
+            <div className="relative p-[2px] bg-gradient-to-r from-blue-900 via-blue-700 to-cyan-500">
                 
-                <div className='bg-white rounded-xl p-4'>
+                <div className='bg-white p-4'>
                     <div className='flex justify-evenly pt-4'>
                         
                         <img src={profilepic||profileicon} onClick={() => openModals(profilepic||profileicon)} alt='profilepic' className='h-14 w-14 md:mt-4 rounded-full ml-1 bg-gray-300 '/>
@@ -289,10 +302,10 @@ useEffect(() => {
                 <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: '15px' }}>
                 
                 <div style={{display:'flex', flexDirection:'row', justifyContent:'space-between'}}>
-                    <button style={{marginRight: '10px'}} onClick={()=> setshowevents(true)} className="px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition duration-300">
+                    <button style={{marginRight: '10px', backgroundColor: showevents ? "blue":"rgb(219 234 254)", color: showevents? "white" : "rgb(29 78 216)"}} onClick={()=> setshowevents(true)} className="px-4 rounded-full text-sm py-2 transition duration-300">
                         View Events
                     </button>
-                    <button onClick={()=> setshowevents(false)} className="px-4 py-2 bg-blue-100 text-blue-700 rounded-full hover:bg-blue-200 transition duration-300">
+                    <button style={{backgroundColor: showevents ? "rgb(219 234 254)":"blue", color: showevents? "rgb(29 78 216)" : "white"}} onClick={()=> setshowevents(false)} className="px-4 py-2 text-sm rounded-full transition duration-300">
                         View All Posts
                     </button>
                 </div>
@@ -372,7 +385,7 @@ useEffect(() => {
                                                 }}
                                             >
                                                 <h1 className='font-bold'>{post.username}</h1>
-                                                <h1>{post.role}</h1>
+                                                <h1>{capital(post.role)}</h1>
                                             </div>
                                             <h3 className='absolute md:relative m-1 top-full md:ml-6 mt-1 text-sm text-gray-400'>{formatTimestamp(post.timestamp)}</h3>
                                         </div>
@@ -393,10 +406,10 @@ useEffect(() => {
                             {post.isEvent && (
                                 <strong>Event ✅🏆</strong>
                             )}
-                            <h1 className='pt-5 mt-4'>{post.textPost}</h1>
+                            <h1 className='pt-5 mt-4 whitespace-pre-wrap'>{post.textPost}</h1>
                         </div>
                         <div>
-                            <strong className='text-2xl text-center pl-6'>
+                            <strong className='flex justify-start md:pl-6 pl-5 md:text-2xl text-[20px]'>
                                 {post.title}
                             </strong>
                             {post.isEvent && (
@@ -414,7 +427,7 @@ useEffect(() => {
                                 </div>
                             )}
                             <br />
-                            <h2 style={{marginLeft:'22px'}} className='text-lg'>{post.description}</h2>
+                            <h2 style={{marginLeft:'22px'}} className='text-lg whitespace-pre-wrap'>{post.description}</h2>
                         </div>
                         {post.images && post.images.length > 0 && (
                             <div className='flex flex-col pl-5 py-1 pr-5'>
@@ -452,9 +465,10 @@ useEffect(() => {
                                 </div>
                             </div>
                         )}
+                        <hr className='' />
+                        <div  className="gap-10 my-0.5" style={{display:'flex', flexDirection:'row',}}>
                         
-                        <div  className="gap-10" style={{display:'flex', flexDirection:'row',}}>
-                            <div className='mb-2 ml-5 mt-4 px-2 flex gap-1 items-center w-fit hover:bg-gradient-to-r hover:from-blue-900/20 hover:via-blue-700/20 hover:to-cyan-500/20 rounded-xl p-1'>
+                            <div className=' ml-5 px-2 flex gap-1 items-center w-fit p-1'>
                             {!post.liked ? (
                                 <CiHeart
                                     onClick={() => handlelikes(post.id, post.userId)}
@@ -462,12 +476,12 @@ useEffect(() => {
                                 />
                             ) : (
                                 <div onClick={() => handlelikes(post.id, post.userId)}>
-                                    <img src={hearticon} alt="Liked" />
+                                    <img className='cursor-pointer' src={hearticon} alt="Liked" />
                                 </div>
                             )}
                                 {likeicon? <h1 className='text-blue-400'><strong>{post.likes}</strong></h1> : <h1><strong>{post.likes}</strong></h1>}
                             </div>
-                            <div className='gap-3 mt-2' style={{marginLeft:'0%', display:'flex', flexDirection:'row', justifyContent:'start', alignItems:'center'}}>
+                            <div className='gap-3' style={{marginLeft:'0%', display:'flex', flexDirection:'row', justifyContent:'start', alignItems:'center'}}>
                                 <button onClick={()=>{
                                     setOpenComment(true);
                                     setpostId(post.id);
@@ -552,7 +566,7 @@ useEffect(() => {
                                                 }}
                                             >
                                                 <h1 className='font-bold'>{post.username}</h1>
-                                                <h1>{post.role}</h1>
+                                                <h1>{capital(post.role)}</h1>
                                             </div>
                                             <h3 className='absolute md:relative m-1 top-full md:ml-6 mt-1 text-sm text-gray-400'>{formatTimestamp(post.timestamp)}</h3>
                                         </div>
@@ -573,10 +587,10 @@ useEffect(() => {
                             {post.isEvent && (
                                 <strong>Event ✅🏆</strong>
                             )}
-                            <h1 className='pt-5 mt-4'>{post.textPost}</h1>
+                            <h1 className='pt-5 mt-4 whitespace-pre-wrap'>{post.textPost}</h1>
                         </div>
                         <div>
-                            <strong className='text-2xl text-center pl-6'>
+                            <strong className='flex justify-start md:pl-6 pl-5 md:text-2xl text-[20px]'>
                                 {post.title}
                             </strong>
                             {post.isEvent && (
@@ -594,7 +608,7 @@ useEffect(() => {
                                 </div>
                             )}
                             <br />
-                            <h2 style={{marginLeft:'22px'}} className='text-lg'>{post.description}</h2>
+                            <h2 style={{marginLeft:'22px'}} className='text-lg whitespace-pre-wrap'>{post.description}</h2>
                         </div>
                         {post.images && post.images.length > 0 && (
                             <div className='flex flex-col pl-5 py-1 pr-5'>
@@ -634,7 +648,7 @@ useEffect(() => {
                         )}
                         
                         <div  className="gap-10" style={{display:'flex', flexDirection:'row',}}>
-                            <div className='mb-2 ml-5 mt-4 px-2 flex gap-1 items-center w-fit hover:bg-gradient-to-r hover:from-blue-900/20 hover:via-blue-700/20 hover:to-cyan-500/20 rounded-xl p-1'>
+                            <div className='mb-2 ml-5 mt-4 px-2 flex gap-1 items-center w-fit p-1'>
                             {!post.liked ? (
                                 <CiHeart
                                     onClick={() => handlelikes(post.id, post.userId)}
@@ -734,7 +748,7 @@ useEffect(() => {
                                                     }}
                                                 >
                                                     <h1 className='font-bold'>{post.username}</h1>
-                                                    <h1>{post.role}</h1>
+                                                    <h1>{capital(post.role)}</h1>
                                                     
                                                 </div>
                                                 <h3 className='absolute md:relative m-1 top-full md:ml-6 mt-1 text-sm text-gray-400'>{formatTimestamp(post.timestamp)}</h3>
@@ -745,22 +759,22 @@ useEffect(() => {
                                         <>
                                             <button
                                             onClick={() => handlenavigation(post.Id)}
-                                            className="mt-1 -translate-y-14 -translate-x-4 md:translate-x-20 hover:scale-105 relative group left-[75%] px-2 bg-gradient-to-r from-blue-900 via-blue-700 to-cyan-500 text-white h-7 p-2 font-bold text-sm transition-all duration-300 rounded-lg overflow-hidden flex items-center justify-center pr-4 origin-right"
+                                            className="mt-1 -translate-y-14 -translate-x-4 md:translate-x-20 hover:scale-105 relative group left-[75%] px-2 border-blue-300 text-blue-700 hover:border-blue-500 border rounded-full h-7 p-2 font-bold text-sm transition-all duration-300 overflow-hidden flex items-center justify-center pr-4 origin-right"
                                           >
                                             {/* <span className="group-hover:hidden text-xl ">₹</span> */}
-                                            <span className=" px-2 ml-2">FUND</span>
+                                            <span className=" px-2 ml-2">Fund</span>
                                           </button>
                                           </>
                                           
                                             
                                     )}
-                                <h1 className='pt-5 mt-4'>{post.textPost}</h1>
+                                <h1 className='pt-5 mt-4 whitespace-pre-wrap'>{post.textPost}</h1>
                             </div>
                             <div>
-                                <strong className='text-2xl text-center pl-6'>
+                                <strong className='flex justify-start md:pl-6 pl-5 md:text-2xl text-[20px] '>
                                     {post.title}
                                 </strong>
-                                <h2 className='pl-7 text-lg'>{post.description}</h2>
+                                <h2 className='pl-7 text-lg whitespace-pre-wrap'>{post.description}</h2>
                             </div>
                             {post.images && post.images.length > 0 && (
                                 <div className='flex flex-col pl-5 py-1 pr-5'>
@@ -800,7 +814,7 @@ useEffect(() => {
                             )}
                             
                             <div  className="gap-10" style={{display:'flex', flexDirection:'row',}}>
-                                <div className='mb-2 ml-5 mt-4 px-2 flex gap-1 items-center w-fit hover:bg-gradient-to-r hover:from-blue-900/20 hover:via-blue-700/20 hover:to-cyan-500/20 rounded-xl p-1'>
+                                <div className='mb-2 ml-5 mt-4 px-2 flex gap-1 items-center w-fit p-1'>
                                 {!post.liked ? (
                                     <CiHeart
                                         onClick={() => handlelikes(post.id, post.userId)}

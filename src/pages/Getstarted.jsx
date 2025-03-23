@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import Footer from '../components/footer';
 import Navbarout from '../components/getstartednavbar';
 import bg from '../assets/background.png';
-import test from '../test/test_bg1.jpg'
+import test from '../test/test_bg2.jpg'
 
 function Getstarted() {
     const navigate = useNavigate();

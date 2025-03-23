@@ -1,11 +1,13 @@
 import React from "react";
 import CommentSection from "./commentsection";
 import closeicon from '../../assets/closeicon.svg'
+import { IoClose } from "react-icons/io5";
+
 const CommentModal = ({posterId, postId, onClose }) => {
   return (
     <div style={modalStyles}>
       <div style={modalContentStyles}>
-        <button onClick={onClose} style={closeButtonStyles}> <img src={closeicon} alt="X" /> </button>
+        <button onClick={onClose} style={closeButtonStyles} className="bg-gray-200  rounded-full text-3xl"> <IoClose /></button>
         <CommentSection posterId={posterId} postId={postId} />
       </div>
     </div>
