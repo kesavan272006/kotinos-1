@@ -364,8 +364,8 @@ const Profile = () => {
         <>
             <Navbar />
             <h1 style={{ textAlign: 'center', opacity: '0.8', paddingTop: '1%' }}>If you find any error, just refresh the page.</h1>
-            <div className="grid md:grid-cols-2 gap-6 m-5 md:px-10">
-                    <div className="bg-white p-4 rounded-lg relative shadow-sm border_grad">
+            <div className="grid md:grid-cols-2 gap-6 mx-2 md:my-4 my-2 md:px-10 ">
+                <div className="bg-white p-4 rounded-lg relative shadow-sm border_grad w-full max-w-2xl mx-auto ">
                         <div className="flex flex-col items-center mb-4">
                             <label className="relative cursor-pointer">
                                 <img src={profile.profilePic || profileicon} alt="Profile" onClick={() => openModals(profile.profilePic || profileicon)} className="w-24 h-24 rounded-full object-cover border-2 border-blue-300" />
@@ -429,7 +429,7 @@ const Profile = () => {
                 
                 )}
                 {decidingcoach && (
-                    <div className="bg-white shadow-sm p-4 rounded-lg h-full border_grad">
+                    <div className="bg-white shadow-sm p-4 rounded-lg h-full border_grad ">
                         <h2 className="text-xl font-semibold mb-4">Sports Information</h2>
                         <div className="space-y-3">
                             <p><strong>Your primary Sport of coaching: </strong> {profile.primarySport || "None"}</p>
@@ -608,7 +608,7 @@ const Profile = () => {
                                     {posts.map((post) => (
                                         <div
                                             key={post.id}
-                                            className='bg-white rounded-xl mb-5 w-[50%]'
+                                            className='bg-white rounded-xl mb-5 md:w-[70%] w-[98%]'
                                         >
                                             <div className='pl-5'>
                                                 <div className='flex flex-row' style={{justifyContent:'space-between'}}>
@@ -718,7 +718,7 @@ const Profile = () => {
                                                     </div>
                                                 )}
                                                 <br />
-                                                <h2>{post.description}</h2>
+                                                <h2 className='whitespace-pre-wrap'>{post.description}</h2>
                                             </div>
                                             <br />
                                             <br />
@@ -754,7 +754,7 @@ const Profile = () => {
                                 {posts.filter(post => post.isEvent === true).map((post) => (
                                     <div
                                         key={post.id}
-                                        className='bg-white rounded-xl mb-5 w-[50%]'
+                                        className='bg-white rounded-xl mb-5 md:w-[70%] w-[98%]'
                                     >
                                         <div className='pl-5'>
                                             <div className='flex flex-row' style={{justifyContent:'space-between'}}>
@@ -864,7 +864,7 @@ const Profile = () => {
                                                 </div>
                                             )}
                                             <br />
-                                            <h2>{post.description}</h2>
+                                            <h2 className='whitespace-pre-wrap'>{post.description}</h2>
                                         </div>
                                         <br />
                                         <br />
@@ -899,18 +899,18 @@ const Profile = () => {
                     )}
                     {!decidinguser && (
                         <>
-                           <nav style={{justifyContent:'space-evenly'}} className="flex items-center w-full max-w-full p-2 border-2 border-gray-800 rounded-lg bg-gradient-to-r from-blue-800 via-black to-gray-900 shadow-lg justify-center">
-                                <button onClick={() => handledisplaypost()} className="text-white text-sm font-semibold hover:bg-blue-700 rounded-lg py-1 px-3 transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-300">
-                                    <h1 className="pr-4">Posts</h1>
+                           <nav style={{justifyContent:'space-evenly'}} className="flex items-center p-2 border-2 border-gray-800 rounded-lg bg-gradient-to-r from-blue-800 via-black to-gray-900 shadow-lg justify-center">
+                                <button onClick={() => handledisplaypost()} className="text-white text-center text-xs font-semibold hover:bg-blue-700 rounded-lg py-1 px-2 transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-300">
+                                    <h1 className="px-2">Posts</h1>
                                 </button>
-                                <button onClick={() => handledisplayachievements()} className="text-white text-sm font-semibold hover:bg-blue-700 rounded-lg py-1 px-3 transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-300">
-                                    <h1 className="pr-4">Achievement</h1>
+                                <button onClick={() => handledisplayachievements()} className="text-white text-xs font-semibold hover:bg-blue-700 rounded-lg py-1 px-2 transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-300">
+                                    <h1 className="px-2">Achievement</h1>
                                 </button>
-                                <button onClick={() => handledisplayevent()} className="text-white text-sm font-semibold hover:bg-blue-700 rounded-lg py-1 px-3 transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-300">
-                                    <h1 className="pr-4">Events</h1>
+                                <button onClick={() => handledisplayevent()} className="text-white text-xs font-semibold hover:bg-blue-700 rounded-lg py-1 px-2 transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-300">
+                                    <h1 className="px-2">Events</h1>
                                 </button>
-                                <button onClick={() => handledisplaycrowd()} className="text-white text-sm font-semibold hover:bg-blue-700 rounded-lg py-1 px-3 transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-300">
-                                    <h1>Crowdfunding</h1>
+                                <button onClick={() => handledisplaycrowd()} className="text-white text-xs font-semibold hover:bg-blue-700 rounded-lg py-1 px-2 transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-300">
+                                    <h1 className='px-2'>Crowdfunding</h1>
                                 </button>
                             </nav>
 
@@ -920,7 +920,7 @@ const Profile = () => {
                                     {posts.filter(post => post.isEvent === true).map((post) => (
                                         <div
                                             key={post.id}
-                                            className='bg-white rounded-xl mb-5 w-[50%]'
+                                            className='bg-white rounded-xl mb-5 md:w-[70%] w-[98%]'
                                         >
                                             <div className='pl-5'>
                                                 <div className='flex flex-row' style={{justifyContent:'center'}}>
@@ -1030,7 +1030,7 @@ const Profile = () => {
                                                     </div>
                                                 )}
                                                 <br />
-                                                <h2>{post.description}</h2>
+                                                <h2 className='whitespace-pre-wrap'>{post.description}</h2>
                                             </div>
                                             <br />
                                             <br />
@@ -1067,7 +1067,7 @@ const Profile = () => {
                                 
                                         <div
                                             key={post.id}
-                                            className='bg-white rounded-xl mb-5 w-[50%]'
+                                            className='bg-white rounded-xl mb-5 md:w-[70%] w-[98%]'
                                         >
                                             <div className='pl-5'>
                                                 <div className='flex flex-row' style={{justifyContent:'space-between'}}>
@@ -1159,7 +1159,7 @@ const Profile = () => {
                                                 <strong className='text-2xl text-center'>
                                                     {post.title}
                                                 </strong>
-                                                <h2>{post.description}</h2>
+                                                <h2 className='whitespace-pre-wrap'>{post.description}</h2>
                                             </div>
                                             <br />
                                             <br />
@@ -1288,7 +1288,7 @@ const Profile = () => {
                                                 <strong className='text-2xl text-center'>
                                                     {post.title}
                                                 </strong>
-                                                <h2>{post.description}</h2>
+                                                <h2 className='whitespace-pre-wrap'>{post.description}</h2>
                                             </div>
                                             <br />
                                             <br />
@@ -1417,7 +1417,7 @@ const Profile = () => {
                                                 <strong className='text-2xl text-center'>
                                                     {post.title}
                                                 </strong>
-                                                <h2>{post.description}</h2>
+                                                <h2 className='whitespace-pre-wrap'>{post.description}</h2>
                                             </div>
                                             <br />
                                             <br />
