@@ -226,24 +226,33 @@ const Profile = () => {
             try {
                 const documentRef = doc(database, "Users", auth.currentUser?.uid);
                 const profileDetailsRef = doc(documentRef, "profileDetails", "details");
-
+    
                 const updatedProfile = { ...profile };
                 if (profile.profilePic !== "") {
                     await setDoc(documentRef, { profilePic: profile.profilePic }, { merge: true });
                     await setDoc(profileDetailsRef, { profilePic: profile.profilePic }, { merge: true });
+                    const postRef = collection(database, 'Users', `${auth.currentUser?.uid}`, 'Posts');
+                    const postSnapshot = await getDocs(postRef);
+                    const postsData = postSnapshot.docs.map((doc) => ({
+                        ...doc.data(),
+                        id: doc.id,
+                    }));
+                    const updatePromises = postsData.map(async (post) => {
+                        const postDocRef = doc(database, 'Users', `${auth.currentUser?.uid}`, 'Posts', post.id);
+                        await setDoc(postDocRef, { profilepic: profile.profilePic }, { merge: true });
+                    });
+                    await Promise.all(updatePromises);
                 }
-
+    
                 await setDoc(profileDetailsRef, updatedProfile, { merge: true });
-
-                console.log('Profile saved successfully!');
+    
+                console.log('Profile and posts updated successfully!');
                 setIsEditing(false);
             } catch (error) {
                 console.error("Error saving profile:", error);
             }
         }
     };
-
-
     const handleImageUpload = (e) => {
         const file = e.target.files[0];
         if (file) {

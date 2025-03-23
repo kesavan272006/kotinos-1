@@ -26,6 +26,7 @@ const ChatPage = () => {
     const [images, setImages] = useState([]);
     const [previewImages, setPreviewImages] = useState([]);
     const [openModal, setOpenModal] = useState(false);
+    const [openGroupModal, setOpenGroupModal]=useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const [groupName, setGroupName] = useState('');
     const navigate = useNavigate();
@@ -49,7 +50,18 @@ const ChatPage = () => {
             setIsMobile(false);
         }
     };
-
+    const handlegroupclosemodal = ()=>{
+        setImages([]);
+        setPreviewImages([]);
+        setGrpMessage('');
+        setOpenGroupModal(false);
+    }
+    const handleuserclosemodal = ()=>{
+        setImages([]);
+        setPreviewImages([]);
+        setMessage('');
+        setOpenModal(false);
+    }
     useEffect(() => {
         checkScreenSize();
         window.addEventListener('resize', checkScreenSize);
@@ -165,50 +177,7 @@ const ChatPage = () => {
         await fetchGroupMessages(groupId);
     };
 
-    const sendMessage = async () => {
-        if (!selectedUser || (!message && images.length === 0)) return;
-
-        const imageUrls = await Promise.all(images.map(async (file) => {
-            return new Promise((resolve) => {
-                const reader = new FileReader();
-                reader.onloadend = () => {
-                    resolve(reader.result);
-                };
-                reader.readAsDataURL(file);
-            });
-        }));
-        const userDocSender = doc(database, "Users", `${auth.currentUser?.uid}`);
-        const messageDocSender = doc(userDocSender, "Message", `${auth.currentUser?.uid}`);
-        const messageRefSender = collection(messageDocSender, `Message-${selectedUser.id}`);
-
-        try {
-            await addDoc(messageRefSender, {
-                message: message,
-                images: imageUrls,
-                timestamp: new Date(),
-                senderId: auth.currentUser?.uid,
-            });
-
-            const userDocReceiver = doc(database, "Users", `${selectedUser.id}`);
-            const messageDocReceiver = doc(userDocReceiver, "Message", `${selectedUser.id}`);
-            const messageRefReceiver = collection(messageDocReceiver, `Message-${auth.currentUser?.uid}`);
-
-            await addDoc(messageRefReceiver, {
-                message: message,
-                images: imageUrls,
-                timestamp: new Date(),
-                senderId: auth.currentUser?.uid,
-            });
-
-            setMessage('');
-            setImages([]);
-            setPreviewImages([]);
-            setOpenModal(false);
-            showMessage();
-        } catch (err) {
-            console.error("Error sending message:", err);
-        }
-    };
+    
     const requestInRef = collection(database, "Users", auth.currentUser?.uid, "RequestIn");
     const showRequest = async () => {
         try {
@@ -293,17 +262,69 @@ const ChatPage = () => {
     );
     mobilesetFilteredUsers(filtered);
     };
+    const sendMessage = async () => {
+        if (!selectedUser || (!message && images.length === 0)) return;
 
+        const imageUrls = await Promise.all(images.map(async (file) => {
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    resolve(reader.result);
+                };
+                reader.readAsDataURL(file);
+            });
+        }));
+        const userDocSender = doc(database, "Users", `${auth.currentUser?.uid}`);
+        const messageDocSender = doc(userDocSender, "Message", `${auth.currentUser?.uid}`);
+        const messageRefSender = collection(messageDocSender, `Message-${selectedUser.id}`);
+
+        try {
+            await addDoc(messageRefSender, {
+                message: message,
+                images: imageUrls,
+                timestamp: new Date(),
+                senderId: auth.currentUser?.uid,
+            });
+
+            const userDocReceiver = doc(database, "Users", `${selectedUser.id}`);
+            const messageDocReceiver = doc(userDocReceiver, "Message", `${selectedUser.id}`);
+            const messageRefReceiver = collection(messageDocReceiver, `Message-${auth.currentUser?.uid}`);
+
+            await addDoc(messageRefReceiver, {
+                message: message,
+                images: imageUrls,
+                timestamp: new Date(),
+                senderId: auth.currentUser?.uid,
+            });
+
+            setMessage('');
+            setImages([]);
+            setPreviewImages([]);
+            setOpenModal(false);
+            showMessage();
+        } catch (err) {
+            console.error("Error sending message:", err);
+        }
+    };
     const handleSendMessage = async (groupids) => {
-        if (!grpmessage) {
+        if (!selectedGroup || (!grpmessage && images.length === 0)) {
             alert('Please enter a message!');
             return;
-        }
-
+        };
+        const imageUrls = await Promise.all(images.map(async (file) => {
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    resolve(reader.result);
+                };
+                reader.readAsDataURL(file);
+            });
+        }));
         const newMessage = {
             senderId: auth.currentUser?.uid,
             username: username,
             message: grpmessage,
+            images: imageUrls,
             timestamp: new Date(),
         };
         const groupRef = doc(database, 'Groups', selectedGroup);
@@ -314,8 +335,11 @@ const ChatPage = () => {
             lastMessage: newMessage.message,
             lastMessageTimestamp: newMessage.timestamp,
         });
-        fetchGroupMessages(groupids);
+        setImages([]);
+        setPreviewImages([]);
         setGrpMessage('');
+        setOpenGroupModal(false);
+        await fetchGroupMessages(selectedGroup);
     };
     useEffect(() => {
         showRequest();
@@ -491,7 +515,6 @@ const ChatPage = () => {
                             <div className="flex items-center border border-gray-300 bg-gray-100 rounded-full px-3 py-2">
                                 <FiSearch className="text-gray-500" />
                                 <input 
-                                    type="text" 
                                     value={searchQuery}
                                     onChange={handleSearchChange}
                                     placeholder="Search groups" 
@@ -602,7 +625,6 @@ const ChatPage = () => {
                             <div className="flex items-center border border-gray-300 bg-gray-100 rounded-full px-3 py-2">
                                     <FiSearch className="text-gray-500" />
                                     <input 
-                                        type="text" 
                                         value={mobilesearchQuery}
                                         onChange={mobilehandleSearchChange}
                                         placeholder="Search chats" 
@@ -701,7 +723,7 @@ const ChatPage = () => {
                                 <div className="bg-white p-6 rounded-lg shadow-lg w-96 max-h-[90vh] overflow-y-auto">
                                     <h1><strong>Create a Group</strong></h1>
                                     <br />
-                                    <TextField label='Group Name' className='w-[90%] ' value={groupName} onChange={handlenamechange} />
+                                    <input label='Group Name' className='w-[90%] ' value={groupName} onChange={handlenamechange} />
 
                                     <Autocomplete
                                         disablePortal
@@ -825,10 +847,10 @@ const ChatPage = () => {
                                         <BiImageAdd
                                             className='cursor-pointer text-3xl ml-3 mt-1 hover:bg-gray-200 rounded'
                                             onClick={() => {
-                                                setOpenModal(true);
+                                                setOpenGroupModal(true);
                                             }} />
                                     </div>
-                                    <input
+                                    <Text
                                         value={grpmessage}
                                         className='rounded-[20px] border h-10 pl-5 pb-1'
                                         onChange={(e) => setGrpMessage(e.target.value)}
@@ -971,6 +993,46 @@ const ChatPage = () => {
                                                         <img src={deleteIcon} className='w-5 h-5' alt="❌" />
                                                     </button>
                                                 )}
+                                                {!isCurrentUser && isMobile &&(
+                                                    <button className='block'
+                                                        onClick={() => {
+                                                            deleteMessage(userMessage.id, selectedUser.id)
+                                                            alert('The message is deleted only for you!');
+                                                            showMessage();
+                                                        }}
+                                                        style={{
+                                                            cursor: 'pointer',
+                                                            background: 'transparent',
+                                                            border: 'none',
+                                                            marginTop: '5px',
+                                                            marginLeft: '5px',
+                                                            fontSize: '16px',
+                                                            color: 'red'
+                                                        }}
+                                                    >
+                                                        <img src={deleteIcon} className='w-5 h-5' alt="❌" />
+                                                    </button>
+                                                )}
+                                                {!isCurrentUser && view === userMessage.id && (
+                                                    <button
+                                                        onClick={() => {
+                                                            deleteMessage(userMessage.id, selectedUser.id)
+                                                            alert('The message is deleted only for you!');
+                                                            showMessage();
+                                                        }}
+                                                        style={{
+                                                            cursor: 'pointer',
+                                                            background: 'transparent',
+                                                            border: 'none',
+                                                            marginTop: '5px',
+                                                            marginLeft: '5px',
+                                                            fontSize: '16px',
+                                                            color: 'red'
+                                                        }}
+                                                    >
+                                                        <img src={deleteIcon} className='w-5 h-5' alt="❌" />
+                                                    </button>
+                                                )}
                                             </div>
                                         );
                                     })}
@@ -1003,7 +1065,8 @@ const ChatPage = () => {
                                                 setOpenModal(true);
                                             }} />
                                     </div>
-                                    <input
+                                    <TextField
+                                        multiline
                                         className='rounded-[20px] border h-10 pl-5 pb-1'
                                         value={message}
                                         onChange={(e) => setMessage(e.target.value)}
@@ -1060,7 +1123,7 @@ const ChatPage = () => {
 
                     <Modal
                         open={openModal}
-                        onClose={() => setOpenModal(false)}
+                        onClose={() => handleuserclosemodal}
                     >
                         <Box sx={{
                             position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
@@ -1087,6 +1150,7 @@ const ChatPage = () => {
                                 ))}
                             </div>
                             <TextField
+                                multiline
                                 value={message}
                                 onChange={(e) => setMessage(e.target.value)}
                                 label="Add a Descreption"
@@ -1097,7 +1161,99 @@ const ChatPage = () => {
                                 }}
                             />
                             <Button
+                                onClick={()=>handleuserclosemodal()}
+                                className='bg-gradient-to-r from-blue-900/80 via-blue-700/80 to-cyan-500/80'
+                                style={{
+                                    marginRight:'5px',
+                                    color: '#fff',
+                                    padding: '12px 24px',
+                                    fontSize: '16px',
+                                    fontWeight: 'bold',
+                                    borderRadius: '8px',
+                                    border: 'none',
+                                    cursor: 'pointer',
+                                    marginTop: '20px',
+                                }}
+                            >
+                                Close
+                            </Button>
+                            <Button
                                 onClick={sendMessage}
+                                className='bg-gradient-to-r from-blue-900/80 via-blue-700/80 to-cyan-500/80'
+                                style={{
+
+                                    color: '#fff',
+                                    padding: '12px 24px',
+                                    fontSize: '16px',
+                                    fontWeight: 'bold',
+                                    borderRadius: '8px',
+                                    border: 'none',
+                                    cursor: 'pointer',
+                                    marginTop: '20px',
+                                }}
+                            >
+                                Send
+                            </Button>
+                        </Box>
+                    </Modal>
+                    <Modal
+                        open={openGroupModal}
+                        onClose={() => handlegroupclosemodal}
+                    >
+                        <Box sx={{
+                            position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
+                            backgroundColor: 'white', padding: '20px', borderRadius: '8px', boxShadow: 24,
+                            width: 400, textAlign: 'center'
+                        }}>
+                            <h3>Choose Images (Max 3)</h3>
+                            <input
+                                type="file"
+                                ref={fileInputRef}
+                                style={{ display: 'none' }}
+                                onChange={handleFileChange}
+                                multiple
+                            />
+                            <Button onClick={handleImageClick}>Choose Files</Button>
+                            <div style={{ marginTop: '10px' }}>
+                                {previewImages.map((imageUrl, index) => (
+                                    <div key={index} style={{ marginBottom: '10px' }} className=' bg-blue-50 p-2 w-fit rounded-xl'>
+                                        <img src={imageUrl} alt={`Preview-${index}`} style={{ width: '100px', height: '100px', margin: '0 10px' }} />
+                                        <Button onClick={() => handleDeletePreviewImage(imageUrl)} className='' style={{ color: 'red' }}>
+                                            <img src={deleteIcon} className='' alt="Delete" style={{ width: '20px' }} />
+                                        </Button>
+                                    </div>
+                                ))}
+                            </div>
+                            <TextField
+                                multiline
+                                value={grpmessage}
+                                onChange={(e) => setGrpMessage(e.target.value)}
+                                label="Add a Descreption"
+                                className=''
+                                style={{
+                                    width: '85%',
+                                    marginRight: '10px',
+                                }}
+                            />
+                            <Button
+                                onClick={()=>handlegroupclosemodal()}
+                                className='bg-gradient-to-r from-blue-900/80 via-blue-700/80 to-cyan-500/80'
+                                style={{
+                                    marginRight:'5px',
+                                    color: '#fff',
+                                    padding: '12px 24px',
+                                    fontSize: '16px',
+                                    fontWeight: 'bold',
+                                    borderRadius: '8px',
+                                    border: 'none',
+                                    cursor: 'pointer',
+                                    marginTop: '20px',
+                                }}
+                            >
+                                Close
+                            </Button>
+                            <Button
+                                onClick={()=>handleSendMessage()}
                                 className='bg-gradient-to-r from-blue-900/80 via-blue-700/80 to-cyan-500/80'
                                 style={{
 
@@ -1479,10 +1635,11 @@ const ChatPage = () => {
                                     <BiImageAdd
                                         className='cursor-pointer text-3xl mt-1 hover:bg-gray-200 rounded mr-2'
                                         onClick={() => {
-                                            setOpenModal(true);
+                                            setOpenGroupModal(true);
                                         }} />
                                 </div>
-                                <input
+                                <TextField
+                                    multiline
                                     value={grpmessage}
                                     className='rounded-[20px] border h-10 pl-5 pb-1'
                                     onChange={(e) => setGrpMessage(e.target.value)}
@@ -1586,7 +1743,7 @@ const ChatPage = () => {
                                                 ))}
                                                 {userMessage.message && <span style={{ fontSize: '14px' }}>{userMessage.message}</span>}
                                             </div>
-                                            {isCurrentUser && view === userMessage.id && (
+                                            {isCurrentUser && (
                                                 <button
                                                     onClick={() => {
                                                         deleteMessage(userMessage.id, selectedUser.id)
@@ -1606,6 +1763,27 @@ const ChatPage = () => {
                                                     <img src={deleteIcon} className='w-5 h-5' alt="❌" />
                                                 </button>
                                             )}
+                                            {!isCurrentUser &&(
+                                                    <button className='block'
+                                                        onClick={() => {
+                                                            deleteMessage(userMessage.id, selectedUser.id)
+                                                            alert('The message is deleted only for you!');
+                                                            showMessage();
+                                                        }}
+                                                        style={{
+                                                            cursor: 'pointer',
+                                                            background: 'transparent',
+                                                            border: 'none',
+                                                            marginTop: '5px',
+                                                            marginLeft: '5px',
+                                                            fontSize: '16px',
+                                                            color: 'red'
+                                                        }}
+                                                    >
+                                                        <img src={deleteIcon} className='w-5 h-5' alt="❌" />
+                                                    </button>
+                                                )}
+                                                
                                         </div>
                                     );
                                 })}
@@ -1638,7 +1816,8 @@ const ChatPage = () => {
                                             setOpenModal(true);
                                         }} />
                                 </div>
-                                <input
+                                <TextField
+                                    multiline
                                     value={message}
                                     className='rounded-[20px] border h-10 pl-5 pb-1'
                                     onChange={(e) => setMessage(e.target.value)}
@@ -1664,7 +1843,7 @@ const ChatPage = () => {
                             <div className="bg-white p-6 rounded-lg shadow-lg w-96 max-h-[90vh] overflow-y-auto">
                                 <h1><strong>Create a Group</strong></h1>
                                 <br />
-                                <TextField label='Group Name' value={groupName} onChange={handlenamechange} />
+                                <input label='Group Name' value={groupName} onChange={handlenamechange} />
                                 <br />
                                 <Autocomplete
                                     disablePortal
@@ -1685,7 +1864,7 @@ const ChatPage = () => {
 
                     <Modal
                         open={openModal}
-                        onClose={() => setOpenModal(false)}
+                        onClose={() => handleuserclosemodal}
                     >
                         <Box sx={{
                             position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
@@ -1712,6 +1891,7 @@ const ChatPage = () => {
                                 ))}
                             </div>
                             <TextField
+                                multiline
                                 value={message}
                                 onChange={(e) => setMessage(e.target.value)}
                                 label="Add a Descreption"
@@ -1722,7 +1902,99 @@ const ChatPage = () => {
                                 }}
                             />
                             <Button
+                                onClick={()=>handleuserclosemodal()}
+                                className='bg-gradient-to-r from-blue-900/80 via-blue-700/80 to-cyan-500/80'
+                                style={{
+                                    marginRight:'5px',
+                                    color: '#fff',
+                                    padding: '12px 24px',
+                                    fontSize: '16px',
+                                    fontWeight: 'bold',
+                                    borderRadius: '8px',
+                                    border: 'none',
+                                    cursor: 'pointer',
+                                    marginTop: '20px',
+                                }}
+                            >
+                                Close
+                            </Button>
+                            <Button
                                 onClick={sendMessage}
+                                className='bg-gradient-to-r from-blue-900/80 via-blue-700/80 to-cyan-500/80'
+                                style={{
+
+                                    color: '#fff',
+                                    padding: '12px 24px',
+                                    fontSize: '16px',
+                                    fontWeight: 'bold',
+                                    borderRadius: '8px',
+                                    border: 'none',
+                                    cursor: 'pointer',
+                                    marginTop: '20px',
+                                }}
+                            >
+                                Send
+                            </Button>
+                        </Box>
+                    </Modal>
+                    <Modal
+                        open={openGroupModal}
+                        onClose={() => handlegroupclosemodal}
+                    >
+                        <Box sx={{
+                            position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
+                            backgroundColor: 'white', padding: '20px', borderRadius: '8px', boxShadow: 24,
+                            width: 400, textAlign: 'center'
+                        }}>
+                            <h3>Choose Images (Max 3)</h3>
+                            <input
+                                type="file"
+                                ref={fileInputRef}
+                                style={{ display: 'none' }}
+                                onChange={handleFileChange}
+                                multiple
+                            />
+                            <Button onClick={handleImageClick}>Choose Files</Button>
+                            <div style={{ marginTop: '10px' }}>
+                                {previewImages.map((imageUrl, index) => (
+                                    <div key={index} style={{ marginBottom: '10px' }} className=' bg-blue-50 p-2 w-fit rounded-xl'>
+                                        <img src={imageUrl} alt={`Preview-${index}`} style={{ width: '100px', height: '100px', margin: '0 10px' }} />
+                                        <Button onClick={() => handleDeletePreviewImage(imageUrl)} className='' style={{ color: 'red' }}>
+                                            <img src={deleteIcon} className='' alt="Delete" style={{ width: '20px' }} />
+                                        </Button>
+                                    </div>
+                                ))}
+                            </div>
+                            <TextField
+                                multiline
+                                value={grpmessage}
+                                onChange={(e) => setGrpMessage(e.target.value)}
+                                label="Add a Descreption"
+                                className=''
+                                style={{
+                                    width: '85%',
+                                    marginRight: '10px',
+                                }}
+                            />
+                            <Button
+                                onClick={()=>handlegroupclosemodal()}
+                                className='bg-gradient-to-r from-blue-900/80 via-blue-700/80 to-cyan-500/80'
+                                style={{
+                                    marginRight:'5px',
+                                    color: '#fff',
+                                    padding: '12px 24px',
+                                    fontSize: '16px',
+                                    fontWeight: 'bold',
+                                    borderRadius: '8px',
+                                    border: 'none',
+                                    cursor: 'pointer',
+                                    marginTop: '20px',
+                                }}
+                            >
+                                Close
+                            </Button>
+                            <Button
+                                onClick={()=>handleSendMessage()}
                                 className='bg-gradient-to-r from-blue-900/80 via-blue-700/80 to-cyan-500/80'
                                 style={{
 
