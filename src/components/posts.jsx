@@ -187,14 +187,14 @@ const Posts = (props, ref) => {
         <br />
         {decidingathlete && (
           <>
-              <div style={{display:'flex',flexDirection:'row', justifyContent:'center'}}>
+              <div className='mt-5' style={{display:'flex',flexDirection:'row',}}>
                 <Switch
                   onChange={handleSwitchChange} 
                 />
                 <h1 style={{color:'black'}}><strong>Enable Crowdfunding for this post</strong></h1>
               </div>
-              <br />
-              <div style={{display:'flex',flexDirection:'row', justifyContent:'center'}}>
+              
+              <div style={{display:'flex',flexDirection:'row',}}>
                 <Switch
                   onChange={handleAchievement} 
                 />
@@ -204,14 +204,14 @@ const Posts = (props, ref) => {
         )}
         {decidingcoach && (
           <>
-              <div style={{display:'flex',flexDirection:'row', justifyContent:'center'}}>
+              <div className='mt-5' style={{display:'flex',flexDirection:'row',}}>
                 <Switch
                   onChange={handleSwitchChange} 
                 />
                 <h1 style={{color:'black'}}><strong>Enable Crowdfunding for this post</strong></h1>
               </div>
-              <br />
-              <div style={{display:'flex',flexDirection:'row', justifyContent:'center'}}>
+              
+              <div style={{display:'flex',flexDirection:'row',}}>
                 <Switch
                   onChange={handleAchievement} 
                 />
@@ -221,14 +221,14 @@ const Posts = (props, ref) => {
         )}
         {decidingorganization && (
           <>
-              <div style={{display:'flex',flexDirection:'row', justifyContent:'center'}}>
+              <div className='mt-5' style={{display:'flex',flexDirection:'row',}}>
                 <Switch
                   onChange={handleSwitchChange} 
                 />
                 <h1 style={{color:'black'}}><strong>Enable Crowdfunding for this post</strong></h1>
               </div>
-              <br />
-              <div style={{display:'flex',flexDirection:'row', justifyContent:'center'}}>
+              
+              <div style={{display:'flex',flexDirection:'row',}}>
                 <Switch
                   onChange={handleAchievement} 
                 />
@@ -236,14 +236,14 @@ const Posts = (props, ref) => {
               </div>
           </>
         )}
-        <div className="modal-buttons mt-5 ml-1 mr-1">
-          <Button variant="outlined" className="closeButton " onClick={closeModal}>
-            Close
-          </Button>
-          <Button variant="contained" className="postButton bg-gradient-to-r from-blue-900 via-blue-700 to-cyan-500 " onClick={addPost}>
-            Post
-          </Button>
-        </div>
+        <div className="modal-buttons mt-2" style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <Button variant="outlined" className="closeButton bg-white border px-4 rounded-xl border-blue-700" onClick={closeModal}>
+                    Close
+                  </Button>
+                  <button variant="contained" className="postButton bg-blue-700 text-white border-2 rounded px-5" onClick={addPost}>
+                    Post
+                  </button>
+                </div>
       </Modal>
 
       <div style={{ marginTop: '30px' }}>

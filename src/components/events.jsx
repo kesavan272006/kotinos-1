@@ -11,6 +11,7 @@ import { alpha, styled } from '@mui/material/styles';
 import { pink } from '@mui/material/colors';
 import Switch from '@mui/material/Switch';
 import trophyicon from '../assets/trophyicon.svg'
+import { IoMdAdd } from "react-icons/io";
 const customStyles = {
   content: {
     top: '50%',
@@ -225,7 +226,7 @@ const Events = (props, ref) => {
             <h2 style={{ color: 'black', fontSize: '30px', marginBottom: '20px' }}>Post about an Event</h2>
             <img src={trophyicon} style={{ marginBottom: '6px', verticalAlign: 'middle', marginLeft: '10px' }} />
         </div>
-
+        <h1>Name of the event:</h1>
         <input
           type="text"
           value={title}
@@ -240,6 +241,7 @@ const Events = (props, ref) => {
             border: '1px solid #ddd',
           }}
         />
+        <h1>Name of the organizer:</h1>
         <input
           type="text"
           value={organizer}
@@ -254,7 +256,7 @@ const Events = (props, ref) => {
             border: '1px solid #ddd',
           }}
         />
-        <h1>starting date of the event</h1>
+        <h1>Starting date of the event:</h1>
         <input
           type="date"
           value={eventstartdate}
@@ -269,7 +271,7 @@ const Events = (props, ref) => {
             border: '1px solid #ddd',
           }}
         />
-        <h1>possible starting time of the event</h1>
+        <h1>Starting time of the event:</h1>
         <input
           type="time"
           value={eventstarttime}
@@ -284,7 +286,7 @@ const Events = (props, ref) => {
             border: '1px solid #ddd',
           }}
         />
-        <h1>Ending date of the event</h1>
+        <h1>Ending date of the event:</h1>
         <input
           type="date"
           value={eventenddate}
@@ -299,7 +301,7 @@ const Events = (props, ref) => {
             border: '1px solid #ddd',
           }}
         />
-        <h1>possible ending time of the event</h1>
+        <h1>Ending time of the event:</h1>
         <input
           type="time"
           value={eventendtime}
@@ -329,6 +331,7 @@ const Events = (props, ref) => {
             border: '1px solid #ddd',
           }}
         />
+        <h1>Description of the event:</h1>
         <textarea
           value={description}
           onChange={(e) => setDescription(e.target.value)}
@@ -392,35 +395,35 @@ const Events = (props, ref) => {
           )}
         </div>
         <br />
-        <div style={{display:'flex', flexDirection:'row', justifyContent:'center'}}>
+        <div onClick={() => fileRef.current.click()} className='cursor-pointer' style={{display:'flex', flexDirection:'row', justifyContent:'center'}}>
           <input onChange={handleFileChange} type="file" multiple ref={fileRef} style={{ display: 'none' }} />
           <button
-            onClick={() => fileRef.current.click()}
+            
             style={{
               border: 'none',
               background: 'none',
               cursor: 'pointer',
             }}
           >
-            <img src={addicon} alt="Add files" style={{ width: '30px', height: '30px' }} />
+            <IoMdAdd className='mt-0.5 mr-1'/>
           </button>
           <h1><strong>Add Images about the event</strong></h1>
         </div>
         <br />
-        <div style={{display:'flex',flexDirection:'row', justifyContent:'center'}}>
+        <div style={{display:'flex',flexDirection:'row'}}>
             <Switch
             onChange={handleSwitchChange} 
             />
             <h1 style={{color:'black'}}><strong>Enable crowdfunding for this event</strong></h1>
         </div>
-        <div className="modal-buttons" style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Button variant="outlined" className="closeButton" onClick={closeModal}>
-            Close
-          </Button>
-          <Button variant="contained" className="postButton bg-gradient-to-r from-blue-900 via-blue-700 to-cyan-500 " onClick={addPost}>
-            Post
-          </Button>
-        </div>
+        <div className="modal-buttons mt-2" style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <Button variant="outlined" className="closeButton bg-white border px-4 rounded-xl border-blue-700" onClick={closeModal}>
+                    Close
+                  </Button>
+                  <button variant="contained" className="postButton bg-blue-700 text-white border-2 rounded px-5" onClick={addPost}>
+                    Post
+                  </button>
+                </div>
       </Modal>
 
       <Modal
@@ -458,7 +461,7 @@ const Events = (props, ref) => {
               deleteFile(currentImageIndex);
               closeImageModal();
             }}
-            style={{ padding: '10px', backgroundColor: 'red', color: 'white' }}
+            style={{ padding: '10px', backgroundColor: 'black', color: 'white' }}
           >
             Delete
           </Button>

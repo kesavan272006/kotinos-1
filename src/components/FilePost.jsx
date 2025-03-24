@@ -10,6 +10,8 @@ import profileicon from '../assets/profileicon.svg';
 import { alpha, styled } from '@mui/material/styles';
 import { pink } from '@mui/material/colors';
 import Switch from '@mui/material/Switch';
+import { IoMdAdd } from "react-icons/io";
+
 const customStyles = {
   content: {
     top: '50%',
@@ -192,7 +194,7 @@ const FilePost = (props, ref) => {
   };
 
   return (
-    <div>
+    <div className='relative z-100'>
       <button ref={ref} style={{ display: 'none' }} onClick={openModal}>
         Open Modal
       </button>
@@ -276,24 +278,24 @@ const FilePost = (props, ref) => {
           )}
         </div>
         <br />
-        <div style={{display:'flex', flexDirection:'row', justifyContent:'center'}}>
+        <div onClick={() => fileRef.current.click()} className='text-gray-600' style={{display:'flex', flexDirection:'row', justifyContent:'center',cursor:'pointer'}}>
           <input onChange={handleFileChange} type="file" multiple ref={fileRef} style={{ display: 'none' }} />
           <button
-            onClick={() => fileRef.current.click()}
+            
             style={{
               border: 'none',
               background: 'none',
               cursor: 'pointer',
             }}
           >
-            <img src={addicon} alt="Add files" style={{ width: '30px', height: '30px' }} />
+            <IoMdAdd  className='mt-0.5 mr-1'/>
           </button>
           <h1><strong>Add Images</strong></h1>
         </div>
         <br />
         {decidingathlete && (
           <>
-              <div style={{display:'flex',flexDirection:'row', justifyContent:'center'}}>
+              <div className='ml-1' style={{display:'flex',flexDirection:'row', }}>
                 <Switch
                   onChange={handleSwitchChange} 
                 />
@@ -311,7 +313,7 @@ const FilePost = (props, ref) => {
         )}
         {decidingcoach && (
           <>
-              <div style={{display:'flex',flexDirection:'row', justifyContent:'center'}}>
+              <div className='ml-1' style={{display:'flex',flexDirection:'row', }}>
                 <Switch
                   onChange={handleSwitchChange} 
                 />
@@ -328,7 +330,7 @@ const FilePost = (props, ref) => {
         )}
         {decidingorganization && (
           <>
-              <div style={{display:'flex',flexDirection:'row', justifyContent:'center'}}>
+              <div className='ml-1' style={{display:'flex',flexDirection:'row', }}>
                 <Switch
                   onChange={handleSwitchChange} 
                 />
@@ -343,13 +345,13 @@ const FilePost = (props, ref) => {
               </div>
           </>
         )}
-        <div className="modal-buttons" style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Button variant="outlined" className="closeButton" onClick={closeModal}>
+        <div className="modal-buttons mt-2" style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <Button variant="outlined" className="closeButton bg-white border px-4 rounded-xl border-blue-700" onClick={closeModal}>
             Close
           </Button>
-          <Button variant="contained" className="postButton bg-gradient-to-r from-blue-900 via-blue-700 to-cyan-500 " onClick={addPost}>
+          <button variant="contained" className="postButton bg-blue-700 text-white border-2 rounded px-5" onClick={addPost}>
             Post
-          </Button>
+          </button>
         </div>
       </Modal>
 
