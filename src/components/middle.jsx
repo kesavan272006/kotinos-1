@@ -854,7 +854,7 @@ useEffect(() => {
                 onRequestClose={closeModal}
                 contentLabel="Image Modal"
                 className="bg-white p-5 rounded-lg shadow-lg outline-none md:w-[80%] md:h-[95%]"
-                overlayClassName="fixed inset-0 bg-black bg-opacity-30 flex justify-center items-center"
+                overlayClassName="fixed z-20 inset-0 bg-black bg-opacity-30 flex justify-center items-center"
             >
                 <div className='flex justify-center'>
                     <img
