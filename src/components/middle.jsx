@@ -415,7 +415,7 @@ useEffect(() => {
                             {post.isEvent && (
                                 <div style={{paddingLeft:'22px',display:'flex', flexDirection:'row', justifyContent:'start', alignItems:'center', alignContent:'center'}}>
                                     <h1>
-                                        <strong>organized by: {post.organizer}</strong> 
+                                        <strong>Organized by: {post.organizer}</strong> 
                                     </h1>
                                 </div>
                             )}
@@ -596,7 +596,7 @@ useEffect(() => {
                             {post.isEvent && (
                                 <div style={{paddingLeft:'22px',display:'flex', flexDirection:'row', justifyContent:'start', alignItems:'center', alignContent:'center'}}>
                                     <h1>
-                                        <strong>organized by: {post.organizer}</strong> 
+                                        <strong>Organized by: {post.organizer}</strong> 
                                     </h1>
                                 </div>
                             )}
