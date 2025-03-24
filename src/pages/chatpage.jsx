@@ -37,12 +37,22 @@ const ChatPage = () => {
     const [selectedGroup, setSelectedGroup] = useState(null);
     const [groups, setGroups] = useState([]);
     const [grpmessage, setGrpMessage] = useState("");
+    const [comMessage, setComMessage]=useState('');
     const [messages, setMessages] = useState([]);
+    const [communityMessages, setCommunityMessages] = useState([]);
     const [groupNames, setGroupNames] = useState({});
+    const [groupLastMessage, setGroupLastMessage] = useState({});
+    const [groupLastMessageTime, setGroupLastMessageTime] = useState({});
     const [senderNames, setSenderNames] = useState({});
     const [view, setView] = useState(null);
     const [isMobile, setIsMobile] = useState(false);
-
+    const [communityName, setCommunityName]=useState('');
+    const [isCommunityEditing, setiscommunityEditing]=useState(false);
+    const [communityDescription, setcommunityDescription]=useState('');
+    const [communities, setCommunities]=useState([]);
+    const [communityNames, setCommunityNames]=useState({});
+    const [communityLastMessage, setCommunityLastMessage] = useState({});
+    const [selectedCommunity, setSelectedCommunity]=useState(null);
     const checkScreenSize = () => {
         if (window.innerWidth <= 480) {
             setIsMobile(true);
@@ -72,7 +82,7 @@ const ChatPage = () => {
     useEffect(() => {
         const fetchGroupNames = async () => {
             const groupNamesData = {};
-
+            const groupLastMessageData = {}
             for (let groupId of groups) {
                 const groupRef = doc(database, 'Groups', groupId);
                 const groupDoc = await getDoc(groupRef);
@@ -80,17 +90,39 @@ const ChatPage = () => {
                 if (groupDoc.exists()) {
                     const groupData = groupDoc.data();
                     groupNamesData[groupId] = groupData.groupName;
+                    groupLastMessageData[groupId]=groupData.lastMessage;
                 }
             }
-
+            setGroupLastMessage(groupLastMessageData);
             setGroupNames(groupNamesData);
         };
 
         fetchGroupNames();
     }, [groups, database]);
+    useEffect(() => {
+        const fetchCommunityNames = async () => {
+            const groupNamesData = {};
+            const groupLastMessageData = {}
+            for (let groupId of communities) {
+                const groupRef = doc(database, 'Community', groupId);
+                const groupDoc = await getDoc(groupRef);
+
+                if (groupDoc.exists()) {
+                    const groupData = groupDoc.data();
+                    groupNamesData[groupId] = groupData.communityName;
+                    groupLastMessageData[groupId]=groupData.lastMessage;
+                }
+            }
+            setCommunityLastMessage(groupLastMessageData);
+            setCommunityNames(groupNamesData);
+        };
+
+        fetchCommunityNames();
+    }, [communities, database]);
     const handleuserselection = (eachuser) => {
         setSelectedUser(eachuser);
         setSelectedGroup(null);
+        setSelectedCommunity(null);
     }
     useEffect(() => {
         const fetchUserData = async () => {
@@ -127,6 +159,20 @@ const ChatPage = () => {
         };
 
         fetchUserGroups();
+    }, [auth.currentUser]);
+    useEffect(() => {
+        const fetchCommunities = async () => {
+            const userGroupsRef = collection(database, 'Community');
+            const querySnapshot = await getDocs(userGroupsRef);
+
+            const userGroups = [];
+            querySnapshot.forEach((doc) => {
+                userGroups.push(doc.id);
+            });
+            setCommunities(userGroups);
+        };
+
+        fetchCommunities();
     }, [auth.currentUser]);
     if (!auth.currentUser) {
         return <Loading />;
@@ -171,13 +217,33 @@ const ChatPage = () => {
         const sortedMessages = groupMessages.sort((a, b) => a.timestamp.toMillis() - b.timestamp.toMillis());
         setMessages(sortedMessages);
     };
+    const fetchCommunityMessages = async (groupId) => {
+        const groupRef = doc(database, 'Community', groupId);
+        const messagesRef = collection(groupRef, 'messages');
+        const querySnapshot = await getDocs(messagesRef);
+
+        const groupMessages = [];
+        if(!querySnapshot.empty){
+            querySnapshot.forEach((doc) => {
+                groupMessages.push(doc.data());
+            });
+            const sortedMessages = groupMessages.sort((a, b) => a.timestamp.toMillis() - b.timestamp.toMillis());
+            setCommunityMessages(sortedMessages);
+        }
+    };
     const handleGroupClick = async (groupId) => {
         setSelectedGroup(groupId);
         setSelectedUser(null);
+        setSelectedCommunity(null);
         await fetchGroupMessages(groupId);
     };
-
-    
+ 
+    const handleCommunityClick = async (groupId) => {
+        setSelectedCommunity(groupId);
+        setSelectedUser(null);
+        setSelectedGroup(null);
+        await fetchCommunityMessages(groupId);
+    };   
     const requestInRef = collection(database, "Users", auth.currentUser?.uid, "RequestIn");
     const showRequest = async () => {
         try {
@@ -236,6 +302,20 @@ const ChatPage = () => {
 
         fetchSenderNames();
     }, [messages, database]);
+    useEffect(() => {
+        const fetchSenderNames = async () => {
+            const names = {};
+            for (let message of communityMessages) {
+                if (!names[message.senderId]) {
+                    const name = await senderName(message.senderId);
+                    names[message.senderId] = name;
+                }
+            }
+            setSenderNames(names);
+        };
+
+        fetchSenderNames();
+    }, [communityMessages, database]);
     const [searchQuery, setSearchQuery] = useState('');
     const [filteredUsers, setFilteredUsers] = useState(groups);
     const [defaults, setdefaults]=useState(true);
@@ -341,6 +421,42 @@ const ChatPage = () => {
         setOpenGroupModal(false);
         await fetchGroupMessages(selectedGroup);
     };
+    const handleSendCommunityMessage = async (groupids) => {
+        if (!selectedCommunity || (!comMessage && images.length === 0)) {
+            alert('Please enter a message!');
+            return;
+        };
+        const imageUrls = await Promise.all(images.map(async (file) => {
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    resolve(reader.result);
+                };
+                reader.readAsDataURL(file);
+            });
+        }));
+        const newMessage = {
+            senderId: auth.currentUser?.uid,
+            username: username,
+            message: comMessage,
+            images: imageUrls,
+            timestamp: new Date(),
+        };
+        const groupRef = doc(database, 'Community', selectedCommunity);
+        const messagesRef = collection(groupRef, 'messages');
+        const newMessageRef = doc(messagesRef, `${Math.random()}`);
+        await setDoc(newMessageRef, newMessage);
+        await updateDoc(groupRef, {
+            lastMessage: newMessage.message,
+            lastMessageTimestamp: newMessage.timestamp,
+            lastMessageSender: newMessage.username,
+        });
+        setImages([]);
+        setPreviewImages([]);
+        setComMessage('');
+        setOpenGroupModal(false);
+        await fetchCommunityMessages(selectedCommunity);
+    };
     useEffect(() => {
         showRequest();
     }, []);
@@ -383,17 +499,29 @@ const ChatPage = () => {
     const connectedUsers = user.filter(user => user.status === 'connected');
     const handleOpen = () => {
         setSelectedUser(null);
+        setSelectedGroup(null);
         setIsEditing(true);
+    }
+    const handleCommunityOpen = () => {
+        setSelectedUser(null);
+        setSelectedGroup(null);
+        setiscommunityEditing(true);
     }
     const handleClose = () => {
         setIsEditing(false);
         setGroupName('');
         setSelectedUser(null);
     }
+    const handleCommunityClose = () => {
+        setiscommunityEditing(false);
+        setCommunityName('');
+    }
     const handlenamechange = (e) => {
         setGroupName(e.target.value);
     }
-
+    const handleCommunitynamechange = (e) => {
+        setCommunityName(e.target.value);
+    }
     const handleSave = async () => {
         if (groupName === '') {
             alert('Kindly Enter a Group Name');
@@ -462,6 +590,48 @@ const ChatPage = () => {
         }
 
     };
+    const handleCommunitySave = async () => {
+        if (communityName === '' || communityDescription==='') {
+            alert('Kindly Enter a Community Name and description');
+            setCommunityName('');
+            setcommunityDescription('')
+        }else {
+            try {
+                const userGroupsRef = collection(database, 'Community');
+                const q = query(userGroupsRef); 
+                const querySnapshot = await getDocs(q);
+                const lowerCaseCommunityName = communityName.toLowerCase();
+                const duplicate = querySnapshot.docs.some(doc => {
+                    const existingCommunityName = doc.data().communityName.toLowerCase();
+                    return existingCommunityName === lowerCaseCommunityName;
+                });
+            
+                if (duplicate) {
+                    alert(`The name ${communityName} is already taken. Please choose another name.`);
+                    setCommunityName('');
+                    return;
+                }
+            
+                const groupRef = doc(userGroupsRef, `${communityName}`);
+                await setDoc(groupRef, {
+                    createdBy: username,
+                    adminId: auth.currentUser?.uid,
+                    communityName: communityName,
+                    communityDescription: communityDescription,
+                    timestamp: new Date(),
+                });
+                setiscommunityEditing(false);
+                setCommunityName('');
+                setcommunityDescription('');
+            }catch (err) {
+                console.log(err);
+                setiscommunityEditing(false);
+                setCommunityName('');
+                setcommunityDescription('');
+            }
+        }
+
+    };
     return (
         <div className='overflow-y-hidden'> {/* added to remove the input box being lifter above in phones */}
             <Navbar />
@@ -493,7 +663,23 @@ const ChatPage = () => {
                                 Create a Group
                             </Button>
                         </div>
-
+                        <div style={{ padding: '16px', borderBottom: '1px solid #eaeaea' }}>
+                            <Button
+                                onClick={handleCommunityOpen}
+                                variant="contained"
+                                fullWidth
+                                style={{
+                                    backgroundColor: '',
+                                    color: 'white',
+                                    textTransform: 'none',
+                                    fontWeight: 'bold',
+                                    borderRadius: '8px',
+                                    padding: '10px'
+                                }}
+                            >
+                                Create a Community
+                            </Button>
+                        </div>
                         <div style={{ padding: '12px 8px' }}>
                             <h3 className="font-bold pl-2" style={{
                                 color: '#424242',
@@ -549,7 +735,7 @@ const ChatPage = () => {
                                                     }
                                                     secondary={
                                                         <span style={{ fontSize: '12px', color: '#757575' }}>
-                                                            Group conversation
+                                                            {groupLastMessage[groupId]|| 'Loading...'}
                                                         </span>
                                                     }
                                                     primaryTypographyProps={{ noWrap: true }}
@@ -588,7 +774,7 @@ const ChatPage = () => {
                                                     }
                                                     secondary={
                                                         <span style={{ fontSize: '12px', color: '#757575' }}>
-                                                            Group conversation
+                                                            {groupLastMessage[groupId]|| 'Loading...'}
                                                         </span>
                                                     }
                                                     primaryTypographyProps={{ noWrap: true }}
@@ -714,6 +900,111 @@ const ChatPage = () => {
                                     )}
                                 </List>
                         </div>
+
+                        <div style={{ padding: '12px 8px' }}>
+                            <h3 className="font-bold pl-2" style={{
+                                color: '#424242',
+                                marginBottom: '10px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'space-between'
+                            }}>
+                                Communities
+                                <span style={{
+                                    backgroundColor: '#edf3fc', color: '#787cff',
+                                    fontSize: '12px',
+                                    padding: '2px 8px',
+                                    borderRadius: '12px'
+                                }}>
+                                    {communities.length}
+                                </span>
+                            </h3>
+                            {/* <div className="flex items-center border border-gray-300 bg-gray-100 rounded-full px-3 py-2">
+                                <FiSearch className="text-gray-500" />
+                                <input 
+                                    value={searchQuery}
+                                    onChange={handleSearchChange}
+                                    placeholder="Search groups" 
+                                    className="w-full ml-2 text-gray-700 outline-none bg-transparent" 
+                                />
+                            </div> */}
+                            <List>
+                                        {communities.map((groupId) => (
+                                    <Paper
+                                        key={groupId}
+                                        style={{
+                                            marginBottom: '8px',
+                                            borderRadius: '8px',
+                                            overflow:'scroll',
+                                            transition: 'transform 0.2s, box-shadow 0.2s',
+                                            cursor: 'pointer'
+                                        }}
+                                        elevation={1}
+                                    >
+                                        <ListItem button onClick={() => handleCommunityClick(groupId)} style={{ padding: '8px 12px' }}>
+                                            <Avatar style={{ backgroundColor: '#edf3fc', color: '#787cff' }}>
+                                                {(communityNames[groupId] || 'G')[0].toUpperCase()}
+                                            </Avatar>
+                                            <div style={{ marginLeft: '12px', overflow: 'hidden' }}>
+                                                <ListItemText
+                                                    primary={
+                                                        <span style={{ fontWeight: 500, color: '#424242' }}>
+                                                            {communityNames[groupId] || 'Loading...'}
+                                                        </span>
+                                                    }
+                                                    secondary={
+                                                        <span style={{ fontSize: '12px', color: '#757575' }}>
+                                                            {communityLastMessage[groupId]|| 'Loading...'}
+                                                        </span>
+                                                    }
+                                                    primaryTypographyProps={{ noWrap: true }}
+                                                    secondaryTypographyProps={{ noWrap: true }}
+                                                />
+                                            </div>
+                                        </ListItem>
+                                    </Paper>
+                                ))}
+                                {/* {!defaults && (
+                                    <>
+                                        {filteredUsers.map((groupId) => (
+                                    <Paper
+                                        key={groupId}
+                                        style={{
+                                            marginBottom: '8px',
+                                            borderRadius: '8px',
+                                            overflow: 'hidden',
+                                            transition: 'transform 0.2s, box-shadow 0.2s',
+                                            cursor: 'pointer'
+                                        }}
+                                        elevation={1}
+                                    >
+                                        <ListItem button onClick={() => handleGroupClick(groupId)} style={{ padding: '8px 12px' }}>
+                                            <Avatar style={{ backgroundColor: '#edf3fc', color: '#787cff' }}>
+                                                {(groupNames[groupId] || 'G')[0].toUpperCase()}
+                                            </Avatar>
+                                            <div style={{ marginLeft: '12px', overflow: 'hidden' }}>
+                                                <ListItemText
+                                                    primary={
+                                                        <span style={{ fontWeight: 500, color: '#424242' }}>
+                                                            {groupNames[groupId] || 'Loading...'}
+                                                        </span>
+                                                    }
+                                                    secondary={
+                                                        <span style={{ fontSize: '12px', color: '#757575' }}>
+                                                            {groupLastMessage[groupId]|| 'Loading...'}
+                                                        </span>
+                                                    }
+                                                    primaryTypographyProps={{ noWrap: true }}
+                                                    secondaryTypographyProps={{ noWrap: true }}
+                                                />
+                                            </div>
+                                        </ListItem>
+                                    </Paper>
+                                ))}
+                                    </>
+                                )} */}
+                            </List>
+                        </div>
                     </div>
 
 
@@ -738,6 +1029,48 @@ const ChatPage = () => {
                                     <div>
                                         <Button onClick={handleClose}>close</Button>
                                         <Button disabled={groupName == ''} onClick={handleSave}>Save</Button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                        {isCommunityEditing && (
+                            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                                <div className="bg-white p-6 rounded-lg shadow-lg w-96 max-h-[90vh] overflow-y-auto">
+                                    <h1><strong>Create a Community</strong></h1>
+                                    <br />
+                                    <input 
+                                        type='text' 
+                                        style={{
+                                            border: '2px solid black', 
+                                            height: '50px', 
+                                            width: '90%', 
+                                            paddingLeft: '10px', 
+                                            borderRadius: '8px', 
+                                            fontSize: '16px', 
+                                            marginBottom: '10px'
+                                        }}  
+                                        placeholder='Community Name' 
+                                        value={communityName} 
+                                        onChange={handleCommunitynamechange} 
+                                    />
+
+                                    <TextField 
+                                        label='Describe the purpose of this community' 
+                                        value={communityDescription} 
+                                        onChange={(e) => setcommunityDescription(e.target.value)} 
+                                        variant="outlined" 
+                                        fullWidth 
+                                        style={{
+                                            borderRadius: '8px', 
+                                            fontSize: '16px', 
+                                            marginBottom: '10px'
+                                        }} 
+                                    />
+
+                                    <br />
+                                    <div>
+                                        <Button onClick={handleCommunityClose}>close</Button>
+                                        <Button disabled={communityName == ''} onClick={handleCommunitySave}>Save</Button>
                                     </div>
                                 </div>
                             </div>
@@ -850,7 +1183,7 @@ const ChatPage = () => {
                                                 setOpenGroupModal(true);
                                             }} />
                                     </div>
-                                    <Text
+                                    <TextField
                                         value={grpmessage}
                                         className='rounded-[20px] border h-10 pl-5 pb-1'
                                         onChange={(e) => setGrpMessage(e.target.value)}
@@ -871,7 +1204,6 @@ const ChatPage = () => {
                                 </div>
                             </>
                         )}
-
                         {selectedUser && (
                             <>
                                 <Link to={`/otherprofile/${selectedUser.id}`}>
@@ -1089,7 +1421,135 @@ const ChatPage = () => {
                                 </div>
                             </>
                         )}
-                        {!selectedUser && !selectedGroup && (
+                        {selectedCommunity && (
+                            <div style={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100vh' }}>
+                                <div style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    padding: '10px',
+                                    borderBottom: '1px solid #ddd'
+                                }}>
+                                    <Avatar src={profileicon} />
+                                    <div style={{ marginLeft: '10px' }}>
+                                        <div style={{ fontSize: '18px', fontWeight: 'bold' }}>
+                                            {communityNames[selectedCommunity]}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div style={{
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    flex: 1,
+                                    overflowY: 'auto',
+                                    backgroundImage: `url(${chat_bg})`,
+                                    backgroundSize: 'cover',
+                                    backgroundPosition: 'right',
+                                    backgroundRepeat: 'no-repeat',
+                                    backgroundAttachment: 'fixed',
+                                    padding: '10px',
+                                    marginBottom: '120px' // Make room for the input area
+                                }}>
+                                    {communityMessages.map((message, index) => {
+                                        const isCurrentUser = message.senderId === auth.currentUser?.uid;
+                                        return (
+                                            <div key={index} style={{
+                                                display: 'flex',
+                                                justifyContent: isCurrentUser ? 'flex-end' : 'flex-start',
+                                                marginBottom: '15px',
+                                                paddingLeft: '10px',
+                                                paddingRight: '10px',
+                                            }}>
+                                                <div className='mr-2' style={{ fontSize: '10px', color: 'black', marginTop: '5px' }}>
+                                                    {new Date(message.timestamp.seconds * 1000).toLocaleDateString()}
+                                                    <br />
+                                                    {new Date(message.timestamp.seconds * 1000).toLocaleTimeString()}
+                                                </div>
+                                                <div className='mt-1' style={{
+                                                    background: isCurrentUser ? 'linear-gradient(to bottom, #1a0d46, #0b3b7e, #0aa6c1)' : '#FFFFFF',
+                                                    color: isCurrentUser ? '#FFFFFF' : '#000',
+                                                    padding: '10px',
+                                                    borderRadius: '15px',
+                                                    maxWidth: '80%',
+                                                    display: 'inline-block',
+                                                    wordBreak: 'break-word',
+                                                    marginLeft: isCurrentUser ? '10px' : '0',
+                                                    marginRight: isCurrentUser ? '0' : '10px',
+                                                }}>
+                                                    <Link to={`/otherprofile/${message.senderId}`}><span className='hover:underline cursor-pointer' style={{ fontSize: '15px', fontWeight: 'bolder' }}>{senderNames[message.senderId] || "Loading..."}</span></Link>
+                                                    <br />
+                                                    {message.images && message.images.map((img, index) => (
+                                                        <img
+                                                            key={index}
+                                                            src={img}
+                                                            alt={`Image-${index}`}
+                                                            style={{
+                                                                width: '100px',
+                                                                height: '100px',
+                                                                marginTop: '5px',
+                                                                borderRadius: '10px',
+                                                                display: 'block',
+                                                                marginBottom: '5px'
+                                                            }}
+                                                        />
+                                                    ))}
+                                                    {message.message && <span style={{ fontSize: '14px' }}>{message.message}</span>}
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+
+                                <div style={{
+                                    position: 'absolute',
+                                    bottom: '0',
+                                    left: '0',
+                                    width: '100%',
+                                    padding: '12px',
+                                    backgroundColor: '#fff',
+                                    boxShadow: '0 -2px 10px rgba(0, 0, 0, 0.1)',
+                                    display: 'flex',
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-between',
+                                    alignItems: 'center',
+                                }}>
+                                    <div>
+                                        <input
+                                            type="file"
+                                            ref={fileInputRef}
+                                            style={{ display: 'none' }}
+                                            onChange={handleFileChange}
+                                            multiple
+                                        />
+
+                                        <BiImageAdd
+                                            className='cursor-pointer text-3xl mt-1 hover:bg-gray-200 rounded mr-2'
+                                            onClick={() => {
+                                                setOpenGroupModal(true);
+                                            }} />
+                                    </div>
+                                    <TextField
+                                        multiline
+                                        value={comMessage}
+                                        className=' border h-12 pl-5 overflow-y-hidden'
+                                        onChange={(e) => setComMessage(e.target.value)}
+                                        placeholder="Type a message"
+                                        style={{
+                                            width: '85%',
+                                            marginRight: '10px',
+                                        }}
+                                    />
+                                    <Button
+                                        onClick={() => handleSendCommunityMessage(selectedCommunity)}
+                                        variant="contained"
+                                        className="postButton bg-gradient-to-r from-blue-900 via-blue-700 to-cyan-500"
+                                    >
+                                        Send
+                                    </Button>
+                                </div>
+                            </div>
+                        )}
+                        {!selectedUser && !selectedGroup && !selectedCommunity && (
                             <div style={{
                                 display: 'flex',
                                 justifyContent: 'center',
@@ -1276,7 +1736,7 @@ const ChatPage = () => {
             {isMobile && (
                 <div className='flex h-[90vh]'>
 
-                    {(!selectedGroup && !selectedUser) && (
+                    {(!selectedGroup && !selectedUser && !selectedCommunity) && (
                         <div style={{ 
                             overflowY: 'auto', 
                             maxHeight: '100vh', 
@@ -1301,7 +1761,23 @@ const ChatPage = () => {
                                     Create a Group
                                 </Button>
                             </div>
-                            
+                            <div style={{ padding: '12px 8px', borderBottom: '1px solid #eaeaea', marginBottom: '16px' }}>
+                                <Button 
+                                    onClick={handleCommunityOpen}
+                                    variant="contained"
+                                    fullWidth
+                                    style={{ 
+                                        backgroundColor: '', 
+                                        color: 'white',
+                                        textTransform: 'none',
+                                        fontWeight: 'bold',
+                                        borderRadius: '8px',
+                                        padding: '10px'
+                                    }}
+                                >
+                                    Create a Community
+                                </Button>
+                            </div>
                             <div style={{ padding: '4px 8px' }}>
                                 <h3 className="font-bold pl-2" style={{ 
                                     color: '#424242', 
@@ -1359,7 +1835,7 @@ const ChatPage = () => {
                                                                 } 
                                                                 secondary={
                                                                     <span style={{ fontSize: '12px', color: '#757575' }}>
-                                                                        Group conversation
+                                                                        {groupLastMessage[groupId]|| 'Loading...'}
                                                                     </span>
                                                                 }
                                                                 primaryTypographyProps={{ noWrap: true }}
@@ -1398,7 +1874,7 @@ const ChatPage = () => {
                                                         } 
                                                         secondary={
                                                             <span style={{ fontSize: '12px', color: '#757575' }}>
-                                                                Group conversation
+                                                                {groupLastMessage[groupId]|| 'Loading...'}
                                                             </span>
                                                         }
                                                         primaryTypographyProps={{ noWrap: true }}
@@ -1525,6 +2001,110 @@ const ChatPage = () => {
                                     )}
                                 </List>
                             </div>
+                            <div style={{ padding: '12px 8px' }}>
+                            <h3 className="font-bold pl-2" style={{
+                                color: '#424242',
+                                marginBottom: '10px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'space-between'
+                            }}>
+                                Communities
+                                <span style={{
+                                    backgroundColor: '#edf3fc', color: '#787cff',
+                                    fontSize: '12px',
+                                    padding: '2px 8px',
+                                    borderRadius: '12px'
+                                }}>
+                                    {communities.length}
+                                </span>
+                            </h3>
+                            {/* <div className="flex items-center border border-gray-300 bg-gray-100 rounded-full px-3 py-2">
+                                <FiSearch className="text-gray-500" />
+                                <input 
+                                    value={searchQuery}
+                                    onChange={handleSearchChange}
+                                    placeholder="Search groups" 
+                                    className="w-full ml-2 text-gray-700 outline-none bg-transparent" 
+                                />
+                            </div> */}
+                            <List>
+                                        {communities.map((groupId) => (
+                                    <Paper
+                                        key={groupId}
+                                        style={{
+                                            marginBottom: '8px',
+                                            borderRadius: '8px',
+                                            overflow: 'hidden',
+                                            transition: 'transform 0.2s, box-shadow 0.2s',
+                                            cursor: 'pointer'
+                                        }}
+                                        elevation={1}
+                                    >
+                                        <ListItem button onClick={() => handleCommunityClick(groupId)} style={{ padding: '8px 12px' }}>
+                                            <Avatar style={{ backgroundColor: '#edf3fc', color: '#787cff' }}>
+                                                {(communityNames[groupId] || 'G')[0].toUpperCase()}
+                                            </Avatar>
+                                            <div style={{ marginLeft: '12px', overflow: 'hidden' }}>
+                                                <ListItemText
+                                                    primary={
+                                                        <span style={{ fontWeight: 500, color: '#424242' }}>
+                                                            {communityNames[groupId] || 'Loading...'}
+                                                        </span>
+                                                    }
+                                                    secondary={
+                                                        <span style={{ fontSize: '12px', color: '#757575' }}>
+                                                            {communityLastMessage[groupId]|| 'Loading...'}
+                                                        </span>
+                                                    }
+                                                    primaryTypographyProps={{ noWrap: true }}
+                                                    secondaryTypographyProps={{ noWrap: true }}
+                                                />
+                                            </div>
+                                        </ListItem>
+                                    </Paper>
+                                ))}
+                                {/* {!defaults && (
+                                    <>
+                                        {filteredUsers.map((groupId) => (
+                                    <Paper
+                                        key={groupId}
+                                        style={{
+                                            marginBottom: '8px',
+                                            borderRadius: '8px',
+                                            overflow: 'hidden',
+                                            transition: 'transform 0.2s, box-shadow 0.2s',
+                                            cursor: 'pointer'
+                                        }}
+                                        elevation={1}
+                                    >
+                                        <ListItem button onClick={() => handleGroupClick(groupId)} style={{ padding: '8px 12px' }}>
+                                            <Avatar style={{ backgroundColor: '#edf3fc', color: '#787cff' }}>
+                                                {(groupNames[groupId] || 'G')[0].toUpperCase()}
+                                            </Avatar>
+                                            <div style={{ marginLeft: '12px', overflow: 'hidden' }}>
+                                                <ListItemText
+                                                    primary={
+                                                        <span style={{ fontWeight: 500, color: '#424242' }}>
+                                                            {groupNames[groupId] || 'Loading...'}
+                                                        </span>
+                                                    }
+                                                    secondary={
+                                                        <span style={{ fontSize: '12px', color: '#757575' }}>
+                                                            {groupLastMessage[groupId]|| 'Loading...'}
+                                                        </span>
+                                                    }
+                                                    primaryTypographyProps={{ noWrap: true }}
+                                                    secondaryTypographyProps={{ noWrap: true }}
+                                                />
+                                            </div>
+                                        </ListItem>
+                                    </Paper>
+                                ))}
+                                    </>
+                                )} */}
+                            </List>
+                        </div>
                         </div>
 
                     )}
@@ -1838,12 +2418,143 @@ const ChatPage = () => {
                             </div>
                         </div>
                     )}
+                    {selectedCommunity && (
+                        <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+                            <div style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                padding: '10px',
+                                borderBottom: '1px solid #ddd'
+                            }}>
+                                <ArrowLeft onClick={() => setSelectedCommunity(null)} />
+                                <Avatar src={profileicon} />
+                                <div style={{ marginLeft: '10px' }}>
+                                    <div style={{ fontSize: '18px', fontWeight: 'bold' }}>
+                                        {communityNames[selectedCommunity]}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div style={{
+                                display: "flex",
+                                flexDirection: "column",
+                                flex: 1,
+                                overflowY: 'scroll',
+                                paddingBottom: '80px',
+                                backgroundImage: `url(${chat_bg})`,
+                                backgroundSize: 'cover',
+                                backgroundPosition: 'right',
+                                backgroundRepeat: 'no-repeat',
+                                backgroundAttachment: 'fixed',
+                                height: '100%',
+                                width: '100%',
+                            }}>
+                                {communityMessages.map((message, index) => {
+                                    const isCurrentUser = message.senderId === auth.currentUser?.uid;
+                                    return (
+                                        <div key={index} style={{
+                                            display: 'flex',
+                                            justifyContent: isCurrentUser ? 'flex-end' : 'flex-start',
+                                            marginBottom: '15px',
+                                            paddingLeft: '10px',
+                                            paddingRight: '10px',
+                                        }}>
+                                            <div className='mr-2' style={{ fontSize: '10px', color: 'black', marginTop: '5px' }}>
+                                                {new Date(message.timestamp.seconds * 1000).toLocaleDateString()}
+                                                <br />
+                                                {new Date(message.timestamp.seconds * 1000).toLocaleTimeString()}
+                                            </div>
+                                            <div className='mt-1' style={{
+                                                background: isCurrentUser ? 'linear-gradient(to bottom, #1a0d46, #0b3b7e, #0aa6c1)' : '#FFFFFF', // Gradient background for current user
+                                                color: isCurrentUser ? '#FFFFFF' : '#000',
+                                                padding: '10px',
+                                                borderRadius: '15px',
+                                                maxWidth: '80%',
+                                                display: 'inline-block',
+                                                wordBreak: 'break-word',
+                                                marginLeft: isCurrentUser ? '10px' : '0',
+                                                marginRight: isCurrentUser ? '0' : '10px',
+                                            }}>
+
+                                                <Link to={`/otherprofile/${message.senderId}`}><span className='hover:underline cursor-pointer' style={{ fontSize: '15px', fontWeight: 'bolder' }}>{senderNames[message.senderId] || "Loading..."}</span></Link>
+                                                <br />
+                                                {message.images && message.images.map((img, index) => (
+                                                    <img
+                                                        key={index}
+                                                        src={img}
+                                                        alt={`Image-${index}`}
+                                                        style={{
+                                                            width: '100px',
+                                                            height: '100px',
+                                                            marginTop: '5px',
+                                                            borderRadius: '10px',
+                                                            display: 'block',
+                                                            marginBottom: '5px'
+                                                        }}
+                                                    />
+                                                ))}
+                                                {message.message && <span style={{ fontSize: '14px' }}>{message.message}</span>}
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+
+                            <div style={{
+                                position: 'absolute',
+                                bottom: '0',
+                                left: '0',
+                                width: '100%',
+                                padding: '10px',
+                                backgroundColor: '#fff',
+                                boxShadow: '0 -2px 10px rgba(0, 0, 0, 0.1)',
+                                display: 'flex',
+                                flexDirection: 'row',
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                            }}>
+                                <div>
+                                    <input
+                                        type="file"
+                                        ref={fileInputRef}
+                                        style={{ display: 'none' }}
+                                        onChange={handleFileChange}
+                                        multiple
+                                    />
+
+                                    <BiImageAdd
+                                        className='cursor-pointer text-3xl mt-1 hover:bg-gray-200 rounded mr-2'
+                                        onClick={() => {
+                                            setOpenGroupModal(true);
+                                        }} />
+                                </div>
+                                <TextField
+                                    multiline
+                                    value={comMessage}
+                                    className='rounded-[20px] border h-10 pl-5 pb-1'
+                                    onChange={(e) => setComMessage(e.target.value)}
+                                    placeholder="Type a message"
+                                    style={{
+                                        width: '85%',
+                                        marginRight: '10px',
+                                    }}
+                                />
+                                <Button
+                                    onClick={() => handleSendCommunityMessage(selectedCommunity)}
+                                    variant="contained"
+                                    className="postButton bg-gradient-to-r from-blue-900 via-blue-700 to-cyan-500"
+                                >
+                                    Send
+                                </Button>
+                            </div>
+                        </ div>
+                    )}
                     {isEditing && (
                         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
                             <div className="bg-white p-6 rounded-lg shadow-lg w-96 max-h-[90vh] overflow-y-auto">
                                 <h1><strong>Create a Group</strong></h1>
                                 <br />
-                                <input label='Group Name' value={groupName} onChange={handlenamechange} />
+                                <input type='text' style={{border:'2px solid black', height:'50px', width:'90%', paddingLeft:'10px', marginBottom:'10px'}} placeholder='Group Name' value={groupName} onChange={handlenamechange} />
                                 <br />
                                 <Autocomplete
                                     disablePortal
@@ -1861,7 +2572,47 @@ const ChatPage = () => {
                             </div>
                         </div>
                     )}
+                    {isCommunityEditing && (
+                        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                            <div className="bg-white p-6 rounded-lg shadow-lg w-96 max-h-[90vh] overflow-y-auto">
+                                <h1><strong>Create a Community</strong></h1>
+                                <br />
+                                <input 
+                                    type='text' 
+                                    style={{
+                                        border: '2px solid black', 
+                                        height: '50px', 
+                                        width: '90%', 
+                                        paddingLeft: '10px', 
+                                        borderRadius: '8px', 
+                                        fontSize: '16px', 
+                                        marginBottom: '10px',
+                                    }}  
+                                    placeholder='Community Name' 
+                                    value={communityName} 
+                                    onChange={handleCommunitynamechange} 
+                                />
 
+                                <TextField 
+                                    label='Describe the purpose of this community' 
+                                    value={communityDescription} 
+                                    onChange={(e) => setcommunityDescription(e.target.value)} 
+                                    variant="outlined" 
+                                    fullWidth 
+                                    style={{
+                                        borderRadius: '8px', 
+                                        fontSize: '16px', 
+                                        marginBottom: '10px'
+                                    }} 
+                                />
+                                <br />
+                                <div>
+                                    <Button onClick={handleCommunityClose}>close</Button>
+                                    <Button disabled={communityName == ''} onClick={handleCommunitySave}>Save</Button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                     <Modal
                         open={openModal}
                         onClose={() => handleuserclosemodal}
