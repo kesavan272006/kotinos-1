@@ -415,7 +415,7 @@ useEffect(() => {
                             {post.isEvent && (
                                 <div style={{paddingLeft:'22px',display:'flex', flexDirection:'row', justifyContent:'start', alignItems:'center', alignContent:'center'}}>
                                     <h1>
-                                        <strong>organized by: {post.organizer}</strong> 
+                                        <strong>Organized by: {post.organizer}</strong> 
                                     </h1>
                                 </div>
                             )}
@@ -596,7 +596,7 @@ useEffect(() => {
                             {post.isEvent && (
                                 <div style={{paddingLeft:'22px',display:'flex', flexDirection:'row', justifyContent:'start', alignItems:'center', alignContent:'center'}}>
                                     <h1>
-                                        <strong>organized by: {post.organizer}</strong> 
+                                        <strong>Organized by: {post.organizer}</strong> 
                                     </h1>
                                 </div>
                             )}
@@ -854,7 +854,7 @@ useEffect(() => {
                 onRequestClose={closeModal}
                 contentLabel="Image Modal"
                 className="bg-white p-5 rounded-lg shadow-lg outline-none md:w-[80%] md:h-[95%]"
-                overlayClassName="fixed inset-0 bg-black bg-opacity-30 flex justify-center items-center"
+                overlayClassName="fixed z-20 inset-0 bg-black bg-opacity-30 flex justify-center items-center"
             >
                 <div className='flex justify-center'>
                     <img
