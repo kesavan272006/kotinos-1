@@ -326,6 +326,9 @@ const ChatPage = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [filteredUsers, setFilteredUsers] = useState(groups);
     const [defaults, setdefaults]=useState(true);
+    const [communitySearchQuery, setCommunitySearchQuery]=useState('');
+    const [communityDefaults, setCommunityDefaults]=useState(true);
+    const [filteredCommunity, setFilteredCommunity]=useState(communities);
     const handleSearchChange = (event) => {
     setdefaults(false);
     const query = event.target.value;
@@ -335,6 +338,15 @@ const ChatPage = () => {
     );
     setFilteredUsers(filtered);
     };
+    const handleCommunitySearchChange = (event) => {
+        setCommunityDefaults(false);
+        const query = event.target.value;
+        setCommunitySearchQuery(query);
+        const filtered = communities.filter(user => 
+            user.toLowerCase().includes(query.toLowerCase())
+        );
+        setFilteredCommunity(filtered);
+        };
     // seperating mobile queries by kesavan 😆
     const [mobilesearchQuery, mobilesetSearchQuery] = useState('');
     const [mobilefilteredUsers, mobilesetFilteredUsers] = useState(user);
@@ -926,91 +938,94 @@ const ChatPage = () => {
                                     {communities.length}
                                 </span>
                             </h3>
-                            {/* <div className="flex items-center border border-gray-300 bg-gray-100 rounded-full px-3 py-2">
+                            <div className="flex items-center border border-gray-300 bg-gray-100 rounded-full px-3 py-2">
                                 <FiSearch className="text-gray-500" />
                                 <input 
-                                    value={searchQuery}
-                                    onChange={handleSearchChange}
+                                    type='text'
+                                    value={communitySearchQuery}
+                                    onChange={handleCommunitySearchChange}
                                     placeholder="Search groups" 
                                     className="w-full ml-2 text-gray-700 outline-none bg-transparent" 
                                 />
-                            </div> */}
-                            <List>
-                                        {communities.map((groupId) => (
-                                    <Paper
-                                        key={groupId}
-                                        style={{
-                                            marginBottom: '8px',
-                                            borderRadius: '8px',
-                                            overflow:'scroll',
-                                            transition: 'transform 0.2s, box-shadow 0.2s',
-                                            cursor: 'pointer'
-                                        }}
-                                        elevation={1}
-                                    >
-                                        <ListItem button onClick={() => handleCommunityClick(groupId)} style={{ padding: '8px 12px' }}>
-                                            <Avatar style={{ backgroundColor: '#edf3fc', color: '#787cff' }}>
-                                                {(communityNames[groupId] || 'G')[0].toUpperCase()}
-                                            </Avatar>
-                                            <div style={{ marginLeft: '12px', overflow: 'hidden' }}>
-                                                <ListItemText
-                                                    primary={
-                                                        <span style={{ fontWeight: 500, color: '#424242' }}>
-                                                            {communityNames[groupId] || 'Loading...'}
-                                                        </span>
-                                                    }
-                                                    secondary={
-                                                        <span style={{ fontSize: '12px', color: '#757575' }}>
-                                                            {communityLastMessage[groupId]|| 'Loading...'}
-                                                        </span>
-                                                    }
-                                                    primaryTypographyProps={{ noWrap: true }}
-                                                    secondaryTypographyProps={{ noWrap: true }}
-                                                />
-                                            </div>
-                                        </ListItem>
-                                    </Paper>
-                                ))}
-                                {/* {!defaults && (
-                                    <>
-                                        {filteredUsers.map((groupId) => (
-                                    <Paper
-                                        key={groupId}
-                                        style={{
-                                            marginBottom: '8px',
-                                            borderRadius: '8px',
-                                            overflow: 'hidden',
-                                            transition: 'transform 0.2s, box-shadow 0.2s',
-                                            cursor: 'pointer'
-                                        }}
-                                        elevation={1}
-                                    >
-                                        <ListItem button onClick={() => handleGroupClick(groupId)} style={{ padding: '8px 12px' }}>
-                                            <Avatar style={{ backgroundColor: '#edf3fc', color: '#787cff' }}>
-                                                {(groupNames[groupId] || 'G')[0].toUpperCase()}
-                                            </Avatar>
-                                            <div style={{ marginLeft: '12px', overflow: 'hidden' }}>
-                                                <ListItemText
-                                                    primary={
-                                                        <span style={{ fontWeight: 500, color: '#424242' }}>
-                                                            {groupNames[groupId] || 'Loading...'}
-                                                        </span>
-                                                    }
-                                                    secondary={
-                                                        <span style={{ fontSize: '12px', color: '#757575' }}>
-                                                            {groupLastMessage[groupId]|| 'Loading...'}
-                                                        </span>
-                                                    }
-                                                    primaryTypographyProps={{ noWrap: true }}
-                                                    secondaryTypographyProps={{ noWrap: true }}
-                                                />
-                                            </div>
-                                        </ListItem>
-                                    </Paper>
-                                ))}
-                                    </>
-                                )} */}
-                            </List>
+                            </div>
+                            {communityDefaults && (
+                                <List>
+                                {communities.map((groupId) => (
+                            <Paper
+                                key={groupId}
+                                style={{
+                                    marginBottom: '8px',
+                                    borderRadius: '8px',
+                                    overflow:'scroll',
+                                    transition: 'transform 0.2s, box-shadow 0.2s',
+                                    cursor: 'pointer'
+                                }}
+                                elevation={1}
+                            >
+                                <ListItem button onClick={() => handleCommunityClick(groupId)} style={{ padding: '8px 12px' }}>
+                                    <Avatar style={{ backgroundColor: '#edf3fc', color: '#787cff' }}>
+                                        {(communityNames[groupId] || 'G')[0].toUpperCase()}
+                                    </Avatar>
+                                    <div style={{ marginLeft: '12px', overflow: 'hidden' }}>
+                                        <ListItemText
+                                            primary={
+                                                <span style={{ fontWeight: 500, color: '#424242' }}>
+                                                    {communityNames[groupId] || 'Loading...'}
+                                                </span>
+                                            }
+                                            secondary={
+                                                <span style={{ fontSize: '12px', color: '#757575' }}>
+                                                    {communityLastMessage[groupId]|| 'Loading...'}
+                                                </span>
+                                            }
+                                            primaryTypographyProps={{ noWrap: true }}
+                                            secondaryTypographyProps={{ noWrap: true }}
+                                        />
+                                    </div>
+                                </ListItem>
+                            </Paper>
+                        ))}
+                    </List>
+                            )}
+                            {!communityDefaults && (
+                                <List>
+                                {filteredCommunity.map((groupId) => (
+                            <Paper
+                                key={groupId}
+                                style={{
+                                    marginBottom: '8px',
+                                    borderRadius: '8px',
+                                    overflow:'scroll',
+                                    transition: 'transform 0.2s, box-shadow 0.2s',
+                                    cursor: 'pointer'
+                                }}
+                                elevation={1}
+                            >
+                                <ListItem button onClick={() => handleCommunityClick(groupId)} style={{ padding: '8px 12px' }}>
+                                    <Avatar style={{ backgroundColor: '#edf3fc', color: '#787cff' }}>
+                                        {(communityNames[groupId] || 'G')[0].toUpperCase()}
+                                    </Avatar>
+                                    <div style={{ marginLeft: '12px', overflow: 'hidden' }}>
+                                        <ListItemText
+                                            primary={
+                                                <span style={{ fontWeight: 500, color: '#424242' }}>
+                                                    {communityNames[groupId] || 'Loading...'}
+                                                </span>
+                                            }
+                                            secondary={
+                                                <span style={{ fontSize: '12px', color: '#757575' }}>
+                                                    {communityLastMessage[groupId]|| 'Loading...'}
+                                                </span>
+                                            }
+                                            primaryTypographyProps={{ noWrap: true }}
+                                            secondaryTypographyProps={{ noWrap: true }}
+                                        />
+                                    </div>
+                                </ListItem>
+                            </Paper>
+                        ))}
+                    </List>
+                            )}
                         </div>
                     </div>
 
@@ -2109,91 +2124,94 @@ const ChatPage = () => {
                                     {communities.length}
                                 </span>
                             </h3>
-                            {/* <div className="flex items-center border border-gray-300 bg-gray-100 rounded-full px-3 py-2">
+                            <div className="flex items-center border border-gray-300 bg-gray-100 rounded-full px-3 py-2">
                                 <FiSearch className="text-gray-500" />
                                 <input 
-                                    value={searchQuery}
-                                    onChange={handleSearchChange}
+                                    type='text'
+                                    value={communitySearchQuery}
+                                    onChange={handleCommunitySearchChange}
                                     placeholder="Search groups" 
                                     className="w-full ml-2 text-gray-700 outline-none bg-transparent" 
                                 />
-                            </div> */}
-                            <List>
-                                        {communities.map((groupId) => (
-                                    <Paper
-                                        key={groupId}
-                                        style={{
-                                            marginBottom: '8px',
-                                            borderRadius: '8px',
-                                            overflow: 'hidden',
-                                            transition: 'transform 0.2s, box-shadow 0.2s',
-                                            cursor: 'pointer'
-                                        }}
-                                        elevation={1}
-                                    >
-                                        <ListItem button onClick={() => handleCommunityClick(groupId)} style={{ padding: '8px 12px' }}>
-                                            <Avatar style={{ backgroundColor: '#edf3fc', color: '#787cff' }}>
-                                                {(communityNames[groupId] || 'G')[0].toUpperCase()}
-                                            </Avatar>
-                                            <div style={{ marginLeft: '12px', overflow: 'hidden' }}>
-                                                <ListItemText
-                                                    primary={
-                                                        <span style={{ fontWeight: 500, color: '#424242' }}>
-                                                            {communityNames[groupId] || 'Loading...'}
-                                                        </span>
-                                                    }
-                                                    secondary={
-                                                        <span style={{ fontSize: '12px', color: '#757575' }}>
-                                                            {communityLastMessage[groupId]|| 'Loading...'}
-                                                        </span>
-                                                    }
-                                                    primaryTypographyProps={{ noWrap: true }}
-                                                    secondaryTypographyProps={{ noWrap: true }}
-                                                />
-                                            </div>
-                                        </ListItem>
-                                    </Paper>
-                                ))}
-                                {/* {!defaults && (
-                                    <>
-                                        {filteredUsers.map((groupId) => (
-                                    <Paper
-                                        key={groupId}
-                                        style={{
-                                            marginBottom: '8px',
-                                            borderRadius: '8px',
-                                            overflow: 'hidden',
-                                            transition: 'transform 0.2s, box-shadow 0.2s',
-                                            cursor: 'pointer'
-                                        }}
-                                        elevation={1}
-                                    >
-                                        <ListItem button onClick={() => handleGroupClick(groupId)} style={{ padding: '8px 12px' }}>
-                                            <Avatar style={{ backgroundColor: '#edf3fc', color: '#787cff' }}>
-                                                {(groupNames[groupId] || 'G')[0].toUpperCase()}
-                                            </Avatar>
-                                            <div style={{ marginLeft: '12px', overflow: 'hidden' }}>
-                                                <ListItemText
-                                                    primary={
-                                                        <span style={{ fontWeight: 500, color: '#424242' }}>
-                                                            {groupNames[groupId] || 'Loading...'}
-                                                        </span>
-                                                    }
-                                                    secondary={
-                                                        <span style={{ fontSize: '12px', color: '#757575' }}>
-                                                            {groupLastMessage[groupId]|| 'Loading...'}
-                                                        </span>
-                                                    }
-                                                    primaryTypographyProps={{ noWrap: true }}
-                                                    secondaryTypographyProps={{ noWrap: true }}
-                                                />
-                                            </div>
-                                        </ListItem>
-                                    </Paper>
-                                ))}
-                                    </>
-                                )} */}
-                            </List>
+                            </div>
+                            {communityDefaults && (
+                                <List>
+                                {communities.map((groupId) => (
+                            <Paper
+                                key={groupId}
+                                style={{
+                                    marginBottom: '8px',
+                                    borderRadius: '8px',
+                                    overflow:'scroll',
+                                    transition: 'transform 0.2s, box-shadow 0.2s',
+                                    cursor: 'pointer'
+                                }}
+                                elevation={1}
+                            >
+                                <ListItem button onClick={() => handleCommunityClick(groupId)} style={{ padding: '8px 12px' }}>
+                                    <Avatar style={{ backgroundColor: '#edf3fc', color: '#787cff' }}>
+                                        {(communityNames[groupId] || 'G')[0].toUpperCase()}
+                                    </Avatar>
+                                    <div style={{ marginLeft: '12px', overflow: 'hidden' }}>
+                                        <ListItemText
+                                            primary={
+                                                <span style={{ fontWeight: 500, color: '#424242' }}>
+                                                    {communityNames[groupId] || 'Loading...'}
+                                                </span>
+                                            }
+                                            secondary={
+                                                <span style={{ fontSize: '12px', color: '#757575' }}>
+                                                    {communityLastMessage[groupId]|| 'Loading...'}
+                                                </span>
+                                            }
+                                            primaryTypographyProps={{ noWrap: true }}
+                                            secondaryTypographyProps={{ noWrap: true }}
+                                        />
+                                    </div>
+                                </ListItem>
+                            </Paper>
+                        ))}
+                    </List>
+                            )}
+                            {!communityDefaults && (
+                                <List>
+                                {filteredCommunity.map((groupId) => (
+                            <Paper
+                                key={groupId}
+                                style={{
+                                    marginBottom: '8px',
+                                    borderRadius: '8px',
+                                    overflow:'scroll',
+                                    transition: 'transform 0.2s, box-shadow 0.2s',
+                                    cursor: 'pointer'
+                                }}
+                                elevation={1}
+                            >
+                                <ListItem button onClick={() => handleCommunityClick(groupId)} style={{ padding: '8px 12px' }}>
+                                    <Avatar style={{ backgroundColor: '#edf3fc', color: '#787cff' }}>
+                                        {(communityNames[groupId] || 'G')[0].toUpperCase()}
+                                    </Avatar>
+                                    <div style={{ marginLeft: '12px', overflow: 'hidden' }}>
+                                        <ListItemText
+                                            primary={
+                                                <span style={{ fontWeight: 500, color: '#424242' }}>
+                                                    {communityNames[groupId] || 'Loading...'}
+                                                </span>
+                                            }
+                                            secondary={
+                                                <span style={{ fontSize: '12px', color: '#757575' }}>
+                                                    {communityLastMessage[groupId]|| 'Loading...'}
+                                                </span>
+                                            }
+                                            primaryTypographyProps={{ noWrap: true }}
+                                            secondaryTypographyProps={{ noWrap: true }}
+                                        />
+                                    </div>
+                                </ListItem>
+                            </Paper>
+                        ))}
+                    </List>
+                            )}
                         </div>
                         </div>
 
@@ -2697,7 +2715,6 @@ const ChatPage = () => {
                                     style={{
                                         borderRadius: '8px', 
                                         fontSize: '16px', 
-                                        marginBottom: '10px'
                                     }} 
                                 />
                                 <br />
