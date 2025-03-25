@@ -17,6 +17,7 @@ import hearticon from '../assets/hearticon2.svg'
 import { FiSearch } from 'react-icons/fi';
 import Events from './events';
 import trophyicon from '../assets/trophyicon.svg'
+import ReadMore from './Readmore';
 const Middle = ({ userData }) => {
     const [username, setUsername] = useState('');
     const [role, setRole] = useState('');
@@ -316,7 +317,7 @@ useEffect(() => {
                     {!showevents && (
                         <>
                             {posts.map((post) => (
-                        <div key={post.id} className='bg-white rounded-xl border  mb-5'>
+                        <div key={post.id} className='bg-white rounded-xl border  mb-5 pr-3'>
                         <div className='pl-5 pt-3'>
                                 <div style={{position:'relative'}} className='flex flex-row'>
                                     <img src={post.profilepic||profileicon} alt={profileicon} className='mr-5 h-14 w-14 rounded-full bg-gray-300' onClick={() => openModals(post.profilepic||profileicon)}/>
@@ -427,7 +428,7 @@ useEffect(() => {
                                 </div>
                             )}
                             <br />
-                            <h2 style={{marginLeft:'22px'}} className='text-lg whitespace-pre-wrap'>{post.description}</h2>
+                            <h2 style={{marginLeft:'22px'}} className='text-base pr-2 whitespace-pre-wrap'><ReadMore text={post.description} /></h2>
                         </div>
                         {post.images && post.images.length > 0 && (
                             <div className='flex flex-col pl-5 py-1 pr-5'>
@@ -608,7 +609,7 @@ useEffect(() => {
                                 </div>
                             )}
                             <br />
-                            <h2 style={{marginLeft:'22px'}} className='text-lg whitespace-pre-wrap'>{post.description}</h2>
+                            <h2 style={{marginLeft:'22px'}} className='text-base pr-2 whitespace-pre-wrap'><ReadMore text={post.description} /></h2>
                         </div>
                         {post.images && post.images.length > 0 && (
                             <div className='flex flex-col pl-5 py-1 pr-5'>
@@ -774,7 +775,7 @@ useEffect(() => {
                                 <strong className='flex justify-start md:pl-6 pl-5 md:text-2xl text-[20px] '>
                                     {post.title}
                                 </strong>
-                                <h2 className='pl-7 text-lg whitespace-pre-wrap'>{post.description}</h2>
+                                <h2 className='pl-7 pr-2 text-lg whitespace-pre-wrap'><ReadMore text={post.description} /></h2>
                             </div>
                             {post.images && post.images.length > 0 && (
                                 <div className='flex flex-col pl-5 py-1 pr-5'>

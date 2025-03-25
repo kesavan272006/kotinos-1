@@ -295,7 +295,7 @@ const FilePost = (props, ref) => {
         <br />
         {decidingathlete && (
           <>
-              <div className='ml-1' style={{display:'flex',flexDirection:'row', }}>
+              <div className='ml-1' style={{display:'flex',flexDirection:'row',justifyContent:'center' }}>
                 <Switch
                   onChange={handleSwitchChange} 
                 />
@@ -313,7 +313,7 @@ const FilePost = (props, ref) => {
         )}
         {decidingcoach && (
           <>
-              <div className='ml-1' style={{display:'flex',flexDirection:'row', }}>
+              <div className='ml-1' style={{display:'flex',flexDirection:'row',justifyContent:'center' }}>
                 <Switch
                   onChange={handleSwitchChange} 
                 />
@@ -330,7 +330,7 @@ const FilePost = (props, ref) => {
         )}
         {decidingorganization && (
           <>
-              <div className='ml-1' style={{display:'flex',flexDirection:'row', }}>
+              <div className='ml-1' style={{display:'flex',flexDirection:'row',justifyContent:'center' }}>
                 <Switch
                   onChange={handleSwitchChange} 
                 />

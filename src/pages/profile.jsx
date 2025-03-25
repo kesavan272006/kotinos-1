@@ -337,6 +337,12 @@ const Profile = () => {
             return 'Organization '
         }
     };
+    const [isDisabled, setisDisabled] = useState("");
+
+  const handleDisabledChange = (e) => {
+    setisDisabled(e.target.value);
+    setProfile({ ...profile, [e.target.name]: e.target.value })
+  };
     const [achievementPost, setAchievementPost] = useState([]);
     const servicesOffered = [
         "Event Hosting",
@@ -378,7 +384,7 @@ const Profile = () => {
     return (
         <>
             <Navbar />
-            <h1 style={{ textAlign: 'center', opacity: '0.8', paddingTop: '1%' }}>If you find any error, just refresh the page.</h1>
+            <h1 style={{ textAlign: 'center', opacity: '0.8', paddingTop: '1%' }}></h1>
             <div className="grid md:grid-cols-2 md:gap-0 gap-6 md:my-4 my-2 md:px-10">
                 <div className="bg-white p-4  rounded-lg relative shadow-sm border_grad w-full max-w-2xl">
                     <div className="flex flex-col items-center mb-4">
@@ -422,7 +428,7 @@ const Profile = () => {
                                 <p><strong>State of main Operation:</strong> {profile.state || "Not provided"}</p>
                                 <p><strong>Website URL:</strong> {profile.websiteUrl || "Not provided"}</p>
                                 <p><strong>Organization Type:</strong> {profile.organizationType || "Not provided"}</p>
-                                <p><strong>Mission or Brief Description of your Organization:</strong> <br />{profile.mission || "Not provided"}</p>
+                                <p style={{whiteSpace:'pre-line'}}><strong>Mission or Brief Description of your Organization:</strong> <br />{profile.mission || "Not provided"}</p>
                             </div>
                         </>
                     )}
@@ -435,8 +441,8 @@ const Profile = () => {
                             <p><strong>Primary Sport:</strong> {profile.primarySport || "None"}</p>
                             <p><strong>Secondary Sport:</strong> {profile.secondarySport || "None"}</p>
                             <p><strong>Years of Experience:</strong> {profile.experience || "None"}</p>
-                            <p><strong>Teams You have played for: </strong> <br /> {profile.teamName || "None"}</p>
-                            <p><strong>Your achievements as a player: </strong> <br /> {profile.achievements || "None"}</p>
+                            <p style={{whiteSpace:'pre-line'}}><strong>Teams You have played for: </strong> <br /> {profile.teamName || "None"}</p>
+                            <p style={{whiteSpace:'pre-line'}}><strong>Your achievements as a player: </strong> <br /> {profile.achievements || "None"}</p>
                             <h1><strong>Upload your QR code to receive financial support for your athletic journey</strong></h1>
                             <Button onClick={handleNavigation}>Upload QR Code</Button>
                         </div>
@@ -449,9 +455,9 @@ const Profile = () => {
                         <div className="space-y-3">
                             <p><strong>Your primary Sport of coaching: </strong> {profile.primarySport || "None"}</p>
                             <p><strong>Your secondary Sport of coaching:</strong> {profile.secondarySport || "None"}</p>
-                            <p><strong>Years of Experience:</strong> {profile.experience || "None"}</p>
-                            <p><strong>Teams You have coached for: </strong> {profile.teamName || "None"}</p>
-                            <p><strong>Your achievements as a coach: </strong> <br /> {profile.achievements || "None"}</p>
+                            <p ><strong>Years of Experience:</strong> {profile.experience || "None"}</p>
+                            <p style={{whiteSpace:'pre-line'}}><strong>Teams You have coached for: </strong> {profile.teamName || "None"}</p>
+                            <p style={{whiteSpace:'pre-line'}}><strong>Your achievements as a coach: </strong> <br /> {profile.achievements || "None"}</p>
                             <p><strong>Kindly upload your QR code to facilitate donations for training your students.</strong></p>
                             <Button onClick={handleNavigation}>Upload QR Code</Button>
                         </div>
@@ -465,9 +471,11 @@ const Profile = () => {
                         <div className="space-y-3">
                             <p><strong>The sports which majorly interest you: </strong> {profile.primarySport || "None"}</p>
                             <p><strong>The other sport which interests you: </strong> {profile.secondarySport || "None"}</p>
-                            <p><strong>Your favorite sports moments: </strong> <br /> {profile.achievements || "None"}</p>
-                            <p><strong>Your favorite teams: </strong> <br /> {profile.teamName || "None"}</p>
-                            <p><strong>Approximate number of years you have been interested in these sports: </strong> {profile.experience || "None"}</p>
+                            <p style={{whiteSpace:'pre-line'}}><strong style={{whiteSpace:'pre-line'}}>Your favorite sports moments: </strong> <br /> {profile.achievements || "None"}</p>
+                            <p style={{whiteSpace:'pre-line'}}><strong style={{whiteSpace:'pre-line'}}>Your favorite teams: </strong> <br /> {profile.teamName || "None"}</p>
+                            <p style={{whiteSpace:'pre-line'}}><strong>Approximate number of years you have been interested in these sports: </strong> {profile.experience || "None"}</p>
+                            <p><strong>Kindly upload your QR code to facilitate money transactions between your network</strong></p>
+                            <Button onClick={handleNavigation}>Upload QR Code</Button>
                         </div>
                     </div>
 
@@ -478,8 +486,8 @@ const Profile = () => {
                         <div className="space-y-3">
                             <p><strong>The sports which you focus primarily: </strong> {profile.primarySport || "None"}</p>
                             <p><strong>Other sports of focus: </strong> {profile.secondarySport || "None"}</p>
-                            <p><strong>Type of services offered: </strong> <br /> {profile.servicesOffered || "None"}</p>
-                            <p><strong>Achievement Highlights: </strong> {profile.achievements || "None"}</p>
+                            <p style={{whiteSpace:'pre-line'}}><strong>Type of services offered: </strong> <br /> {profile.servicesOffered || "None"}</p>
+                            <p style={{whiteSpace:'pre-line'}}><strong>Achievement Highlights: </strong> {profile.achievements || "None"}</p>
                         </div>
                     </div>
 
@@ -523,6 +531,43 @@ const Profile = () => {
                                                 <option key={state} value={state}>{state}</option>
                                             ))}
                                         </select>
+                                        <br />
+                                        <div style={{
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            alignItems: 'center',
+                                            }}>
+                                            <h1 style={{ fontSize: '18px', marginBottom: '15px' }}>
+                                                <strong>Are you an athlete with a disability?</strong>
+                                            </h1>
+
+                                            <div style={{ display: 'flex', gap: '20px' }}>
+                                                <label style={{ fontSize: '16px' }}>
+                                                <input
+                                                    type="radio"
+                                                    name="isDisabled"
+                                                    value="yes"
+                                                    checked={isDisabled === "yes"}
+                                                    onChange={handleDisabledChange}
+                                                    style={{ marginRight: '8px' }}
+                                                />
+                                                Yes
+                                                </label>
+
+                                                <label style={{ fontSize: '16px' }}>
+                                                <input
+                                                    type="radio"
+                                                    name="isDisabled"
+                                                    value="no"
+                                                    checked={isDisabled === "no"}
+                                                    onChange={handleDisabledChange}
+                                                    style={{ marginRight: '8px' }}
+                                                />
+                                                No
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <br />
                                         <textarea name='teamName' placeholder='Please enter the name of the teams you have played for' value={profile.teamName} onChange={handleChange} style={textareaStyle} onFocus={(e) => e.target.style.border = focusStyle.border} onBlur={(e) => e.target.style.border = blurStyle.border} />
                                         <textarea name='achievements' placeholder='Please enter your achievements as a player' value={profile.achievements} onChange={handleChange} style={textareaStyle} onFocus={(e) => e.target.style.border = focusStyle.border} onBlur={(e) => e.target.style.border = blurStyle.border} />
                                         <input type="number" name="experience" placeholder="Years of Experience" value={profile.experience} onChange={handleChange} className="border p-2 rounded w-full" />
