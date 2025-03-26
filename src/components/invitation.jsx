@@ -51,7 +51,7 @@ const Invitation = () => {
     try {
       await deleteDoc(doc(database, "Users", `${auth.currentUser?.uid}`, "RequestIn", id));
       alert('rejected the request')
-      showrequest();
+      await showrequest();
     } catch (err) {
       console.error("Error deleting request:", err);
     }
@@ -66,7 +66,7 @@ const Invitation = () => {
         status: "connected",
       });
       alert(`Accepted the request from ${user.username}`);
-      showrequest();
+      await showrequest();
       addConnect(user.id, user);
     } catch (err) {
       console.log(err);
@@ -87,7 +87,7 @@ const Invitation = () => {
         username: requestedUser,
         status: "connected",
       });
-      showrequest();
+      await showrequest();
     } catch (err) {
       console.log(err);
     }
