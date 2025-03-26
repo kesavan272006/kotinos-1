@@ -44,7 +44,7 @@ function Getstarted() {
 
             // Scroll-triggered animations
 
-            
+
 
             gsap.utils.toArray(".scroll-reveal").forEach((el) => {
                 gsap.from(el, {
@@ -118,8 +118,8 @@ function Getstarted() {
                         { icon: "🏅", title: "Showcase Achievements", desc: "Share the defining highlights of your athletic journey. Upload images and share thoughts that not only capture your passion but also mark those standout achievements, helping boost your profile and inspire your network" },
                         { icon: "🎉", title: "Host & Discover Events", desc: "Step beyond the screen and into dynamic gatherings. Organize, discover, and join events that bring your community together—whether you're cheering on from afar or shaking hands in person." },
                         { icon: "💰", title: "Crowdfunding Support", desc: "Empower athletes by providing direct financial backing through our streamlined crowdfunding platform. Fuel the passion and progress of promising talent." },
-                        { icon: "🤖", title: "AI Injury Prevention & Guidance", desc: "Get expert guidance with our AI-powered assistant." },
-                        { icon: "📋", title: "Performance Tracking", desc: "Set goals, track progress, and stay ahead." },
+                        { icon: "🤖", title: "AI Sports Assistant", desc: "Access personalized guidance for your sports-related queries. With a focus on injury prevention and overall wellness, our AI-powered chatbot offers real-time advice to keep you at your best." },
+                        { icon: "📋", title: "Performance Tracking", desc: "Stay on track with an intuitive performance-monitoring tool. Organize your training routines, set realistic goals, and visualize your progress—just like a to-do list for your athletic journey." },
                         { icon: "💬", title: "Community & Chat", desc: "Connect with fellow athletes and sports enthusiasts. Enjoy one-on-one chats, vibrant group discussions, and active community forums to share insights, tips, and successes." }
                     ].map((feature, index) => (
                         <div className="w-full scroll-reveal">
@@ -148,17 +148,36 @@ function Getstarted() {
 
 
 
-                {/* Call to Action */}
-                <div className="scale-reveal mt-20">
-                    <h2 className="text-4xl font-bold neon-title">Start Your Journey Today!</h2>
-                    <p className="text-lg text-gray-300 mt-4">Join a thriving community of athletes worldwide.</p>
-                    <button
-                        onClick={() => navigate("/signin")}
-                        className="glow-btn mt-8 px-10 py-3 rounded-full text-lg font-bold"
-                    >
-                        Sign Up Now 🚀
-                    </button>
+
+                {/* About Us Section */}
+                {/* About Us Section */}
+                <div className="about-us-section mt-20 w-full text-center scale-reveal">
+                    <h2 className="text-4xl font-bold neon-title text-white fade-up">
+                        About <span className="text-[#2BCEE0]">Us</span>
+                    </h2>
+                    <p className="text-lg text-gray-300 mt-4 max-w-3xl mx-auto fade-up">
+                        We are passionate about revolutionizing sports networking. Our platform connects athletes, coaches, and fans, empowering them to track progress, engage with the community, and take their journey to the next level.
+                    </p>
+
+                    {/* About Us Content */}
+                    <div className="grid md:grid-cols-2 gap-10 scroll-reveal mt-10 w-full">
+                        <div className="p-6 rounded-3xl bg-blue-950 shadow-lg text-white">
+                            <h3 className="text-2xl font-bold">Our Mission</h3>
+                            <p className="mt-3 text-gray-300">
+                                To create a seamless, interactive experience for athletes worldwide by offering tools for performance tracking, event organization, and personal brand building.
+                            </p>
+                        </div>
+
+                        <div className="p-6 rounded-3xl bg-blue-950 shadow-lg text-white">
+                            <h3 className="text-2xl font-bold">Why Choose Us?</h3>
+                            <p className="mt-3 text-gray-300">
+                                With AI-driven insights, a thriving community, and a user-friendly interface, we provide everything athletes need to succeed both on and off the field.
+                            </p>
+                        </div>
+                    </div>
                 </div>
+
+
 
             </div>
             <Footer />
