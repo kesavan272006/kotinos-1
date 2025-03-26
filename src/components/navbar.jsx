@@ -103,7 +103,7 @@ function Navbar() {
                         <div className="h-10 w-10 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-xl transition-transform hover:scale-105">
                             K
                         </div>
-                        <span className="ml-2 text-lg font-semibold hidden md:block text-gray-800">Kotinos</span>
+                        <span className="ml-2 text-lg font-semibold md:block text-gray-800">Kotinos</span>
                         {/* {isMobile && (
                             <strong className="ml-2 text-lg font-semibold text-gray-800">Kotinos</strong>
                         )} */}
