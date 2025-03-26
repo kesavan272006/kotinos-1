@@ -4,7 +4,7 @@ import Navbar from '../components/navbar';
 import { Paper, ListItem, Avatar, ListItemText, List } from "@mui/material";
 import profileicon from "../assets/profileicon.svg";
 import { Button } from "@mui/material";
-import { collection, doc, getDocs, deleteDoc, setDoc } from "firebase/firestore";
+import { collection, doc, getDocs, deleteDoc, setDoc, getDoc } from "firebase/firestore";
 import { auth, database } from "../config/firebase";
 import Loading from "./Loading";
 import { Link, useLocation } from "react-router-dom";
@@ -66,10 +66,11 @@ const Invitation = () => {
     return <Loading />;
   }
   const location = useLocation();
+  const [requestedUser, setrequestUser]=useState('');
+  const [requestRole, setRequestedRole]=useState('');
   const acceptReq = async (user) => {
     const acceptDoc = doc(database, "Users", `${auth.currentUser?.uid}`);
     const connectionDoc = doc(acceptDoc, "RequestIn", `${user.id}`);
-
     try {
       await setDoc(connectionDoc, {
         role: user.role,
@@ -87,17 +88,23 @@ const Invitation = () => {
 
 
   const addConnect = async (requestId, user) => {
-    const acceptDoc = doc(database, "Users", `${requestId}`);
+    const acceptDoc = doc(database, "Users", `${user.id}`);
     const connectionDoc = doc(acceptDoc, "RequestIn", `${auth.currentUser?.uid}`);
-
+    const docRef = doc(database, "Users", `${user.id}`);
+    const docSnap = await getDoc(docRef);
+    
+    if (docSnap.exists()) {
+        const reference = docSnap.data();
+        setrequestUser(reference.username);
+        setRequestedRole(reference.role);
+    }
     try {
       await setDoc(connectionDoc, {
         id: auth.currentUser?.uid,
-        role: location.state.role,
-        username: location.state.username,
+        role: requestRole,
+        username: requestedUser,
         status: 'connected',
       });
-      alert(`Accepted the request from ${user.username}`);
       showrequest();
     } catch (err) {
       console.log(err);
