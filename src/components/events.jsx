@@ -410,7 +410,7 @@ const Events = (props, ref) => {
           <h1><strong>Add Images about the event</strong></h1>
         </div>
         <br />
-        <div style={{display:'flex',flexDirection:'row'}}>
+        <div style={{display:'flex',flexDirection:'row',justifyContent:'center'}}>
             <Switch
             onChange={handleSwitchChange} 
             />

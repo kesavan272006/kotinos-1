@@ -102,7 +102,8 @@ const Connection = () => {
     const query = event.target.value;
     setSearchQuery(query);
     const filtered = userData.filter(user => 
-      user.username.toLowerCase().includes(query.toLowerCase())
+      user.username.toLowerCase().includes(query.toLowerCase()) || 
+      user.role.toLowerCase().includes(query.toLowerCase())
     );
     setFilteredUsers(filtered);
   };

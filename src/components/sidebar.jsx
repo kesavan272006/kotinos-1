@@ -101,7 +101,7 @@ const Sidebar = () => {
           {/* <div><img src={logo} className='w-16 rounded-full' alt="" /></div> */}
           <div className="heading russo text-white pl-8 text-4xl pt-5">KOTINOS</div>
         </div>
-        <div className="flex flex-row items-center justify-center gap-3 absolute top-[89vh] md:top-[87vh] p-2 bg-gray-300 w-full hover:bg-opacity-10 bg-opacity-5">
+        <div className="flex flex-row items-center justify-center gap-3 absolute top-[85vh] md:top-[87vh] p-2 bg-gray-300 w-full hover:bg-opacity-10 bg-opacity-5">
           <div><img src={profiles || profileicon} className=" h-10 w-10 md:w-14 md:h-14 rounded-full bg-gray-500 mt-[20px]" /></div>
           <Link to='/profile'>
             <div className="flex flex-col justify-center">
