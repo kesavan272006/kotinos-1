@@ -24,21 +24,20 @@ const Invitation = () => {
     });
     return () => unsubscribe();
   }, []);
-
+  const requestref = doc(database, "Users", `${auth.currentUser?.uid}`);
+  const requestInRef = collection(requestref, "RequestIn");
   useEffect(() => {
     if (isAuthenticated && auth.currentUser?.uid) {
-      const requestref = doc(database, "Users", `${auth.currentUser?.uid}`);
-      const requestInRef = collection(requestref, "RequestIn");
-      showrequest(requestInRef);
+      showrequest();
     } else {
       setLoading(false);
     }
   }, [isAuthenticated]);
 
-  const showrequest = async (requestInRef) => {
-    if (!requestInRef) return;
+  const showrequest = async () => {
     try {
       const data = await getDocs(requestInRef);
+      console.log("hi")
       const filteredData = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
       setuser(filteredData);
     } catch (err) {
@@ -51,6 +50,7 @@ const Invitation = () => {
   const deleteRequest = async (id) => {
     try {
       await deleteDoc(doc(database, "Users", `${auth.currentUser?.uid}`, "RequestIn", id));
+      alert('rejected the request')
       showrequest();
     } catch (err) {
       console.error("Error deleting request:", err);
@@ -74,7 +74,7 @@ const Invitation = () => {
   };
 
   const addConnect = async (requestId, user) => {
-    const docSnap = await getDoc(doc(database, "Users", `${user.id}`));
+    const docSnap = await getDoc(doc(database, "Users", `${auth.currentUser?.id}`));
     if (docSnap.exists()) {
       const reference = docSnap.data();
       setrequestUser(reference.username);
