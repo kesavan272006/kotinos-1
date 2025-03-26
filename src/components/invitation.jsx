@@ -37,7 +37,6 @@ const Invitation = () => {
   const showrequest = async () => {
     try {
       const data = await getDocs(requestInRef);
-      console.log("hi")
       const filteredData = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
       setuser(filteredData);
     } catch (err) {
