@@ -1,108 +1,213 @@
 import React, { useState, useEffect } from "react";
-import { collection, getDocs, getDoc, doc } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import { auth, database } from "../config/firebase";
-import { Alert } from "@mui/material";
+import {
+  Alert,
+  Box,
+  Button,
+  Container,
+  Typography,
+  Grid,
+  Paper,
+} from "@mui/material";
 import { Link, useParams } from "react-router-dom";
+import { motion } from "framer-motion";
+import samplechat from "../assets/samplechat.jpg";
+import samplefund from "../assets/kkr.jpg"; 
+import Footer from "../components/footer";
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0 },
+};
 
 const QRDisplay = () => {
-    const {userId} = useParams();
+  const { userId } = useParams();
   const [qrCodes, setQrCode] = useState(null);
   const [message, setMessage] = useState("");
-  const [username, setUsername]=useState("");
-  const [role, setRole]=useState("");
-  const [qrimg, setqrimg]=useState("");
-  const user = auth.currentUser;
+  const [username, setUsername] = useState("");
+  const [role, setRole] = useState("");
+  const [qrimg, setQrImg] = useState("");
+
   useEffect(() => {
-    const fetchProfile2 = async () => {
-        
-        const docRef = doc(database, "Users", userId);
-            const docSnap = await getDoc(docRef);
-            if (docSnap.exists()) {
-                const reference = docSnap.data();
-                setUsername(reference.username)
-                setRole(reference.role);
-            }
+    const fetchProfile = async () => {
+      const docRef = doc(database, "Users", userId);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        setUsername(data.username);
+        setRole(data.role);
+      }
     };
-    
-    fetchProfile2();
-}, [user, role]);
+    fetchProfile();
+  }, [userId]);
+
   useEffect(() => {
     const fetchLatestQRCode = async () => {
       try {
-        const qrDocref = doc(database, "Users", userId);
-        const qrDoc2ref = doc(qrDocref, "profileDetails", "details");
-        const querySnapshot = await getDoc(qrDoc2ref);
-
-        if (querySnapshot.exists()) {
-          const latestQR = querySnapshot.data();
-          setQrCode(latestQR.decodedQr);
-          setqrimg(latestQR.qrCode);
+        const qrDocRef = doc(database, "Users", userId, "profileDetails", "details");
+        const docSnap = await getDoc(qrDocRef);
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          setQrCode(data.decodedQr);
+          setQrImg(data.qrCode);
         }
       } catch (error) {
         console.error("Error fetching QR code:", error);
         setMessage("⚠ Failed to load QR code.");
       }
     };
-
     fetchLatestQRCode();
-  }, []);
+  }, [userId]);
 
   return (
-    <div style={{marginTop:'40px'}} className="qr-display-container">
-      <h2 className="title">Latest Verified QR Code</h2>
-      {message && <p className="error-message">{message}</p>}
+    <>
+        <Container maxWidth="lg" sx={{ mt: 6 }}>
+      <Typography variant="h4" align="center" gutterBottom color="primary">
+        Support via Verified QR Code
+      </Typography>
+
+      {message && <Alert severity="error" sx={{ mb: 2 }}>{message}</Alert>}
+
       {!qrCodes ? (
-        <p>No verified QR code available. <br />{username} has not uploaded any verified qr code.</p>
+        <Paper sx={{ p: 3, textAlign: "center", backgroundColor: "#e3f2fd" }}>
+          <Typography variant="body1">
+            No verified QR code available. <br />
+            {username ? `${username} has not uploaded any verified QR code.` : "Loading..."}
+          </Typography>
+        </Paper>
       ) : (
-        <div className="qr-content">
-          <img src={qrimg} alt="QR Code" width="150" className="qr-image" />
-          <p className="uploaded-by">Uploaded by: {username || "Unknown User"}</p>
-          
-          {qrCodes.startsWith("upi://pay") ? (
-            <Link
-              to={qrCodes}
-              style={{
-                display: "inline-block",
-                padding: "10px 20px",
-                backgroundColor: "#4CAF50",
-                color: "white",
-                textDecoration: "none",
-                borderRadius: "5px",
-                marginTop: "10px",
-              }}
-              className="pay-now-button"
-            >
-              Pay Now
-            </Link>
-          ) : (
-            <button className="scan-go-button" onClick={() => window.open(qrCodes.decodedQr, "_blank")}>Scan & Go</button>
-          )}
-          
-          {qrCodes.startsWith("upi://pay") && (
-            <div className="qr-copy-section">
-              <p className="copy-text">⚠ If the payment app doesn't open, copy & paste the link below manually:</p>
-              <input
-                type="text"
-                value={qrCodes}
-                readOnly
-                className="qr-link-input"
-              />
-              <button
-                onClick={() => 
-                    {
-                        navigator.clipboard.writeText(qrCodes)
-                        alert("Qr code url copied!")
-                    }
-                }
-                className="copy-button"
-              >
-                Copy UPI Link
-              </button>
-            </div>
-          )}
-        </div>
+        <Grid container justifyContent="center">
+          <Grid item xs={12} md={6}>
+            <Paper elevation={3} sx={{ p: 4, textAlign: "center", backgroundColor: "#e3f2fd" }}>
+              <img src={qrimg} alt="QR Code" width="150" />
+              <Typography variant="body2" sx={{ mt: 2 }}>
+                Uploaded by: <strong>{username || "Unknown User"}</strong>
+              </Typography>
+
+              {qrCodes.startsWith("upi://pay") ? (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  sx={{ mt: 2 }}
+                  component={Link}
+                  to={qrCodes}
+                >
+                  Pay Now
+                </Button>
+              ) : (
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  sx={{ mt: 2 }}
+                  onClick={() => window.open(qrCodes, "_blank")}
+                >
+                  Scan & Go
+                </Button>
+              )}
+
+              {qrCodes.startsWith("upi://pay") && (
+                <Box sx={{ mt: 3 }}>
+                  <Typography variant="body2" color="textSecondary">
+                    ⚠ If your payment app doesn't open, copy and paste the link:
+                  </Typography>
+                  <Box sx={{ display: "flex", alignItems: "center", mt: 1 }}>
+                    <input
+                      type="text"
+                      value={qrCodes}
+                      readOnly
+                      style={{
+                        flex: 1,
+                        padding: "8px",
+                        marginRight: "8px",
+                        borderRadius: "4px",
+                        border: "1px solid #ccc",
+                      }}
+                    />
+                    <Button
+                      variant="outlined"
+                      color="primary"
+                      onClick={() => {
+                        navigator.clipboard.writeText(qrCodes);
+                        alert("QR code URL copied!");
+                      }}
+                    >
+                      Copy Link
+                    </Button>
+                  </Box>
+                </Box>
+              )}
+            </Paper>
+          </Grid>
+        </Grid>
       )}
-    </div>
+
+      {/* Animated Scroll Info */}
+      <Box sx={{ mt: 10 }}>
+        <motion.div
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.7 }}
+        >
+          <Typography variant="h5" gutterBottom color="primary">
+            Why Make a Payment?
+          </Typography>
+          <Typography variant="body1" sx={{ mb: 3 }}>
+            Whether you're tipping a creator, supporting an athlete, or donating to an organization —
+            your payment goes directly to the user through their verified QR code.
+          </Typography>
+          <Box sx={{ display: "flex", justifyContent: "center" }}>
+            <img
+              src={samplechat}
+              alt="Chat payment screenshot"
+              style={{
+                width: '100%',
+                maxWidth: '280px',
+                height: 'auto',
+                borderRadius: '8px',
+                display: 'block',
+              }}
+            />
+          </Box>
+        </motion.div>
+
+        <motion.div
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.7, delay: 0.3 }}
+        >
+          <Box sx={{ mt: 8 }}>
+            <Typography variant="h5" gutterBottom color="primary">
+              Safe. Verified. Instant.
+            </Typography>
+            <Typography variant="body1" sx={{ mb: 3 }}>
+              All QR codes on our platform are reviewed and verified. Your payment is sent directly through UPI to their linked
+              account — no middleman involved.
+            </Typography>
+            <Box sx={{ display: "flex", justifyContent: "center" }}>
+              <img
+                src={samplefund}
+                alt="Crowdfunding screenshot"
+                style={{
+                  width: '100%',
+                  maxWidth: '280px',
+                  height: 'auto',
+                  borderRadius: '8px',
+                  display: 'block',
+                }}
+              />
+            </Box>
+          </Box>
+        </motion.div>
+      </Box>
+    </Container>
+    <br />
+    <Footer />
+    </>
   );
 };
 

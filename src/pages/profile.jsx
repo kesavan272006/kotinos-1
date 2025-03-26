@@ -16,6 +16,7 @@ import { getDocs } from 'firebase/firestore';
 import Modal from 'react-modal';
 import { signOut } from 'firebase/auth';
 import { IoTrashOutline } from "react-icons/io5";
+import ReadMore from '../components/Readmore';
 const Profile = () => {
     const handleNavigation = () => {
         navigate('/addQR');
@@ -442,7 +443,7 @@ const Profile = () => {
                             <p><strong>Secondary Sport:</strong> {profile.secondarySport || "None"}</p>
                             <p><strong>Years of Experience:</strong> {profile.experience || "None"}</p>
                             <p style={{whiteSpace:'pre-line'}}><strong>Teams You have played for: </strong> <br /> {profile.teamName || "None"}</p>
-                            <p style={{whiteSpace:'pre-line'}}><strong>Your achievements as a player: </strong> <br /> {profile.achievements || "None"}</p>
+                            <p style={{whiteSpace:'pre-line'}}><strong>Your achievements as a player: </strong> <br /> <ReadMore text={profile.achievements || "None"} /> </p>
                             <h1><strong>Upload your QR code to receive financial support for your athletic journey</strong></h1>
                             <Button onClick={handleNavigation}>Upload QR Code</Button>
                         </div>
@@ -456,8 +457,8 @@ const Profile = () => {
                             <p><strong>Your primary Sport of coaching: </strong> {profile.primarySport || "None"}</p>
                             <p><strong>Your secondary Sport of coaching:</strong> {profile.secondarySport || "None"}</p>
                             <p ><strong>Years of Experience:</strong> {profile.experience || "None"}</p>
-                            <p style={{whiteSpace:'pre-line'}}><strong>Teams You have coached for: </strong> {profile.teamName || "None"}</p>
-                            <p style={{whiteSpace:'pre-line'}}><strong>Your achievements as a coach: </strong> <br /> {profile.achievements || "None"}</p>
+                            <p style={{whiteSpace:'pre-line'}}><strong>Teams You have coached for: </strong> <ReadMore text={profile.teamName || "None"} /></p>
+                            <p style={{whiteSpace:'pre-line'}}><strong>Your achievements as a coach: </strong> <br /> <ReadMore text={profile.achievements || "None"} /></p>
                             <p><strong>Kindly upload your QR code to facilitate donations for training your students.</strong></p>
                             <Button onClick={handleNavigation}>Upload QR Code</Button>
                         </div>
@@ -486,8 +487,8 @@ const Profile = () => {
                         <div className="space-y-3">
                             <p><strong>The sports which you focus primarily: </strong> {profile.primarySport || "None"}</p>
                             <p><strong>Other sports of focus: </strong> {profile.secondarySport || "None"}</p>
-                            <p style={{whiteSpace:'pre-line'}}><strong>Type of services offered: </strong> <br /> {profile.servicesOffered || "None"}</p>
-                            <p style={{whiteSpace:'pre-line'}}><strong>Achievement Highlights: </strong> {profile.achievements || "None"}</p>
+                            <p style={{whiteSpace:'pre-line'}}><strong>Type of services offered: </strong> <br /> <ReadMore text={profile.servicesOffered || "None"} /></p>
+                            <p style={{whiteSpace:'pre-line'}}><strong>Achievement Highlights: </strong> <ReadMore text={profile.achievements || "None"} /></p>
                         </div>
                     </div>
 
@@ -795,7 +796,7 @@ const Profile = () => {
                                                 </div>
 
                                                 <br />
-                                                <h1 className='ml-5'>{post.textPost}</h1>
+                                                <h1 className='ml-5'><ReadMore text={post.textPost} /></h1>
                                             </div>
                                             <div>
                                                 <div className='text-2xl font-bold ml-5 mb-3'>
@@ -816,7 +817,7 @@ const Profile = () => {
                                                     </div>
                                                 )}
                                                 <br />
-                                                <h2 className='whitespace-pre-wrap text-base ml-6 mr-2'>{post.description}</h2>
+                                                <h2 className='whitespace-pre-wrap text-base ml-6 mr-2'><ReadMore text={post.description} /></h2>
                                             </div>
 
                                             {post.images && post.images.length > 0 && (
@@ -971,10 +972,11 @@ const Profile = () => {
                                                                 </button>
                                                             </div>
                                                         )}
-                                                    </div>                                                </div>
+                                                    </div>                                              
+                                                </div>
 
                                                 <br />
-                                                <h1 className='ml-5'>{post.textPost}</h1>
+                                                <h1 className='ml-5'><ReadMore text={post.textPost} /></h1>
                                             </div>
                                             <div>
                                                 <div className='text-2xl font-bold ml-5 mb-3'>
@@ -995,7 +997,7 @@ const Profile = () => {
                                                     </div>
                                                 )}
                                                 <br />
-                                                <h2 className='whitespace-pre-wrap text-base ml-6 mr-2'>{post.description}</h2>
+                                                <h2 className='whitespace-pre-wrap text-base ml-6 mr-2'><ReadMore text={post.description} /></h2>
                                             </div>
                                             <br />
                                             {post.images && post.images.length > 0 && (
@@ -1182,9 +1184,10 @@ const Profile = () => {
                                                                 </button>
                                                             </div>
                                                         )}
-                                                    </div>                                                </div>
+                                                    </div>                                       
+                                                </div>
 
-                                                <h1 className='ml-5'>{post.textPost}</h1>
+                                                <h1 className='ml-5'><ReadMore text={post.textPost} /></h1>
                                             </div>
                                             <div>
                                                 <div className='text-2xl font-bold ml-5 mb-3'>
@@ -1205,7 +1208,7 @@ const Profile = () => {
                                                     </div>
                                                 )}
                                                 <br />
-                                                <h2 className='whitespace-pre-wrap text-base ml-6 mr-2'>{post.description}</h2>
+                                                <h2 className='whitespace-pre-wrap text-base ml-6 mr-2'><ReadMore text={post.description} /></h2>
                                             </div>
 
                                             {post.images && post.images.length > 0 && (
@@ -1363,15 +1366,16 @@ const Profile = () => {
                                                                 </button>
                                                             </div>
                                                         )}
-                                                    </div>                                                </div>
+                                                    </div>                                                
+                                                </div>
                                                 <br />
-                                                <h1>{post.textPost}</h1>
+                                                <h1><ReadMore text={post.textPost} /></h1>
                                             </div>
                                             <div>
                                                 <div className='text-2xl font-bold ml-4'>
                                                     {post.title}
                                                 </div>
-                                                <h2 className='whitespace-pre-wrap text-base ml-6 mr-2'>{post.description}</h2>
+                                                <h2 className='whitespace-pre-wrap text-base ml-6 mr-2'><ReadMore text={post.description} /></h2>
                                             </div>
 
                                             {post.images && post.images.length > 0 && (
@@ -1523,15 +1527,16 @@ const Profile = () => {
                                                                 </button>
                                                             </div>
                                                         )}
-                                                    </div>                                                </div>
+                                                    </div>                                                
+                                                </div>
                                                 <br />
-                                                <h1 className='md:mx-4 whitespace-pre-wrap'>{post.textPost}</h1>
+                                                <h1 className='md:mx-4 whitespace-pre-wrap'><ReadMore text={post.textPost} /></h1>
                                             </div>
                                             <div>
                                                 <div className='text-2xl font-bold ml-4'>
                                                     {post.title}
                                                 </div>
-                                                <h2 className='whitespace-pre-wrap text-base ml-6 mr-2'>{post.description}</h2>
+                                                <h2 className='whitespace-pre-wrap text-base ml-6 mr-2'><ReadMore text={post.description} /></h2>
                                             </div>
 
                                             {post.images && post.images.length > 0 && (
@@ -1683,14 +1688,15 @@ const Profile = () => {
                                                                 </button>
                                                             </div>
                                                         )}
-                                                    </div>                                                </div>
-                                                <h1 className='whitespace-pre-wrap text-base mr-2 mt-4'>{post.textPost}</h1>
+                                                    </div>                                                
+                                                </div>
+                                                <h1 className='whitespace-pre-wrap text-base mr-2 mt-4'><ReadMore text={post.textPost} /></h1>
                                             </div>
                                             <div>
                                                 <div className='text-2xl font-bold ml-4'>
                                                     {post.title}
                                                 </div>
-                                                <h2 className='whitespace-pre-wrap text-base ml-6 mr-2'>{post.description}</h2>
+                                                <h2 className='whitespace-pre-wrap text-base ml-6 mr-2'><ReadMore text={post.description} /></h2>
                                             </div>
 
                                             {post.images && post.images.length > 0 && (
