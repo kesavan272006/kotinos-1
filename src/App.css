@@ -135,7 +135,12 @@ body {
   width: 86px;
   border-radius: 100%;
 }
-
+.gradient-text {
+  background: linear-gradient(to bottom, white, rgb(140, 183, 240));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
 
 .active-link {
   color: rgb(3, 148, 220);
@@ -960,3 +965,12 @@ input[type="file"] {
 .modal-content button.close-btn:hover {
   color: #f44336;
 }
+
+
+.hover\:shadow-glowC:hover {
+  --tw-shadow: 0 0 20px rgba(25, 0, 255, 0.3), 0 0 40px rgb(92, 255, 247,0.3), 0 0 60px rgb(87, 104, 255,0.3);
+  --tw-shadow-colored: 0 0 20px var(--tw-shadow-color), 0 0 40px var(--tw-shadow-color), 0 0 60px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+/* ight, #00d9ff, #5cfff7, #5768ff) */
