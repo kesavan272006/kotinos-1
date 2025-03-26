@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import '../pages/chatbot.css'
 import ReactMarkdown from 'react-markdown';
+import Navbar from '../components/navbar';
 const API_KEY = import.meta.env.VITE_AI_APP_ID;
 const genAI = new GoogleGenerativeAI(API_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-exp" });
@@ -84,7 +85,8 @@ const ChatBot = () => {
 
   return (
     <div className="flex flex-col justify-center items-center min-h-screen bg-white">
-        <div className="chat-container w-full max-w-4xl h-5/6 bg-white rounded-lg shadow-xl border">
+      <Navbar />
+        <div className="chat-container w-full h-5/6 max-h-[90vh] bg-white shadow-xl border">
           <div className="chat-header bg-blue-500 text-white text-center p-5 font-semibold text-lg">
             Rio: Your AI Assistant on Kotinos
           </div>
@@ -119,8 +121,8 @@ const ChatBot = () => {
                 key={index}
                 className={`max-w-xs p-4 rounded-xl shadow-md mb-4 ${
                   msg.role === "user"
-                    ? "bg-blue-500 text-white self-end"
-                    : "bg-gray-200 text-gray-800 self-start"
+                    ? "bg-blue-500 text-white self-end md:mr-0 "
+                    : "bg-gray-200 text-gray-800 self-start md:ml-10 bot-message"
                 }`}
               >
                 <ReactMarkdown>{msg.content}</ReactMarkdown>
