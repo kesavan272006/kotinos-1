@@ -17,6 +17,7 @@ import { ArrowLeft } from 'lucide-react';
 import { BiImageAdd } from "react-icons/bi";
 import { RiMoneyRupeeCircleLine } from "react-icons/ri";
 import { FiSearch } from 'react-icons/fi';
+import ReadMore from '../components/Readmore';
 const ChatPage = () => {
     const [user, setUser] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -1171,7 +1172,7 @@ const ChatPage = () => {
                                                             }}
                                                         />
                                                     ))}
-                                                    {message.message && <span style={{ fontSize: '14px', whiteSpace:'pre-line' }}>{message.message}</span>}
+                                                    {message.message && <span style={{ fontSize: '14px', whiteSpace:'pre-line' }}><ReadMore text={message.message} /></span>}
                                                 </div>
                                             </div>
                                         );
@@ -1307,7 +1308,7 @@ const ChatPage = () => {
                                                             }}
                                                         />
                                                     ))}
-                                                    {userMessage.message && <span style={{ fontSize: '14px', whiteSpace:'pre-line' }}>{userMessage.message}</span>}
+                                                    {userMessage.message && <span style={{ fontSize: '14px', whiteSpace:'pre-line' }}><ReadMore text={userMessage.message} /></span>}
                                                 </div>
                                                 {isCurrentUser && view === userMessage.id && (
                                                     <button
@@ -1395,37 +1396,37 @@ const ChatPage = () => {
                                 </div>
 
                                 <div style={{
-                                    position: 'absolute',
-                                    bottom: '0',
-                                    left: '0',
-                                    width: '100%',
-                                    padding: '10px',
-                                    backgroundColor: '#fff',
-                                    boxShadow: '0 -2px 10px rgba(0, 0, 0, 0.1)',
-                                    display: 'flex',
-                                    flexDirection: 'row',
-                                    justifyContent: 'space-between',
-                                    alignItems: 'center',
-                                    height:'10%'
-                                }}>
-                                    <div>
-                                        <input
-                                            type="file"
-                                            ref={fileInputRef}
-                                            style={{ display: 'none' }}
-                                            onChange={handleFileChange}
-                                            multiple
-                                        />
-                                        <BiImageAdd
-                                            className='cursor-pointer text-3xl ml-3 mt-1 hover:bg-gray-200 rounded mr-2'
-                                            onClick={() => {
-                                                setOpenModal(true);
-                                            }} />
-                                    </div>
-                                    <TextField
+                                position: 'absolute',
+                                bottom: '0',
+                                left: '0',
+                                width: '100%',
+                                padding: '10px',
+                                backgroundColor: '#fff',
+                                boxShadow: '0 -2px 10px rgba(0, 0, 0, 0.1)',
+                                display: 'flex',
+                                flexDirection: 'row',
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                                height:'10%'
+                            }}>
+                                <div>
+                                    <input
+                                        type="file"
+                                        ref={fileInputRef}
+                                        style={{ display: 'none' }}
+                                        onChange={handleFileChange}
+                                        multiple
+                                    />
+                                    <BiImageAdd
+                                        className='cursor-pointer text-3xl mt-1 hover:bg-gray-200 rounded mr-2'
+                                        onClick={() => {
+                                            setOpenModal(true);
+                                        }} />
+                                </div>
+                                <TextField
                                         multiline
-                                        className='rounded-[20px] border h-10 pl-5 pb-1'
                                         value={message}
+                                        className=' border h-10 pl-5'
                                         onChange={(e) => setMessage(e.target.value)}
                                         placeholder="Type a message"
                                         style={{
@@ -1434,17 +1435,14 @@ const ChatPage = () => {
                                             overflowY: 'scroll',
                                         }}
                                     />
-                                    <RiMoneyRupeeCircleLine onClick={() => handlenavigation(selectedUser.id)} className='text-3xl mx-3 cursor-pointer hover:bg-gray-200 rounded' />
-
-                                    <button
-                                        onClick={sendMessage}
-                                        variant="contained"
-                                        className="postButton text-white font-bold px-3 py-1 rounded mr-4"
-                                        style={{ background: 'linear-gradient(to bottom, #1e3a8a, #1d4ed8, #22d3ee)' }}
-                                    >
-                                        Send
-                                    </button>
-                                </div>
+                                <RiMoneyRupeeCircleLine onClick={() => handlenavigation(selectedUser.id)} className='text-5xl mx-3 cursor-pointer hover:bg-gray-200 rounded' />
+                                <Button
+                                    onClick={sendMessage}
+                                    variant="contained" className="postButton bg-gradient-to-r from-blue-900 via-blue-700 to-cyan-500 "
+                                >
+                                    Send
+                                </Button>
+                            </div>
                             </>
                         )}
                         {selectedCommunity && (
@@ -1520,7 +1518,7 @@ const ChatPage = () => {
                                                             }}
                                                         />
                                                     ))}
-                                                    {message.message && <span style={{ fontSize: '14px', whiteSpace:'pre-line' }}>{message.message}</span>}
+                                                    {message.message && <span style={{ fontSize: '14px', whiteSpace:'pre-line' }}><ReadMore text={message.message}/></span>}
                                                 </div>
                                             </div>
                                         );
@@ -2291,7 +2289,7 @@ const ChatPage = () => {
                                                         }}
                                                     />
                                                 ))}
-                                                {message.message && <span style={{ fontSize: '14px', whiteSpace:'pre-line' }}>{message.message}</span>}
+                                                {message.message && <span style={{ fontSize: '14px', whiteSpace:'pre-line' }}><ReadMore text={message.message} /></span>}
                                             </div>
                                         </div>
                                     );
@@ -2431,7 +2429,7 @@ const ChatPage = () => {
                                                         }}
                                                     />
                                                 ))}
-                                                {userMessage.message && <span style={{ fontSize: '14px',whiteSpace:'pre-line' }}>{userMessage.message}</span>}
+                                                {userMessage.message && <span style={{ fontSize: '14px',whiteSpace:'pre-line' }}><ReadMore text={userMessage.message} /></span>}
                                             </div>
                                             {isCurrentUser && (
                                                 <button
@@ -2509,9 +2507,9 @@ const ChatPage = () => {
                                 </div>
                                 <TextField
                                         multiline
-                                        value={comMessage}
+                                        value={message}
                                         className=' border h-10 pl-5'
-                                        onChange={(e) => setComMessage(e.target.value)}
+                                        onChange={(e) => setMessage(e.target.value)}
                                         placeholder="Type a message"
                                         style={{
                                             width: '85%',
@@ -2604,7 +2602,7 @@ const ChatPage = () => {
                                                         }}
                                                     />
                                                 ))}
-                                                {message.message && <span style={{ fontSize: '14px', whiteSpace:'pre-line' }}>{message.message}</span>}
+                                                {message.message && <span style={{ fontSize: '14px', whiteSpace:'pre-line' }}><ReadMore text={message.message} /></span>}
                                             </div>
                                         </div>
                                     );

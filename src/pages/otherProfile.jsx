@@ -288,8 +288,8 @@ const OtherProfile = () => {
                         <div className="space-y-3">
                             <p><strong>The sports which you focus primarily: </strong> {profile.primarySport || "None"}</p>
                             <p><strong>Other sports of focus: </strong> {profile.secondarySport || "None"}</p>
-                            <p style={{whiteSpace:'pre-line'}}><strong>Type of services offered: </strong> <br /> {profile.servicesOffered || "None"}</p>
-                            <p style={{whiteSpace:'pre-line'}}><strong>Achievement Highlights: </strong> {profile.achievements || "None"}</p>
+                            <p style={{whiteSpace:'pre-line'}}><strong>Type of services offered: </strong> <br /> <ReadMore text={profile.servicesOffered || "None"} /></p>
+                            <p style={{whiteSpace:'pre-line'}}><strong>Achievement Highlights: </strong> <ReadMore text={profile.achievements || "None"} /></p>
                         </div>
                     </div>
                 )}
@@ -300,8 +300,8 @@ const OtherProfile = () => {
                             <p><strong>Primary Sport:</strong> {profile.primarySport || "None"}</p>
                             <p><strong>Secondary Sport:</strong> {profile.secondarySport || "None"}</p>
                             <p><strong>Years of Experience:</strong> {profile.experience || "None"}</p>
-                            <p style={{whiteSpace:'pre-line'}}><strong>Teams they have played for: </strong> <br /> {profile.teamName || "None"}</p>
-                            <p style={{whiteSpace:'pre-line'}}><strong>Achievements as a player: </strong> <br /> {profile.achievements || "None"}</p>
+                            <p style={{whiteSpace:'pre-line'}}><strong>Teams they have played for: </strong> <br /> <ReadMore text={profile.teamName || "None"} /></p>
+                            <p style={{whiteSpace:'pre-line'}}><strong>Achievements as a player: </strong> <br /> <ReadMore text={profile.achievements || "None"} /></p>
                         </div>
                     </div>
                 )}
@@ -312,8 +312,8 @@ const OtherProfile = () => {
                             <p><strong>Primary Sport of coaching: </strong> {profile.primarySport || "None"}</p>
                             <p><strong>Secondary Sport of coaching</strong> {profile.secondarySport || "None"}</p>
                             <p><strong>Years of Experience:</strong> {profile.experience || "None"}</p>
-                            <p style={{whiteSpace:'pre-line'}}><strong>Teams {username} have coached for: </strong> {profile.teamName || "None"}</p>
-                            <p style={{whiteSpace:'pre-line'}}><strong>Achievements as a coach: </strong> <br /> {profile.achievements || "None"}</p>
+                            <p style={{whiteSpace:'pre-line'}}><strong>Teams {username} have coached for: </strong> <ReadMore text={profile.teamName || "None"} /></p>
+                            <p style={{whiteSpace:'pre-line'}}><strong>Achievements as a coach: </strong> <br /> <ReadMore text={profile.achievements || "None"} /></p>
                         </div>
                     </div>
                 )}
@@ -324,8 +324,8 @@ const OtherProfile = () => {
                             <p><strong>The sports which majorly interests them: </strong> {profile.primarySport || "None"}</p>
                             <p><strong>The other sport which interests them: </strong> {profile.secondarySport || "None"}</p>
                             <p><strong>Approximate number of years they have been interested in these sports: </strong> {profile.experience || "None"}</p>
-                            <p style={{whiteSpace:'pre-line'}}><strong>Favourite sports Moments: </strong> <br /> {profile.achievements || "None"}</p>
-                            <p style={{whiteSpace:'pre-line'}}><strong>Favourite teams: </strong> <br /> {profile.teamName || "None"}</p>
+                            <p style={{whiteSpace:'pre-line'}}><strong>Favourite sports Moments: </strong> <br /> <ReadMore text={profile.achievements || "None"} /></p>
+                            <p style={{whiteSpace:'pre-line'}}><strong>Favourite teams: </strong> <br /> <ReadMore text={profile.teamName || "None"} /></p>
                         </div>
                     </div>
                 )}
@@ -441,7 +441,7 @@ const OtherProfile = () => {
                                                     </div>
                                                 </div>
                                                 <br />
-                                                <h1 className='ml-5'>{post.textPost}</h1>
+                                                <h1 className='ml-5'><ReadMore text={post.textPost} /></h1>
                                             </div>
                                             <div>
                                                 <div className='text-2xl font-bold ml-5 mb-3'>
@@ -592,10 +592,11 @@ const OtherProfile = () => {
                                                             <h1>{capital(post.role)}</h1>
                                                         </div>
                                                         <h3 className='mt-8 text-gray-400 text-sm ml-4'>{formatTimestamp(post.timestamp)}</h3>
-                                                    </div>                                              </div>
+                                                    </div>                                              
+                                                </div>
 
                                                 <br />
-                                                <h1 style={{whiteSpace:'pre-line'}} className='ml-5'>{post.textPost}</h1>
+                                                <h1 style={{whiteSpace:'pre-line'}} className='ml-5'><ReadMore text={post.textPost} /></h1>
                                             </div>
                                             <div>
                                                 <div className='text-2xl font-bold ml-5 mb-3'>
@@ -803,9 +804,10 @@ const OtherProfile = () => {
                                                                 </button>
                                                             </div>
                                                         )}
-                                                    </div>                                                </div>
+                                                    </div>                                                
+                                                </div>
 
-                                                <h1 className='ml-5'>{post.textPost}</h1>
+                                                <h1 className='ml-5'><ReadMore text={post.textPost} /></h1>
                                             </div>
                                             <div>
                                                 <div className='text-2xl font-bold ml-5 mb-3'>
@@ -973,7 +975,7 @@ const OtherProfile = () => {
                                                     </div>                                                
                                                 </div>
                                                 <br />
-                                                <h1>{post.textPost}</h1>
+                                                <h1><ReadMore text={post.textPost} /></h1>
                                             </div>
                                             <div>
                                                 <div className='text-2xl font-bold ml-4'>
@@ -1131,9 +1133,10 @@ const OtherProfile = () => {
                                                                 </button>
                                                             </div>
                                                         )}
-                                                    </div>                                                </div>
+                                                    </div>                                                
+                                                </div>
                                                 <br />
-                                                <h1 className='md:mx-4 whitespace-pre-wrap'>{post.textPost}</h1>
+                                                <h1 className='md:mx-4 whitespace-pre-wrap'><ReadMore text={post.textPost} /></h1>
                                             </div>
                                             <div>
                                                 <div className='text-2xl font-bold ml-4'>
@@ -1291,8 +1294,9 @@ const OtherProfile = () => {
                                                                 </button>
                                                             </div>
                                                         )}
-                                                    </div>                                                </div>
-                                                <h1 className='whitespace-pre-wrap text-base mr-2 mt-4'>{post.textPost}</h1>
+                                                    </div>                                                
+                                                </div>
+                                                <h1 className='whitespace-pre-wrap text-base mr-2 mt-4'><ReadMore text={post.textPost} /></h1>
                                             </div>
                                             <div>
                                                 <div className='text-2xl font-bold ml-4'>
