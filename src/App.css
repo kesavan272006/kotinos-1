@@ -135,7 +135,12 @@ body {
   width: 86px;
   border-radius: 100%;
 }
-
+.gradient-text {
+  background: linear-gradient(to bottom, white, rgb(140, 183, 240));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
 
 .active-link {
   color: rgb(3, 148, 220);
@@ -960,3 +965,51 @@ input[type="file"] {
 .modal-content button.close-btn:hover {
   color: #f44336;
 }
+
+
+.hover\:shadow-glowC:hover {
+  --tw-shadow: 0 0 20px rgba(25, 0, 255, 0.3), 0 0 40px rgb(92, 255, 247,0.3), 0 0 60px rgb(87, 104, 255,0.3);
+  --tw-shadow-colored: 0 0 20px var(--tw-shadow-color), 0 0 40px var(--tw-shadow-color), 0 0 60px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+.codepen-button {
+  display: block;
+  cursor: pointer;
+  color: white;
+  position: relative;
+  text-decoration: none;
+  font-weight: 600;
+  border-radius: 100px;
+  overflow: hidden;
+  padding: 3px;
+  isolation: isolate;
+}
+
+.codepen-button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 400%;
+  height: 100%;
+  background: linear-gradient(115deg,#4fcf70,#fad648,#a767e5,#12bcfe,#44ce7b);
+  background-size: 25% 100%;
+  animation: an-at-keyframe-css-at-rule-that-translates-via-the-transform-property-the-background-by-negative-25-percent-of-its-width-so-that-it-gives-a-nice-border-animation_-We-use-the-translate-property-to-have-a-nice-transition-so-it_s-not-a-jerk-of-a-start-or-stop .75s linear infinite;
+  animation-play-state: paused;
+  translate: -5% 0%;
+  transition: translate 0.25s ease-out;
+}
+
+.codepen-button:before {
+  animation-play-state: running;
+  transition-duration: 0.75s;
+  translate: 0% 0%;
+}
+
+@keyframes an-at-keyframe-css-at-rule-that-translates-via-the-transform-property-the-background-by-negative-25-percent-of-its-width-so-that-it-gives-a-nice-border-animation_-We-use-the-translate-property-to-have-a-nice-transition-so-it_s-not-a-jerk-of-a-start-or-stop {
+  to {
+    transform: translateX(-25%);
+  }
+}
+
