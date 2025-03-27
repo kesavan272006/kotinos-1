@@ -9,6 +9,10 @@ import Footer from "../components/footer";
 import test from '../test/test_bg2.jpg'
 import GetstartedBtn from '../components/animata/button/slide-arrow-button'
 import Glowcard from '../components/animata/button/glowing-card'
+import img1 from '../test/test_bg1.jpg'
+
+import ss1 from '../test/SS1.png'
+
 
 
 gsap.registerPlugin(ScrollTrigger);
@@ -150,8 +154,7 @@ function Getstarted() {
 
 
                 {/* About Us Section */}
-                {/* About Us Section */}
-                <div className="about-us-section mt-20 w-full text-center scale-reveal">
+                <div className="about-us-section mt-20 w-full text-center scale-reveal mb-20">
                     <h2 className="text-4xl font-bold neon-title text-white fade-up">
                         About <span className="text-[#2BCEE0]">Us</span>
                     </h2>
@@ -160,22 +163,66 @@ function Getstarted() {
                     </p>
 
                     {/* About Us Content */}
-                    <div className="grid md:grid-cols-2 gap-10 scroll-reveal mt-10 w-full">
-                        <div className="p-6 rounded-3xl bg-blue-950 shadow-lg text-white">
-                            <h3 className="text-2xl font-bold">Our Mission</h3>
-                            <p className="mt-3 text-gray-300">
-                                To create a seamless, interactive experience for athletes worldwide by offering tools for performance tracking, event organization, and personal brand building.
-                            </p>
+                    <div className="grid md:grid-cols-2 gap-10 scroll-reveal mt-10 w-full ">
+                        <div
+                            className="rounded-3xl  w-full p-0.5 hover:shadow-glowC hover:brightness-110 hover:bg-gradient-to-r hover:from-[#00d9ff] hover:via-[#5cfff7] hover:to-[#5768ff]"
+                            style={{
+                                transition: " box-shadow 0.5s ease",
+                            }}
+                        >
+                            <div className="p-6 rounded-3xl h-full bg-blue-950 shadow-lg text-white">
+                                <h3 className="text-2xl font-bold">Our Mission</h3>
+                                <p className="mt-3 text-gray-300">
+                                    Our mission is to empower athletes across India with an innovative and holistic platform that redefines athlete management. We strive to bridge the gap between talent and opportunity by providing comprehensive solutions for performance tracking, injury prevention, career planning, and financial stability. With a deep commitment to excellence, collaboration, and innovation, we aim to nurture the next generation of sports stars and drive the Indian sporting industry toward unprecedented growth and success.                            </p>
+                            </div>
                         </div>
 
-                        <div className="p-6 rounded-3xl bg-blue-950 shadow-lg text-white">
-                            <h3 className="text-2xl font-bold">Why Choose Us?</h3>
-                            <p className="mt-3 text-gray-300">
-                                With AI-driven insights, a thriving community, and a user-friendly interface, we provide everything athletes need to succeed both on and off the field.
-                            </p>
+                        <div
+                            className="rounded-3xl  w-full p-0.5 hover:shadow-glowC hover:brightness-110 hover:bg-gradient-to-r hover:from-[#00d9ff] hover:via-[#5cfff7] hover:to-[#5768ff]"
+                            style={{
+                                transition: " box-shadow 0.5s ease",
+                            }}
+                        >
+                            <div className="p-6 rounded-3xl bg-blue-950 shadow-lg text-white">
+                                <h3 className="text-2xl font-bold">Why Choose Us?</h3>
+                                <p className="mt-3 text-gray-300">
+                                    We offer a seamless and integrated platform designed to simplify and enhance every aspect of athlete management. By prioritizing performance tracking and injury prevention, we empower athletes and coaches to make informed decisions that drive success. Our solutions also focus on career development and financial planning, ensuring long-term growth and stability for athletes both on and off the field. With scalable technology tailored to meet the unique demands of India's dynamic sporting ecosystem, we are the trusted partner in revolutionizing the athlete experience.
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
+
+                {/* Demo Section */}
+                <div className="demo-section mt-20 w-full text-center scale-reveal mb-20">
+                    <h2 className="text-4xl font-bold neon-title text-white fade-up">
+                        See <span className="text-[#2BCEE0]">It In Action</span>
+                    </h2>
+                    <p className="text-lg text-gray-300 mt-4 max-w-3xl mx-auto fade-up">
+                        Explore the power of our platform with these real-time previews. From performance tracking to event management, experience it all.
+                    </p>
+
+                    {/* 3D Carousel */}
+                    <div className="flex justify-center mt-10 overflow-hidden">
+                        <div className="relative flex gap-5">
+                            {[img1, ss1, img1, test].map((image, index) => (
+                                <div key={index} className="carousel-item w-60 md:w-72 h-40 md:h-52 bg-blue-950 shadow-lg rounded-3xl p-2 hover:scale-105 transition-all duration-300 hover:shadow-glowC hover:brightness-110 hover:-rotate-2">
+                                    <img
+                                        src={image}
+                                        alt={`Demo ${index + 1}`}
+                                        className="rounded-2xl w-full h-full object-cover"
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* CTA */}
+                    <div className="mt-10 fade-up">
+                        <GetstartedBtn onClick={handleclick} className="glow-btn" />
+                    </div>
+                </div>
+
 
 
 
