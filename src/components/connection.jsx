@@ -83,17 +83,6 @@ const Connection = () => {
       alert('Request already sent!');
     }
   };
-  const fetchingProfilePic = async (userIds) => {
-    const userRef = doc(database, "Users", userIds);
-    const userSnap = await getDoc(userRef);
-    if (userSnap.exists()) {
-      const userData = userSnap.data();
-      return userData.profilePic
-    } else {
-      return profileicon
-    }
-  }
-  const [profilePics, setProfilePics] = useState({});
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredUsers, setFilteredUsers] = useState(userData);
   const [defaults, setdefaults]=useState(true);
@@ -107,6 +96,17 @@ const Connection = () => {
     );
     setFilteredUsers(filtered);
   };
+  const [profilePics, setProfilePics] = useState({});
+  const fetchingProfilePic = async (userIds) => {
+    const userRef = doc(database, "Users", userIds);
+    const userSnap = await getDoc(userRef);
+    if (userSnap.exists()) {
+      const userData = userSnap.data();
+      return userData.profilePic
+    } else {
+      return profileicon
+    }
+  }
   useEffect(() => {
     const fetchProfilePics = async () => {
       const newProfilePics = {};

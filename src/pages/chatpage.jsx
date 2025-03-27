@@ -55,6 +55,31 @@ const ChatPage = () => {
     const [communityNames, setCommunityNames]=useState({});
     const [communityLastMessage, setCommunityLastMessage] = useState({});
     const [selectedCommunity, setSelectedCommunity]=useState(null);
+    const [profilePics, setProfilePics] = useState({});
+        const fetchingProfilePic = async (userIds) => {
+        const userRef = doc(database, "Users", userIds);
+        const userSnap = await getDoc(userRef);
+        if (userSnap.exists()) {
+            const userData = userSnap.data();
+            return userData.profilePic
+        } else {
+            return profileicon
+        }
+        }
+        useEffect(() => {
+        const fetchProfilePics = async () => {
+            const newProfilePics = {};
+    
+            for (const users of user) {
+            const pic = await fetchingProfilePic(users.id);
+            newProfilePics[users.id] = pic;
+            }
+    
+            setProfilePics(newProfilePics);
+        };
+    
+        fetchProfilePics();
+        }, [user]);
     const checkScreenSize = () => {
         if (window.innerWidth <= 480) {
             setIsMobile(true);
@@ -853,11 +878,12 @@ const ChatPage = () => {
                                             >
                                                 <ListItem button onClick={() => handleuserselection(eachuser)} style={{ padding: '8px 12px' }}>
                                                     <Avatar 
-                                                        src={eachuser.profilePic}
-                                                        style={!eachuser.profilePic ? { backgroundColor: '#edf3fc', color: '#787cff' } : {}}
-                                                    >
-                                                        {!eachuser.profilePic && eachuser.username[0].toUpperCase()}
-                                                    </Avatar>
+                                                        src={profilePics[eachuser.id]} 
+                                                        sx={{ 
+                                                            width: 48, 
+                                                            height: 48,
+                                                        }}
+                                                    />
                                                     <div style={{ marginLeft: '12px', overflow: 'hidden' }}>
                                                         <ListItemText 
                                                             primary={
@@ -893,10 +919,12 @@ const ChatPage = () => {
                                             >
                                                 <ListItem button onClick={() => handleuserselection(eachuser)} style={{ padding: '8px 12px' }}>
                                                     <Avatar 
-                                                        src={eachuser.profilePic}
-                                                        style={!eachuser.profilePic ? { backgroundColor: '#edf3fc', color: '#787cff' } : {}}
+                                                        src={profilePics[eachuser.id]} 
+                                                        sx={{ 
+                                                            width: 48, 
+                                                            height: 48,
+                                                        }}
                                                     >
-                                                        {!eachuser.profilePic && eachuser.username[0].toUpperCase()}
                                                     </Avatar>
                                                     <div style={{ marginLeft: '12px', overflow: 'hidden' }}>
                                                         <ListItemText 
@@ -1238,7 +1266,13 @@ const ChatPage = () => {
                                         padding: '10px',
                                         borderBottom: '1px solid #ddd'
                                     }}>
-                                        <Avatar src={selectedUser.profilePic} />
+                                        <Avatar 
+                                            src={profilePics[selectedUser.id]} 
+                                            sx={{ 
+                                                width: 48, 
+                                                height: 48,
+                                            }}
+                                        />
                                         <div style={{ marginLeft: '10px' }}>
                                             <div style={{ fontSize: '18px', fontWeight: 'bold' }}>
                                                 {selectedUser.username}
@@ -2037,10 +2071,12 @@ const ChatPage = () => {
                                             >
                                                 <ListItem button onClick={() => handleuserselection(eachuser)} style={{ padding: '8px 12px' }}>
                                                     <Avatar 
-                                                        src={eachuser.profilePic}
-                                                        style={!eachuser.profilePic ? { backgroundColor: '#edf3fc', color: '#787cff' } : {}}
+                                                        src={profilePics[eachuser.id]} 
+                                                        sx={{ 
+                                                            width: 48, 
+                                                            height: 48,
+                                                        }}
                                                     >
-                                                        {!eachuser.profilePic && eachuser.username[0].toUpperCase()}
                                                     </Avatar>
                                                     <div style={{ marginLeft: '12px', overflow: 'hidden' }}>
                                                         <ListItemText 
@@ -2077,10 +2113,12 @@ const ChatPage = () => {
                                             >
                                                 <ListItem button onClick={() => handleuserselection(eachuser)} style={{ padding: '8px 12px' }}>
                                                     <Avatar 
-                                                        src={eachuser.profilePic}
-                                                        style={!eachuser.profilePic ? { backgroundColor: '#edf3fc', color: '#787cff' } : {}}
+                                                        src={profilePics[eachuser.id]} 
+                                                        sx={{ 
+                                                            width: 48, 
+                                                            height: 48,
+                                                        }}
                                                     >
-                                                        {!eachuser.profilePic && eachuser.username[0].toUpperCase()}
                                                     </Avatar>
                                                     <div style={{ marginLeft: '12px', overflow: 'hidden' }}>
                                                         <ListItemText 
@@ -2359,7 +2397,13 @@ const ChatPage = () => {
                                         padding: '10px',
                                         borderBottom: '1px solid #ddd'
                                     }}>
-                                        <Avatar src={selectedUser.profilePic} />
+                                        <Avatar
+                                         src={profilePics[selectedUser.id]} 
+                                         sx={{ 
+                                             width: 48, 
+                                             height: 48,
+                                         }}
+                                         />
                                         <div style={{ marginLeft: '10px' }}>
                                             <div style={{ fontSize: '18px', fontWeight: 'bold' }}>
                                                 {selectedUser.username}

@@ -15,6 +15,7 @@ import { motion } from "framer-motion";
 import samplechat from "../assets/samplechat.jpg";
 import samplefund from "../assets/kkr.jpg"; 
 import Footer from "../components/footer";
+import { Navbar } from "react-bootstrap";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
@@ -61,7 +62,8 @@ const QRDisplay = () => {
   }, [userId]);
 
   return (
-    <>
+    <>  
+        <Navbar />
         <Container maxWidth="lg" sx={{ mt: 6 }}>
       <Typography variant="h4" align="center" gutterBottom color="primary">
         Support via Verified QR Code

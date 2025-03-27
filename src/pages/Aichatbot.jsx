@@ -1,78 +1,73 @@
 import React, { useState, useRef, useEffect } from "react";
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import '../pages/chatbot.css'
-import ReactMarkdown from 'react-markdown';
+import ReactMarkdown from "react-markdown";
+import Navbar from "../components/navbar";
+
 const API_KEY = import.meta.env.VITE_AI_APP_ID;
 const genAI = new GoogleGenerativeAI(API_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-exp" });
 
-const generationConfig = {
-  temperature: 1,
-  topP: 0.95,
-  topK: 40,
-  maxOutputTokens: 8192,
-  responseMimeType: "text/plain",
-};
-
 const ChatBot = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
+  const [isLoading, setIsLoading] = useState(false); // Loading State
   const chatBoxRef = useRef(null);
-  
+
   const systemPrompt = `
   You are an AI chatbot named Rio, specialized in answering only sports and health-related questions. 
-  You work for a sports content website called KOTINOS. 
-  You have expert-level knowledge in:
-  - Football, basketball, cricket, tennis, and other popular sports.
-  - Fitness, diet, nutrition, and mental well-being.
-  - Sports science and athlete performance.
-  - Injury prevention and recovery.
+  You are the chat bot for KOTINOS, a sports management app. 
+  Make your answers informative and engaging.
   If a user asks about something unrelated, politely tell them you can only answer sports and health questions.
-
-  You should response like friendly and don't elaborate widly, just answer like sensior and in a way to understanding easily.
-  If user ask who are you, just say your are Rio.
+  If user asks who you are, just say you are Rio.
   `;
-  
-  // Store the chat session
+
   const chatSession = model.startChat({
-    history: messages.map(msg => ({
+    history: messages.map((msg) => ({
       role: msg.role,
-      parts: [{ text: msg.content }]
-    }))
+      parts: [{ text: msg.content }],
+    })),
   });
-  
+
   const handleSend = async () => {
     if (!input.trim()) return;
-
-    const userMessage = { role: "user", content: input };
-    setMessages((prev) => [...prev, userMessage]);
+  
+    const userMessage = { role: "user", parts: [{ text: input }] };
+    setMessages((prev) => [...prev, { role: "user", content: input }]);
     setInput("");
-
+    setIsLoading(true); // Show loading animation
+  
     try {
-      // Corrected history order
+      // Ensure the system prompt is included at the start
       const chatHistory = [
-        { role: "system", parts: [{ text: systemPrompt }] },
+        { role: "user", parts: [{ text: systemPrompt }] }, // System prompt as first user message
         ...messages.map((msg) => ({
-          role: msg.role === "user" ? "user" : "model",
+          role: msg.role,
           parts: [{ text: msg.content }],
         })),
+        userMessage, // Append latest user message
       ];
-
+  
+      // Create a new chat session
+      const chatSession = model.startChat({ history: chatHistory });
+  
       const result = await chatSession.sendMessage(input);
       const responseText = result.response.text
         ? await result.response.text()
         : result.response.candidates[0]?.content || "No response";
-
+  
       const botMessage = { role: "model", content: responseText };
       setMessages((prev) => [...prev, botMessage]);
     } catch (error) {
       console.error("Error fetching Gemini response:", error);
       setMessages((prev) => [
         ...prev,
-        { role: "model", content: `⚠ Error: ${error.message}`},
+        { role: "model", content: `⚠ Error: ${error.message}` },
       ]);
+    } finally {
+      setIsLoading(false); // Hide loading animation
     }
   };
+  
 
   useEffect(() => {
     setTimeout(() => {
@@ -80,91 +75,89 @@ const ChatBot = () => {
         chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
       }
     }, 100);
-  }, [messages]);
+  }, [messages, isLoading]);
 
   return (
-    <div className="flex flex-col justify-center items-center min-h-screen bg-white">
-        <div className="chat-container w-full max-w-4xl h-5/6 bg-white rounded-lg shadow-xl border">
-          <div className="chat-header bg-blue-500 text-white text-center p-5 font-semibold text-lg">
-            Rio: Your AI Assistant on Kotinos
-          </div>
+    <>
+    <Navbar />
+    <div className="flex flex-col justify-center items-center min-h-screen bg-gradient-to-br from-[#E0F7FA] to-[#BBDEFB]">
+      
 
-          <div className="category-buttons flex justify-center gap-5 p-4 bg-gray-100 rounded-b-lg">
-            <button
-              onClick={() => setInput("Tell me about football fitness")}
-              className="px-4 py-2 text-blue-500 bg-white border border-blue-500 rounded-full shadow-sm hover:bg-blue-500 hover:text-white transition"
-            >
-              ⚽ Football Fitness
-            </button>
-            <button
-              onClick={() => setInput("How to recover from a sports injury?")}
-              className="px-4 py-2 text-blue-500 bg-white border border-blue-500 rounded-full shadow-sm hover:bg-blue-500 hover:text-white transition"
-            >
-              🩹 Injury Recovery
-            </button>
-            <button
-              onClick={() => setInput("Latest sports news")}
-              className="px-4 py-2 text-blue-500 bg-white border border-blue-500 rounded-full shadow-sm hover:bg-blue-500 hover:text-white transition"
-            >
-              📰 Sports News
-            </button>
-          </div>
+      {/* Chat Container */}
+      <div className="chat-container w-full max-w-3xl h-[85vh] bg-white shadow-xl rounded-2xl border border-gray-200 overflow-hidden flex flex-col backdrop-blur-md bg-opacity-80">
+        
+        {/* Chat Header */}
+        <div className="bg-gradient-to-r from-[#2196F3] to-[#64B5F6] text-white p-5 text-center font-semibold text-lg shadow-md">
+          💬 Rio - Your AI Sports Buddy
+        </div>
 
-          <div
-            className="chat-box flex-1 overflow-y-auto p-6 bg-gray-50"
-            ref={chatBoxRef}
+        {/* Chat Messages */}
+        <div
+          className="flex-1 overflow-y-auto p-5 space-y-3 bg-[#E3F2FD] custom-scrollbar"
+          ref={chatBoxRef}
+        >
+          {messages.map((msg, index) => (
+            <div
+              key={index}
+              className={`w-fit max-w-xs p-4 rounded-2xl shadow-md ${
+                msg.role === "user"
+                  ? "bg-gradient-to-r from-blue-400 to-blue-300 text-white self-end ml-auto"
+                  : "bg-gradient-to-r from-[#90CAF9] to-[#64B5F6] text-gray-900 self-start"
+              } transform transition-all duration-300 hover:scale-105`}
+            >
+              <ReactMarkdown>{msg.content}</ReactMarkdown>
+            </div>
+          ))}
+
+          {/* Bot Typing Animation */}
+          {isLoading && (
+            <div style={{width:'20%'}} className="self-start p-4 rounded-2xl bg-gradient-to-r from-[#90CAF9] to-[#64B5F6] text-white flex space-x-1">
+              <span className="animate-bounce">●</span>
+              <span className="animate-bounce delay-150">●</span>
+              <span className="animate-bounce delay-300">●</span>
+              <span style={{color:'white', marginLeft:'2%', fontWeight:'bolder', fontSize:'20px'}}>thinking</span>
+            </div>
+          )}
+        </div>
+
+        {/* Quick Response Buttons */}
+        <div className="flex justify-center gap-4 p-4 bg-[#E1F5FE] border-t border-gray-300">
+          {[
+            { text: "⚽ Football Fitness", message: "Tell me about football fitness" },
+            { text: "🩹 Injury Recovery", message: "How to recover from a sports injury?" },
+            { text: "📰 Sports News", message: "Latest sports news" },
+          ].map((btn, idx) => (
+            <button
+              key={idx}
+              onClick={() => setInput(btn.message)}
+              className="px-5 py-2 text-white bg-gradient-to-r from-[#1E88E5] to-[#42A5F5] rounded-lg shadow-md hover:scale-110 transition-all duration-300"
+            >
+              {btn.text}
+            </button>
+          ))}
+        </div>
+
+        {/* Input & Send Button */}
+        <div className="flex items-center p-4 bg-[#E1F5FE] border-t border-gray-300">
+          <input
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="Type your question..."
+            onKeyDown={(e) => e.key === "Enter" && handleSend()}
+            className="flex-1 p-3 rounded-full border border-gray-400 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#1E88E5] shadow-md"
+          />
+          <button
+            onClick={handleSend}
+            className="ml-3 bg-gradient-to-r from-[#0D47A1] to-[#1976D2] text-white px-4 py-2 rounded-full shadow-lg hover:scale-110 transition-all duration-300"
           >
-            {messages.map((msg, index) => (
-              <div
-                key={index}
-                className={`max-w-xs p-4 rounded-xl shadow-md mb-4 ${
-                  msg.role === "user"
-                    ? "bg-blue-500 text-white self-end"
-                    : "bg-gray-200 text-gray-800 self-start"
-                }`}
-              >
-                <ReactMarkdown>{msg.content}</ReactMarkdown>
-              </div>
-            ))}
-          </div>
-
-          <div className="input-container flex items-center p-4 bg-gray-100 border-t border-gray-300">
-            <input
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="Ask your doubts to Rio..."
-              onKeyDown={(e) => e.key === "Enter" && handleSend()}
-              className="flex-1 p-3 rounded-l-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            <button
-        onClick={handleSend}
-        className="
-          send-button 
-          px-6 py-3 
-          bg-gradient-to-r from-gray-200 via-gray-300 to-gray-400 
-          text-gray-700 
-          font-semibold 
-          rounded-full 
-          shadow-md 
-          hover:shadow-lg 
-          hover:scale-105 
-          hover:bg-gradient-to-r hover:from-gray-300 hover:via-gray-400 hover:to-gray-500 
-          transform 
-          transition-all 
-          duration-300 
-          ease-in-out
-        "
-      >
-        ➤
-      </button>
-
-
-          </div>
+            🚀
+          </button>
         </div>
       </div>
-
-        );
-      };
+    </div>
+    </>
+  );
+};
 
 export default ChatBot;

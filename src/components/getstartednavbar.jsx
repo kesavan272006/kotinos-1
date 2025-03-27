@@ -28,7 +28,8 @@ function Navbarout() {
         <nav className='flex items-center justify-between'>
           <div className="left flex items-center md:text-6xl text-3xl ml-4 md:ml-10 gap-5">
             {/* <Link to='/about'><img src={logo} className='logo md:block md:h-20 md:w-20 hidden rounded-full' /></Link> */}
-            <Link to='/about'><h1 id='kotinos-nav' className='russo pt-3 text-[white] hover:scale-105 transition-all md:text-5xl text-4xl'>KOTINOS</h1></Link>
+            <Link to='/about'><h1 id='kotinos-nav' style={{}} className='gradient-text russo pt-3 hover:scale-105 transition-all md:text-5xl text-4xl'>KOTINOS</h1></Link>
+            
           </div>
           <div id="navbar-components" className="ul">
             <ul className='flex mr-4 md:text-2xl text-l gap-6 mt-4 md:pr-10 md:mt-5'>

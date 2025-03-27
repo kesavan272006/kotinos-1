@@ -105,13 +105,13 @@ function Navbar() {
                                 K
                             </div>
                         </Link>
-                        <span className="ml-2 text-lg font-semibold md:block text-gray-800">Kotinos</span>
                         {isMobile && (
                             <strong className="ml-2 text-lg font-semibold text-gray-800">Kotinos</strong>
                         )}
                     </div>
                     {!isMobile && (
                         <div className={`hidden md:flex items-center relative mx-4 flex-1 max-w-md transition-all ${searchFocused ? 'scale-105' : ''}`}>
+                            <span style={{marginRight:'20%'}} className="ml-2 text-lg font-semibold md:block text-gray-800">Kotinos</span>
                             <div className={`flex items-center w-full border ${searchFocused ? 'border-blue-500 bg-blue-50' : 'border-gray-300 bg-gray-100'} rounded-full px-4 py-2 transition-all`}>
                                 <FiSearch className={`${searchFocused ? 'text-blue-500' : 'text-gray-500'} transition-colors`} />
                                 <input 

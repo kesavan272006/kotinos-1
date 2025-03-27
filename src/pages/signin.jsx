@@ -101,11 +101,11 @@ const Signin = () => {
                 <h1 className='lexend  w-full m-0 pt-14 text-4xl'>Sign In to Kotinos</h1>
             </div>
             <div className="signin-head w-full text-center relative z-20 opacity-0">
-                <h2 className='lexend text-5xl mt-2 mb-3 text-white'>Sign In</h2>
+                <h2 className='lexend text-5xl mt-2 md:mb-3 text-white'>Sign In</h2>
             </div>
             <div className="flex justify-center relative z-20 items-center ">
-                <div className='md:w-[35%] bg-white mt-10 md:mt-4 p-10 rounded-lg shadoww'>
-                    <h2 className='lexend text-xl'>User name</h2>
+                <div className='md:w-[35%] bg-white md:mt-4 p-10 rounded-lg shadoww m-2'>
+                    <h2 className='lexend text-xl mb-0'>User name</h2>
                     <input type="text" placeholder='Enter your Username here' className='w-full my-2 mb-5 p-1 rounded-lg border' onChange={(e) => setusername(e.target.value)} />
                     <h2 className='lexend'>Which of these best describes you?</h2>
                     <div>
@@ -132,8 +132,8 @@ const Signin = () => {
                             A coach aiming to train talented athletes
                         </label>
                     </div>
-                    <div className="buttons flex flex-col justify-center items-center mt-10">
-                        <button className='text-white bg-black russo w-full rounded-full py-1 text-l md:w-3/4 flex justify-center items-center gap-2 hover:scale-105 transition-all' onClick={signInWithGoogle}><img className='w-10' src={googlepic} />  Sign in with Google</button>
+                    <div className="buttons flex flex-col justify-center items-center mx-auto mt-10 codepen-button before:-z-10  md:w-3/4 rounded-full">
+                        <button className='text-white bg-black russo w-full rounded-full py-1 text-l md:w-full flex justify-center items-center gap-2 hover:scale-105 transition-all' onClick={signInWithGoogle}><img className='w-10' src={googlepic} />  Sign in with Google</button>
                     </div>
                 </div>
             </div>
