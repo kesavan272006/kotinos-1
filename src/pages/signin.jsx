@@ -24,9 +24,7 @@ const Signin = () => {
 
     const signInWithGoogle = async () => {
         if (!username || !selectedOption) {
-            toast.warning("Please enter username and select a role.", {
-                autoClose: 500,
-            });
+            alert("Please enter username and select a role.");
             return;
         }
         try {

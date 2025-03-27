@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Navbar from '../components/navbar';
 import { Paper, Avatar, ListItem, ListItemText, List, Button } from '@mui/material';
 import profileicon from '../assets/profileicon.svg'; 
-import { collection, doc, getDocs } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
 import { database, auth } from '../config/firebase';
 import Loading from './Loading';
 import { Link, useNavigate } from 'react-router-dom';
@@ -54,6 +54,31 @@ const Network = () => {
 
         return () => unsubscribe();
     }, []);
+    const [profilePics, setProfilePics] = useState({});
+    const fetchingProfilePic = async (userIds) => {
+    const userRef = doc(database, "Users", userIds);
+    const userSnap = await getDoc(userRef);
+    if (userSnap.exists()) {
+        const userData = userSnap.data();
+        return userData.profilePic
+    } else {
+        return profileicon
+    }
+    }
+    useEffect(() => {
+    const fetchProfilePics = async () => {
+        const newProfilePics = {};
+
+        for (const users of user) {
+        const pic = await fetchingProfilePic(users.id);
+        newProfilePics[users.id] = pic;
+        }
+
+        setProfilePics(newProfilePics);
+    };
+
+    fetchProfilePics();
+    }, [user]);
     const [searchQuery, setSearchQuery] = useState('');
     const [filteredUsers, setFilteredUsers] = useState(user);
     const [defaults, setdefaults]=useState(true);
@@ -132,11 +157,11 @@ const Network = () => {
                                         <div className="px-4 py-3 flex items-center justify-between">
                                             <div className="flex items-center">
                                                 <Avatar className='bg-gray-100'
-                                                    src={profileicon} 
+                                                    src={profilePics[eachuser.id]} 
                                                     sx={{ 
                                                         width: 48, 
                                                         height: 48,
-                                                        
+
                                                     }}
                                                 />
                                                 <div className="ml-3">
@@ -167,11 +192,10 @@ const Network = () => {
                                         <div className="px-4 py-3 flex items-center justify-between">
                                             <div className="flex items-center">
                                                 <Avatar className='bg-gray-100'
-                                                    src={profileicon} 
+                                                    src={profilePics[eachuser.id]} 
                                                     sx={{ 
                                                         width: 48, 
                                                         height: 48,
-                                                        
                                                     }}
                                                 />
                                                 <div className="ml-3">
