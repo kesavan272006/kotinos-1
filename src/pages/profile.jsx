@@ -232,6 +232,8 @@ const Profile = () => {
                 const updatedProfile = { ...profile };
                 if (profile.profilePic !== "") {
                     await setDoc(documentRef, { profilePic: profile.profilePic }, { merge: true });
+                    await setDoc(documentRef, { isDisabled: isDisabled }, { merge: true });
+                    await setDoc(documentRef, { gender: profile.gender || "none" }, { merge: true });
                     await setDoc(profileDetailsRef, { profilePic: profile.profilePic }, { merge: true });
                     const postRef = collection(database, 'Users', `${auth.currentUser?.uid}`, 'Posts');
                     const postSnapshot = await getDocs(postRef);

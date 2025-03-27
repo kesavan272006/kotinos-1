@@ -29,6 +29,8 @@ import QRDisplay from './pages/QRDisplay';
 import AiChatbot from './pages/Aichatbot';
 import OtherProfile from './pages/otherProfile';
 import ChatBot from './pages/Aichatbot';
+import CricketMatches from './pages/SportApiPages/eventdisplay';
+import FootballMatches from './pages/SportApiPages/FootballDisplay';
 function App() {
   return (
     <div>
@@ -61,6 +63,8 @@ function App() {
             <Route path="/addQr" element={<QRUpload />} />
             <Route path="/displayQr/:userId" element={<QRDisplay />} />
             <Route path="/aichatbot" element={<ChatBot />} />
+            <Route path="/cricketmatches" element={<CricketMatches />} />
+            <Route path="/footballmatches" element={<FootballMatches />} />
             <Route path="/otherprofile/:userId" element={<OtherProfile />} />
           </Routes>
         </UserProvider>

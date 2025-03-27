@@ -18,6 +18,7 @@ import { FiSearch } from 'react-icons/fi';
 import Events from './events';
 import trophyicon from '../assets/trophyicon.svg'
 import ReadMore from './Readmore';
+import CricketMatches from '../pages/SportApiPages/eventdisplay';
 const Middle = ({ userData }) => {
     const [username, setUsername] = useState('');
     const [role, setRole] = useState('');
@@ -251,7 +252,24 @@ useEffect(() => {
         );
         setFilteredUsers(filtered);
     };
-    const [showevents, setshowevents]=useState(false)
+    const [showevents, setshowevents]=useState(false);
+    const [showPosts, setShowPosts]=useState(true);
+    const [showLive, setShowLive]=useState(false);
+    const handleShowEvents = ()=>{
+        setshowevents(true);
+        setShowPosts(false);
+        setShowLive(false);
+    }
+    const handleShowPosts = ()=>{
+        setshowevents(false);
+        setShowPosts(true);
+        setShowLive(false);
+    }
+    const handleShowLive = ()=>{
+        setshowevents(false);
+        setShowPosts(false);
+        setShowLive(true);
+    }
     return (
         <>
         <div className='w-full flex justify-center items-center flex-col  pb-3 pt-0'>
@@ -303,18 +321,21 @@ useEffect(() => {
                 <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: '15px' }}>
                 
                 <div style={{display:'flex', flexDirection:'row', justifyContent:'space-between'}}>
-                    <button style={{marginRight: '10px', backgroundColor: showevents ? "blue":"rgb(219 234 254)", color: showevents? "white" : "rgb(29 78 216)"}} onClick={()=> setshowevents(true)} className="px-4 rounded-full text-sm py-2 transition duration-300">
+                    <button style={{marginRight: '10px', backgroundColor: showevents ? "blue":"rgb(219 234 254)", color: showevents? "white" : "rgb(29 78 216)"}} onClick={()=> handleShowEvents()} className="px-4 rounded-full text-sm py-2 transition duration-300">
                         View Events
                     </button>
-                    <button style={{backgroundColor: showevents ? "rgb(219 234 254)":"blue", color: showevents? "rgb(29 78 216)" : "white"}} onClick={()=> setshowevents(false)} className="px-4 py-2 text-sm rounded-full transition duration-300">
+                    <button style={{marginRight: '10px',backgroundColor: showPosts ? "blue":"rgb(219 234 254)", color: showPosts? "white" : "rgb(29 78 216)"}} onClick={()=> handleShowPosts()} className="px-4 py-2 text-sm rounded-full transition duration-300">
                         View All Posts
+                    </button>
+                    <button style={{backgroundColor: showLive ? "blue":"rgb(219 234 254)", color: showLive? "white" : "rgb(29 78 216)"}} onClick={()=> handleShowLive()} className="px-4 py-2 text-sm rounded-full transition duration-300">
+                        View Live
                     </button>
                 </div>
                 </div>
 
                 {defaults && (
                     <div className='w-full mt-5 mb-7'>
-                    {!showevents && (
+                    {showPosts && (
                         <>
                             {posts.map((post) => (
                         <div key={post.id} className='bg-white rounded-xl border  mb-5 pr-3'>
@@ -674,6 +695,9 @@ useEffect(() => {
                     </div>
                     ))}
                         </>
+                    )}
+                    {showLive && (
+                        <CricketMatches />
                     )}
                 </div>
                 )}

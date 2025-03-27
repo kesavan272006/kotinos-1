@@ -100,13 +100,15 @@ function Navbar() {
             <nav className='w-full flex items-center justify-between py-3 px-4'>
                 <div className="flex items-center">
                     <div className="flex items-center">
-                        <div className="h-10 w-10 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-xl transition-transform hover:scale-105">
-                            K
-                        </div>
+                        <Link to={'/home'}>
+                            <div className="h-10 w-10 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-xl transition-transform hover:scale-105">
+                                K
+                            </div>
+                        </Link>
                         <span className="ml-2 text-lg font-semibold md:block text-gray-800">Kotinos</span>
-                        {/* {isMobile && (
+                        {isMobile && (
                             <strong className="ml-2 text-lg font-semibold text-gray-800">Kotinos</strong>
-                        )} */}
+                        )}
                     </div>
                     {!isMobile && (
                         <div className={`hidden md:flex items-center relative mx-4 flex-1 max-w-md transition-all ${searchFocused ? 'scale-105' : ''}`}>
