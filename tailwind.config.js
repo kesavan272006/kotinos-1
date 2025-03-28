@@ -19,6 +19,31 @@ module.exports = {
       brightness: {
         150: "1.5",
       },
+      animation: {
+        text: 'text 5s ease infinite',
+        sparkle: "sparkle 2s ease-in-out infinite",
+        meteor: "meteor var(--duration) var(--delay) ease-in-out infinite",
+      },
+      keyframes: {
+        text: {
+          '0%, 100%': {
+            'background-size': '200% 200%',
+            'background-position': 'left center',
+          },
+          '50%': {
+            'background-size': '200% 200%',
+            'background-position': 'right center',
+          },
+        },
+        sparkle: {
+          "0%, 100%": { opacity: "0.75", scale: "0.9" },
+          "50%": { opacity: "1", scale: "1" },
+        },
+        meteor: {
+          "0%": { transform: "translateY(-20%) translateX(-50%)" },
+          "100%": { transform: "translateY(300%) translateX(-50%)" },
+        },
+      },
     },
   },
   plugins: [scrollbarHide],

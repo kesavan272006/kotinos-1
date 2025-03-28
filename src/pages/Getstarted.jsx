@@ -10,6 +10,8 @@ import test from '../test/test_bg2.jpg'
 import GetstartedBtn from '../components/animata/button/slide-arrow-button'
 import Glowcard from '../components/animata/button/glowing-card'
 import img1 from '../test/test_bg1.jpg'
+import AnimatedBeam from '../components/animata/button/animated-beam'
+
 
 import ss1 from '../test/SS1.png'
 
@@ -84,8 +86,9 @@ function Getstarted() {
 
     return (
         <>
-
+           
             <Navbarout />
+            
             <div ref={comp} className="flex flex-col items-center text-center px-6 md:px-20 lg:px-32">
                 <style>
                     {`
@@ -110,14 +113,14 @@ function Getstarted() {
                 </div> */}
                 <GetstartedBtn id="get-started-button" onClick={handleclick} className="mt-10" />
                 <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2">
-                    <p ref={scrollRef} className="text-white text-lg font-semibold tracking-widest animate-glow">
+                    <p ref={scrollRef} className="text-white relative z-100 text-lg font-semibold tracking-widest animate-glow">
                         Scroll Down ↓
                     </p>
                 </div>
 
 
                 {/* Features Section */}
-                <div className="grid md:grid-cols-3 gap-10 scroll-reveal mt-20 w-full">
+                <div className="grid md:grid-cols-3 gap-10 scroll-reveal mt-24 w-full">
                     {[
                         { icon: "🏅", title: "Showcase Achievements", desc: "Share the defining highlights of your athletic journey. Upload images and share thoughts that not only capture your passion but also mark those standout achievements, helping boost your profile and inspire your network" },
                         { icon: "🎉", title: "Host & Discover Events", desc: "Step beyond the screen and into dynamic gatherings. Organize, discover, and join events that bring your community together—whether you're cheering on from afar or shaking hands in person." },
@@ -222,7 +225,7 @@ function Getstarted() {
                         <GetstartedBtn onClick={handleclick} className="glow-btn" />
                     </div>
                 </div>
-
+                
 
 
 

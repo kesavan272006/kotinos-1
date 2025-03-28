@@ -1237,13 +1237,13 @@ const ChatPage = () => {
                                     </div>
                                     <TextField
                                         value={grpmessage}
-                                        className='rounded-[20px] border h-10 pl-5 pb-1'
+                                        className=' border pl-5 pb-1'
                                         onChange={(e) => setGrpMessage(e.target.value)}
                                         placeholder="Type a message"
                                         style={{
                                             width: '85%',
                                             marginRight: '10px',
-                                            overflowY:'scroll'
+                                            
                                         }}
                                     />
                                     <button
@@ -1460,13 +1460,12 @@ const ChatPage = () => {
                                 <TextField
                                         multiline
                                         value={message}
-                                        className=' border h-10 pl-5'
+                                        className=' border pl-5'
                                         onChange={(e) => setMessage(e.target.value)}
                                         placeholder="Type a message"
                                         style={{
                                             width: '85%',
                                             marginRight: '10px',
-                                            overflowY: 'scroll',
                                         }}
                                     />
                                 <RiMoneyRupeeCircleLine onClick={() => handlenavigation(selectedUser.id)} className='text-5xl mx-3 cursor-pointer hover:bg-gray-200 rounded' />
@@ -1592,13 +1591,12 @@ const ChatPage = () => {
                                     <TextField
                                         multiline
                                         value={comMessage}
-                                        className=' border h-10 pl-5'
+                                        className=' border pl-5'
                                         onChange={(e) => setComMessage(e.target.value)}
                                         placeholder="Type a message"
                                         style={{
                                             width: '85%',
                                             marginRight: '10px',
-                                            overflowY: 'scroll',
                                         }}
                                     />
                                     <Button
@@ -2366,13 +2364,12 @@ const ChatPage = () => {
                                 <TextField
                                         multiline
                                         value={comMessage}
-                                        className=' border h-10 pl-5'
+                                        className=' border pl-5'
                                         onChange={(e) => setComMessage(e.target.value)}
                                         placeholder="Type a message"
                                         style={{
                                             width: '85%',
                                             marginRight: '10px',
-                                            overflowY: 'scroll',
                                         }}
                                     />
                                 <Button
@@ -2552,13 +2549,12 @@ const ChatPage = () => {
                                 <TextField
                                         multiline
                                         value={message}
-                                        className=' border h-10 pl-5'
+                                        className=' border pl-5'
                                         onChange={(e) => setMessage(e.target.value)}
                                         placeholder="Type a message"
                                         style={{
                                             width: '85%',
                                             marginRight: '10px',
-                                            overflowY: 'scroll',
                                         }}
                                     />
                                 <RiMoneyRupeeCircleLine onClick={() => handlenavigation(selectedUser.id)} className='text-5xl mx-3 cursor-pointer hover:bg-gray-200 rounded' />
@@ -2685,13 +2681,12 @@ const ChatPage = () => {
                                 <TextField
                                         multiline
                                         value={comMessage}
-                                        className=' border h-10 pl-5'
+                                        className=' border pl-5'
                                         onChange={(e) => setComMessage(e.target.value)}
                                         placeholder="Type a message"
                                         style={{
                                             width: '85%',
                                             marginRight: '10px',
-                                            overflowY: 'scroll',
                                         }}
                                     />
                                 <Button

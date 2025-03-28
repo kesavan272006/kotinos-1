@@ -7,6 +7,7 @@ import { signOut } from 'firebase/auth';
 import { GoHomeFill } from "react-icons/go";
 import { IoChatbubbleEllipses, IoPersonSharp } from "react-icons/io5";
 import { IoIosNotifications, IoIosPeople } from "react-icons/io";
+import { MdPersonSearch } from "react-icons/md";
 import { MdLogout } from "react-icons/md";
 import { FiSearch } from "react-icons/fi";
 import { doc, getDoc } from 'firebase/firestore';
@@ -94,6 +95,20 @@ function Navbar() {
         }
     };
     const isActive = (path) => location.pathname === path;
+    const capital =(role)=>{
+        if(role==='user'){
+            return 'User';
+        }
+        else if(role==='athlete'){
+            return 'Athlete';
+        }
+        else if(role==='coach'){
+            return 'Coach'
+        }
+        else if(role==='organization'){
+            return 'Organization'
+        }
+    }
 
     return (
         <div className={`sticky w-full top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-white/95 backdrop-blur-sm shadow-lg' : 'bg-white shadow-md'}`}>
@@ -101,7 +116,7 @@ function Navbar() {
                 <div className="flex items-center">
                     <div className="flex items-center">
                         <Link to={'/home'}>
-                            <div className="h-10 w-10 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-xl transition-transform hover:scale-105">
+                            <div className="h-10 w-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-xl transition-transform hover:scale-105">
                                 K
                             </div>
                         </Link>
@@ -110,8 +125,9 @@ function Navbar() {
                         )}
                     </div>
                     {!isMobile && (
-                        <div className={`hidden md:flex items-center relative mx-4 flex-1 max-w-md transition-all ${searchFocused ? 'scale-105' : ''}`}>
-                            <span style={{marginRight:'20%'}} className="ml-2 text-lg font-semibold md:block text-gray-800">Kotinos</span>
+                        <>
+                        <span className="ml-2 text-lg font-semibold md:block text-gray-800 ">Kotinos</span>
+                        <div className={`hidden md:flex items-center w-full mx-4 flex-1 max-w-md transition-all ${searchFocused ? 'scale-105' : ''}`}>
                             <div className={`flex items-center w-full border ${searchFocused ? 'border-blue-500 bg-blue-50' : 'border-gray-300 bg-gray-100'} rounded-full px-4 py-2 transition-all`}>
                                 <FiSearch className={`${searchFocused ? 'text-blue-500' : 'text-gray-500'} transition-colors`} />
                                 <input 
@@ -123,6 +139,7 @@ function Navbar() {
                                 />
                             </div>
                         </div>
+                        </>
                     )}
                 </div>
                 {!isMobile && (
@@ -141,14 +158,19 @@ function Navbar() {
                 <div className="flex items-center">
                     <ul className='flex items-center space-x-1 md:space-x-3'>
                         <li>
-                            <NavLink to='/home' className={`p-2 rounded-full flex items-center justify-center transition-colors ${isActive('/home') ? 'bg-cyan-100 text-cyan-600' : 'text-gray-700 hover:bg-gray-100'}`}>
+                            <NavLink to='/home' className={`p-2 rounded-full flex items-center justify-center transition-colors ${isActive('/home') ? 'bg-blue-100 text-blue-600' : 'text-gray-700 hover:bg-gray-100'}`}>
                                 <GoHomeFill className='text-xl md:text-2xl' />
                             </NavLink>
                         </li>
 
                         <li>
-                            <NavLink to='/chatpage' className={`p-2 rounded-full flex items-center justify-center transition-colors ${isActive('/chatpage') ? 'bg-cyan-100 text-cyan-600' : 'text-gray-700 hover:bg-gray-100'}`}>
+                            <NavLink to='/chatpage' className={`p-2 rounded-full flex items-center justify-center transition-colors ${isActive('/chatpage') ? 'bg-blue-100 text-blue-600' : 'text-gray-700 hover:bg-gray-100'}`}>
                                 <IoChatbubbleEllipses className='text-xl md:text-2xl' />
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink to='/connection' className={`p-2 rounded-full flex items-center justify-center transition-colors ${isActive('/connection') ? 'bg-blue-100 text-blue-600' : 'text-gray-700 hover:bg-gray-100'}`}>
+                                <MdPersonSearch className='text-xl md:text-2xl' />
                             </NavLink>
                         </li>
                         <li className="dropdown-container relative">
@@ -157,7 +179,7 @@ function Navbar() {
                                     setShowNotifications(!showNotifications);
                                     setShowProfile(false);
                                 }}
-                                className={`p-2 rounded-full flex items-center justify-center transition-colors ${showNotifications ? 'bg-cyan-100 text-cyan-600' : 'text-gray-700 hover:bg-gray-100'}`}
+                                className={`p-2 rounded-full flex items-center justify-center transition-colors ${showNotifications ? 'bg-blue-100 text-blue-600' : 'text-gray-700 hover:bg-gray-100'}`}
                             >
                                 <IoIosNotifications className='text-xl md:text-2xl' />
                             </button>
@@ -165,7 +187,7 @@ function Navbar() {
                                 <div className="absolute right-0 mt-2 w-72 bg-white rounded-lg shadow-xl border border-gray-200 overflow-hidden transition-all">
                                     <div className="px-4 py-3 border-b border-gray-200 flex justify-between items-center">
                                         <h3 className="font-semibold text-gray-800">Notifications</h3>
-                                        <button className="text-xs text-cyan-600 hover:text-blue-800">Mark all as read</button>
+                                        <button className="text-xs text-blue-600 hover:text-blue-800">Mark all as read</button>
                                     </div>
                                     <div className="max-h-72 overflow-y-auto">
                                         <div className="px-4 py-3 bg-gray-50 hover:bg-gray-100 border-b border-gray-100 cursor-pointer">
@@ -173,23 +195,19 @@ function Navbar() {
                                         </div>
                                     </div>
                                     <div className="px-4 py-2 text-center">
-                                        <button onClick={()=>navigate('/invitation')} className="text-sm text-cyan-600 hover:text-blue-800">View all notifications</button>
+                                        <button onClick={()=>navigate('/invitation')} className="text-sm text-blue-600 hover:text-blue-800">View all notifications</button>
                                     </div>
                                 </div>
                             )}
                         </li>
-                        <li>
-                            <NavLink to='/network' className={`p-2 rounded-full flex items-center justify-center transition-colors ${isActive('/network') ? 'bg-cyan-100 text-cyan-600' : 'text-gray-700 hover:bg-gray-100'}`}>
-                                <IoIosPeople className='text-xl md:text-2xl' />
-                            </NavLink>
-                        </li>
+                        
                         <li className="dropdown-container relative">
                             <button 
                                 onClick={() => {
                                     setShowProfile(!showProfile);
                                     setShowNotifications(false);
                                 }}
-                                className={`p-2 rounded-full flex items-center justify-center transition-colors ${showProfile ? 'bg-cyan-100 text-cyan-600' : 'text-gray-700 hover:bg-gray-100'}`}
+                                className={`p-2 rounded-full flex items-center justify-center transition-colors ${showProfile ? 'bg-blue-100 text-blue-600' : 'text-gray-700 hover:bg-gray-100'}`}
                             >
                                 <IoPersonSharp className='text-xl md:text-2xl' />
                             </button>
@@ -197,7 +215,7 @@ function Navbar() {
                                 <div style={{width:'max-width'}} className="absolute right-0 mt-2 bg-white rounded-lg shadow-xl border border-gray-200 overflow-hidden">
                                     <div className="px-4 py-3 border-b border-gray-200">
                                         <p className="font-semibold text-gray-800">{username}</p>
-                                        <p className="text-sm text-gray-500">{role}</p>
+                                        <p className="text-sm text-gray-500">{capital(role)}</p>
                                         <p className="text-sm text-gray-500">{email}</p>
                                     </div>
                                     <div>
