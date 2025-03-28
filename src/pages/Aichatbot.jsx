@@ -2,6 +2,9 @@ import React, { useState, useRef, useEffect } from "react";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import ReactMarkdown from "react-markdown";
 import Navbar from "../components/navbar";
+import { auth, database } from "../config/firebase";
+import { useNavigate } from "react-router-dom";
+import { doc, getDoc } from "firebase/firestore";
 
 const API_KEY = import.meta.env.VITE_AI_APP_ID;
 const genAI = new GoogleGenerativeAI(API_KEY);
@@ -12,13 +15,54 @@ const ChatBot = () => {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const chatBoxRef = useRef(null);
-
+  const [date, setDate] = useState(new Date().toLocaleDateString());
+  const [time, setTime] = useState(new Date().toLocaleTimeString());
+  useEffect(() => {
+    const timer = setInterval(() => {
+      const currentDate = new Date();
+      setDate(currentDate.toLocaleDateString());
+      setTime(currentDate.toLocaleTimeString());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+  const [username, setUsername]=useState('');
+  const [role, setRole]=useState('');
+  const user=auth.currentUser;
+  const navigate = useNavigate();
+  useEffect(() => {
+          const fetchProfile2 = async () => {
+  
+              if (user) {
+                  try {
+                      const docRef = doc(database, "Users", auth.currentUser?.uid);
+                      const docSnap = await getDoc(docRef);
+                      if (docSnap.exists()) {
+                          const reference = docSnap.data();
+                          setUsername(reference.username)
+                          if(reference.role==='user'){
+                            setRole('General Sports Lover')
+                          }else{
+                            setRole(reference.role);
+                          }
+                      }
+                  } catch (error) {
+                      console.error('Error fetching profile:', error);
+                      navigate('/signin');
+                  }
+              }
+          };
+  
+          fetchProfile2();
+      }, [user, navigate, role]);
   const systemPrompt = `
   You are an AI chatbot named Rio, specialized in answering only sports and health-related questions. 
   You are the chat bot for Kotinos, a sports management app. 
   Make your answers informative and engaging.
   If a user asks about something unrelated, politely tell them you can only answer sports and health questions. But u may also answer some general questions.
   If user asks who you are, just say you are Rio.
+  If some one asks you who created Kotinos, you should describe the team behind it as, Kesavan G(team leader, worked on full stack web development, this website is managed and created by him. he created the entire frontend and backend was primarily handled by him with other guys help. Dont elevate him so much but remember he has worked a lot.), Aditya(chief Designer and helped in training Rio), Adwaith J(worked on backend of the website), Amal Sajeev(worked on development of Rio, the Ai assistant in Kotinos. He is the main man behind the Rio. He was the one who created you primarily). Briefly explain about them. when someone asks about the team behind Kotinos or about the one who created you, you should very briefly explain about them. if someone asks about who created you, you should talk about the entire Kotinos team briefly, minimum 200 words with whitespaces.
+  If some one questions you about date just give them ${date} and if they ask about current time just give them ${time} and in other cases give them both, with some more funny texts.
+  You should address the person who is speaking with you as ${username} and he is a ${role}
   `;
 
   const handleSend = async () => {
