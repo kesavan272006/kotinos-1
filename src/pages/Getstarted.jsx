@@ -117,7 +117,7 @@ function Getstarted() {
 
 
                 {/* Features Section */}
-                <div className="grid md:grid-cols-3 gap-10 scroll-reveal mt-20 w-full">
+                <div className="grid md:grid-cols-3 gap-10 scroll-reveal mt-24 w-full">
                     {[
                         { icon: "🏅", title: "Showcase Achievements", desc: "Share the defining highlights of your athletic journey. Upload images and share thoughts that not only capture your passion but also mark those standout achievements, helping boost your profile and inspire your network" },
                         { icon: "🎉", title: "Host & Discover Events", desc: "Step beyond the screen and into dynamic gatherings. Organize, discover, and join events that bring your community together—whether you're cheering on from afar or shaking hands in person." },
@@ -222,7 +222,7 @@ function Getstarted() {
                         <GetstartedBtn onClick={handleclick} className="glow-btn" />
                     </div>
                 </div>
-
+                
 
 
 

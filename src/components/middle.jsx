@@ -179,7 +179,7 @@ useEffect(() => {
             return 'Athlete'
         }
         else if(role==='organization'){
-            return 'Organization '
+            return 'Organization'
         }
     }
     const openModals = (imageUrl) => {
