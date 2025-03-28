@@ -131,11 +131,11 @@ const Network = () => {
                         <h2 className="text-xl font-semibold mb-2">Your network is empty</h2>
                         <p className="text-gray-500 mb-6">Connect with others to build your professional network</p>
                         <Button 
-                            className=''
                             onClick={()=>navigate('/connection')}
                             variant="contained" 
+                            className="hover:bg-blue-600"
                             style={{ 
-                                backgroundColor: '#2BCEE0', 
+                                backgroundColor: '#3b82f6',
                                 textTransform: 'none',
                                 borderRadius: '8px',
                                 padding: '8px 16px'

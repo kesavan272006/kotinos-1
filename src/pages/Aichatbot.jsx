@@ -134,7 +134,7 @@ const ChatBot = () => {
           >
             <div className="md:w-1/2 w-full">
               {messages.length === 0 ? (
-                <div className=" text-[beige] w-fit h-[50vh] text-3xl flex justify-center items-center mx-auto">
+                <div className=" text-[beige] w-full text-center h-[50vh] text-3xl flex justify-center items-center mx-auto">
                   Welcome back {username}, How can I assist you today?
                 </div>
               ) : (
