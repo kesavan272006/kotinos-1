@@ -8,6 +8,7 @@ import { auth, database } from "../config/firebase";
 import { useNavigate } from "react-router-dom";
 import boticon from '../assets/boticon.svg';
 
+
 function Home() {
     const [userData, setUserData] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -75,6 +76,7 @@ function Home() {
         <div className="page-container flex flex-col min-h-screen overflow-hidden">
             <div className="flex flex-grow">
                 <Sidebar className="sticky top-0 w-[20vw] bg-white" />
+                
                 <div className="flex flex-col justify-center items-center w-full overflow-y-scroll h-full">
                     <Middle userData={userData} />
                 </div>

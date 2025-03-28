@@ -10,6 +10,8 @@ import test from '../test/test_bg2.jpg'
 import GetstartedBtn from '../components/animata/button/slide-arrow-button'
 import Glowcard from '../components/animata/button/glowing-card'
 import img1 from '../test/test_bg1.jpg'
+import AnimatedBeam from '../components/animata/button/animated-beam'
+
 
 import ss1 from '../test/SS1.png'
 
@@ -84,8 +86,9 @@ function Getstarted() {
 
     return (
         <>
-
+           
             <Navbarout />
+            
             <div ref={comp} className="flex flex-col items-center text-center px-6 md:px-20 lg:px-32">
                 <style>
                     {`
@@ -110,7 +113,7 @@ function Getstarted() {
                 </div> */}
                 <GetstartedBtn id="get-started-button" onClick={handleclick} className="mt-10" />
                 <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2">
-                    <p ref={scrollRef} className="text-white text-lg font-semibold tracking-widest animate-glow">
+                    <p ref={scrollRef} className="text-white relative z-100 text-lg font-semibold tracking-widest animate-glow">
                         Scroll Down ↓
                     </p>
                 </div>

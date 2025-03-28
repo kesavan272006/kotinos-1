@@ -128,6 +128,20 @@ const Connection = () => {
   useEffect(() => {
     getUsers();
   }, []);
+  const capital = (role) => {
+    if (role === 'user') {
+        return 'User'
+    }
+    else if (role === 'coach') {
+        return 'Coach'
+    }
+    else if (role === 'athlete') {
+        return 'Athlete'
+    }
+    else if (role === 'organization') {
+        return 'Organization'
+    }
+}
 
   return (
     <div className='bg-gray-50'>
@@ -135,7 +149,7 @@ const Connection = () => {
       <div className="flex justify-center">
         <div className="w-[90%] md:w-[40%]">
           <div className="flex items-center mt-10">
-            <IoPersonAddSharp className='text-2xl text-cyan-500 mt-1' />
+            <IoPersonAddSharp className='text-2xl text-blue-500 mt-1' />
             <h1 className='pl-2 text-gray-800 text-3xl font-bold'>Connect with Others</h1>
           </div>
           <h2 className='text-gray-700 text-base mt-10 mb-10 font-medium ml-3 md:ml-2'>
@@ -159,21 +173,21 @@ const Connection = () => {
               return (
                 <div key={users.id} className=''>
   
-                  <div className='hover:bg-cyan-50 bg-white mb-1 rounded'>
+                  <div className='hover:bg-blue-50 bg-white mb-1 rounded'>
                     <List>
                       <ListItem className='' style={{ display: 'flex', flexDirection: 'row', justifyContent: 'start' }}>
                         <Link to={`/otherprofile/${users.id}`}>
                           <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'start', alignItems: 'center' }}>
                             <Avatar className='bg-gray-100' src={profilePics[users.id] || profileicon} sx={{ width: 48, height: 48,}} />
                             <div style={{ marginLeft: '10px' }}>
-                              <ListItemText primary={users.username} secondary={users.role} />
+                              <ListItemText primary={users.username} secondary={capital(users.role)} />
                             </div>
                           </div>
                         </Link>
                         {!isRequestAlreadySent && (
                           <button
                             onClick={() => sendRequest(users.id)}
-                            className='ml-auto text-cyan-500 hover:bg-white hover:border hover:border-cyan-500 rounded-full px-2 py-1 transform transition duration-100 ease-in-out'
+                            className='ml-auto text-blue-500 hover:bg-white hover:border hover:border-blue-500 rounded-full px-2 py-1 transform transition duration-100 ease-in-out'
                           >
                             Connect
                           </button>
@@ -200,21 +214,21 @@ const Connection = () => {
               return (
                 <div key={users.id} className=''>
   
-                  <div className='hover:bg-cyan-50 bg-white mb-1 rounded'>
+                  <div className='hover:bg-blue-50 bg-white mb-1 rounded'>
                     <List>
                       <ListItem className='' style={{ display: 'flex', flexDirection: 'row', justifyContent: 'start' }}>
                         <Link to={`/otherprofile/${users.id}`}>
                           <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'start', alignItems: 'center' }}>
                             <Avatar className='bg-gray-100' src={profilePics[users.id] || profileicon} sx={{ width: 48, height: 48,}} />
                             <div style={{ marginLeft: '10px' }}>
-                              <ListItemText primary={users.username} secondary={users.role} />
+                              <ListItemText primary={users.username} secondary={capital(users.role)} />
                             </div>
                           </div>
                         </Link>
                         {!isRequestAlreadySent && (
                           <button
                             onClick={() => sendRequest(users.id)}
-                            className='ml-auto text-cyan-500 hover:bg-white hover:border hover:border-cyan-500 rounded-full px-2 py-1 transform transition duration-100 ease-in-out'
+                            className='ml-auto text-blue-500 hover:bg-white hover:border hover:border-blue-500 rounded-full px-2 py-1 transform transition duration-100 ease-in-out'
                           >
                             Connect
                           </button>
