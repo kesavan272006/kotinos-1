@@ -180,10 +180,13 @@ const OtherProfile = () => {
     const decidingcoach = role === 'coach'; 
     const decidinguser = role === 'user';
     const decidingorganization = role === 'organization';
+    const handlenavigation = (userId) => {
+        navigate(`/displayQr/${userId}`);
+    }
     useEffect(() => {
         const timer = setTimeout(() => {
             setLoading(false);
-        }, 3000);
+        }, 1000);
         const fetchProfile2 = async () => {
             
             if (user) {
@@ -1215,12 +1218,13 @@ const OtherProfile = () => {
                                                                 flexDirection: 'column',
                                                                 justifyContent: 'center',
                                                             }}
+                                                            onClick={() => handlenavigation(post.Id)}
                                                         >
                                                             <h1 className='font-bold text-lg mt-5'>{post.username}</h1>
                                                             <h1>{capital(post.role)}</h1>
                                                         </div>
                                                         <h3 className='mt-8 text-gray-400 text-sm ml-4'>{formatTimestamp(post.timestamp)}</h3>
-                                                    </div>                                            
+                                                    </div> 
                                                 </div>
                                                 <h1 className='whitespace-pre-wrap text-base mr-2 mt-4'><ReadMore text={post.textPost} /></h1>
                                             </div>
