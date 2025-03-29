@@ -8,6 +8,8 @@ import { doc, getDoc } from "firebase/firestore";
 import Aibutton from "../components/animata/button/ai-button";
 import { AiOutlineSend } from "react-icons/ai";
 import AiButton from "../components/animata/button/ai-button";
+import AnimatedBeam from "../components/animata/button/animated-beam";
+import '../pages/Aichatbot.css'
 
 const API_KEY = import.meta.env.VITE_AI_APP_ID;
 const genAI = new GoogleGenerativeAI(API_KEY);
@@ -115,35 +117,38 @@ const ChatBot = () => {
 
   return (
     <>
+
       {/* <Navbar /> */}
-      <div className="flex flex-col justify-center items-center ">
-        {/* Chat Container */}
-        <div className="w-full h-[100vh] overflow-hidden flex flex-col backdrop-blur-xl bg-opacity-20">
+      <AnimatedBeam><div className="text-white ">
+        <div className="w-full h-[100vh] overflow-hidden flex flex-col ">
           {/* Chat Header */}
-          <div className="p-5 text-center font-bold text-4xl text-[beige] bg-[#0A0F38]">
-            <div className="animate-text bg-gradient-to-r from-teal-500 via-purple-500 to-blue-500 bg-clip-text h-fit pb-3 text-transparent text-5xl font-black
-">
+          <div className="p-5 w-full flex justify-center text-center font-bold text-4xl text-[beige]">
+            <div className="animate-text w-fit px-4 bg-opacity-10 backdrop-blur-sm bg-gradient-to-r from-teal-500 via-purple-500 to-blue-500 bg-clip-text h-fit pb-3 text-transparent text-5xl font-black">
               Rio - Your AI Sports Buddy
             </div>
           </div>
 
           {/* Chat Messages */}
+
           <div
-            className="flex-1 flex flex-col items-center overflow-y-auto p-5 space-y-3 bg-[#0A0F38] custom-scrollbar"
+            className="flex-1 flex  flex-col items-center overflow-y-auto p-5 space-y-3 chat-bot-ctr "
             ref={chatBoxRef}
           >
-            <div className="md:w-1/2 w-full">
+
+            <div className="md:w-1/2 w-full ">
               {messages.length === 0 ? (
                 <div className=" text-[beige] w-full text-center h-[50vh] text-3xl flex justify-center items-center mx-auto">
-                  Welcome back {username}, How can I assist you today?
+                  <div className="backdrop-blur-sm bg-opacity-10 py-14 px-10">
+                    Welcome back {username}, How can I assist you today?
+                  </div>
                 </div>
               ) : (
                 messages.map((msg, index) => (
                   <div
                     key={index}
                     className={`p-4 rounded-2xl ${msg.role === "user"
-                        ? "bg-gradient-to-r from-[#0057D9] to-[#002F6C] text-white self-end ml-auto w-fit my-5"
-                        : "text-[beige] w-full my-5"
+                      ? "bg-gradient-to-r from-[#0057D9] to-[#002F6C] text-white self-end ml-auto w-fit my-5"
+                      : "text-[beige] w-full my-5 backdrop-blur-sm bg-opacity-10"
                       }`}
                   >
                     <ReactMarkdown>{msg.content}</ReactMarkdown>
@@ -151,6 +156,7 @@ const ChatBot = () => {
                 ))
               )}
             </div>
+
 
 
             {/* Bot Typing Animation */}
@@ -164,12 +170,13 @@ const ChatBot = () => {
               </div>
             )}
           </div>
-          <div onClick={() => setInput("How to recover from a sports injury?")} className="flex items-center justify-center p-4 bg-[#0A0F38] h-20">
-          <AiButton  className=""/>
+
+          <div onClick={() => setInput("How to recover from a sports injury?")} className=" relative z-50 flex items-center justify-center p-4 bg-[#0A0F38]/0 h-20">
+            <AiButton className="" />
           </div>
           {/* Input & Send Button */}
-          <div className="flex items-center justify-center p-4 bg-[#001F54] border-t border-gray-600">
-            
+          <div className="flex items-center justify-center p-4 bg-opacity-0 bg-[#001F54]">
+
             <div className="md:w-1/2 w-full flex items-center">
               <input
                 type="text"
@@ -183,14 +190,16 @@ const ChatBot = () => {
                 onClick={handleSend}
                 className="ml-3 py-4 bg-gradient-to-r from-[#003B8B] to-[#007BFF] text-white px-4 rounded-full shadow-lg hover:scale-110 transition-all duration-300"
               >
-                <AiOutlineSend className="ml-1"/>
+                <AiOutlineSend className="ml-1" />
               </button>
             </div>
+
           </div>
 
         </div>
 
-      </div>
+      </div></AnimatedBeam>
+
     </>
   );
 };

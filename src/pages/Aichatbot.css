@@ -1,0 +1,22 @@
+.chat-bot-ctr::-webkit-scrollbar {
+    width: 12px;               /* width of the entire scrollbar */
+  }
+  
+  .chat-bot-ctr::-webkit-scrollbar-track {
+    background: #121836;       /* dark blue background matching your interface */
+    border-radius: 10px;
+  }
+  
+  .chat-bot-ctr::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #844bff, #3e17eb);  /* purple gradient matching your header */
+    border-radius: 10px;       /* roundness of the scroll thumb */
+    border: 2px solid #121836; /* creates padding around scroll thumb */
+  }
+  
+  .chat-bot-ctr::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #9a6bff, #6e37eb);  /* slightly lighter on hover */
+  }
+  
+
+  
+  
