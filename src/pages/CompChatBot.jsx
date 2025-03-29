@@ -15,7 +15,7 @@ const API_KEY = import.meta.env.VITE_AI_APP_ID;
 const genAI = new GoogleGenerativeAI(API_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-exp" });
 
-const ChatBot = () => {
+const CompChatBot = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -65,7 +65,7 @@ const ChatBot = () => {
   Make your answers informative and engaging.
   If a user asks about something unrelated, politely tell them you can only answer sports and health questions. But u may also answer some general questions.
   If user asks who you are, just say you are Rio.
-  If some one asks you who created Kotinos, you should describe the team behind it as, Kesavan G(team leader, worked on full stack web development, this website is managed and created by him. he created the entire frontend and backend was primarily handled by him. Dont elevate him so much but remember he has worked a lot.), Aditya(chief Designer and helped in training Rio), Adwaith J(worked on backend of the website), Amal Sajeev(worked on development of Rio, the Ai assistant in Kotinos. He was the one who created you primarily). Briefly explain about them. when someone asks about the team behind Kotinos or about the one who created you, you should very briefly explain about them. if someone asks about who created you, you should talk about the entire Kotinos team briefly, minimum 200 words with whitespaces.
+  If some one asks you who created Kotinos, you should describe the team behind it as, Kesavan G(team leader, worked on full stack web development, this website is managed and created by him. he created the entire frontend and backend was primarily handled by him with other guys help. Dont elevate him so much but remember he has worked a lot.), Aditya(chief Designer and helped in training Rio), Adwaith J(worked on backend of the website), Amal Sajeev(worked on development of Rio, the Ai assistant in Kotinos. He is the main man behind the Rio. He was the one who created you primarily). Briefly explain about them. when someone asks about the team behind Kotinos or about the one who created you, you should very briefly explain about them. if someone asks about who created you, you should talk about the entire Kotinos team briefly, minimum 200 words with whitespaces.
   If some one questions you about date just give them ${date} and if they ask about current time just give them ${time} and in other cases give them both, with some more funny texts.
   You should address the person who is speaking with you as ${username} and he is a ${role}. address them with their name only once in a conversation, not everytime.
   `;
@@ -121,47 +121,34 @@ const ChatBot = () => {
       {/* <Navbar /> */}
       <AnimatedBeam><div className="text-white ">
         <div className="w-full h-[100vh] overflow-hidden flex flex-col ">
-          {/* Chat Header */}
-          <div className="p-5 w-full flex justify-center text-center font-bold text-4xl text-[beige]">
-            <div className="animate-text w-fit px-4 bg-opacity-10 backdrop-blur-sm bg-gradient-to-r from-teal-500 via-purple-500 to-blue-500 bg-clip-text h-fit pb-3 text-transparent text-5xl font-black">
-              Rio - Your AI Sports Buddy
-            </div>
-          </div>
 
           {/* Chat Messages */}
 
           <div
-            className="flex-1 flex  flex-col items-center overflow-y-auto p-5 space-y-3 chat-bot-ctr "
+            className="flex-1 flex  flex-col items-center overflow-y-auto space-y-3 chat-bot-ctr "
             ref={chatBoxRef}
           >
 
-            <div className="md:w-1/2 w-full ">
-              {messages.length === 0 ? (
-                <div className=" text-[beige] w-full text-center h-[50vh] text-3xl flex justify-center items-center mx-auto">
-                  <div className="backdrop-blur-sm bg-opacity-10 py-14 px-10">
-                    Welcome back {username}, How can I assist you today?
-                  </div>
-                </div>
-              ) : (
-                messages.map((msg, index) => (
-                  <div
+            <div className="w-full mb-8">
+            {messages.map((msg, index) => (
+                <div
                     key={index}
-                    className={`p-4 rounded-2xl ${msg.role === "user"
-                      ? "bg-gradient-to-r from-[#0057D9] to-[#002F6C] text-white self-end ml-auto w-fit my-5"
-                      : "text-[beige] w-full my-5 backdrop-blur-sm bg-opacity-10"
-                      }`}
-                  >
+                    className={`p-4 rounded-2xl max-w-[75%] ${msg.role === "user"
+                        ? "bg-gradient-to-r from-[#0057D9] to-[#002F6C] text-white self-end my-5 ml-auto w-40"
+                        : "text-[beige] w-fit my-5 backdrop-blur-sm bg-opacity-10 w-50"
+                    }`}
+                >
                     <ReactMarkdown>{msg.content}</ReactMarkdown>
-                  </div>
-                ))
-              )}
+                </div>
+            ))}
+
             </div>
 
 
 
             {/* Bot Typing Animation */}
             {isLoading && (
-              <div className="self-start p-4 rounded-2xl w-full text-gray-400 animate-pulse">
+              <div style={{marginLeft:'0px'}} className="self-start p-4 rounded-2xl w-full text-gray-400 animate-pulse">
                 <div className="flex md:w-1/2 w-full md:ml-7 ml-3 md:justify-center md:items-center space-x-1">
                   <span className="animate-bounce">●</span>
                   <span className="animate-bounce delay-200">●</span>
@@ -170,14 +157,10 @@ const ChatBot = () => {
               </div>
             )}
           </div>
-
-          <div onClick={() => setInput("How to recover from a sports injury?")} className=" relative z-50 flex items-center justify-center p-4 bg-[#0A0F38]/0 h-20">
-            <AiButton className="" />
-          </div>
           {/* Input & Send Button */}
-          <div className="flex items-center justify-center p-4 bg-opacity-0 bg-[#001F54]">
+          <div className="flex items-center justify-center p-4 bg-opacity-0 bg-[#001F54] fixed bottom-8">
 
-            <div className="md:w-1/2 w-full flex items-center">
+            <div className="md:w-1/2 w-full flex items-center" style={{width:'90%'}}>
               <input
                 type="text"
                 value={input}
@@ -204,4 +187,4 @@ const ChatBot = () => {
   );
 };
 
-export default ChatBot;
+export default CompChatBot;

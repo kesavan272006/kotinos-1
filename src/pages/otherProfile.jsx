@@ -180,10 +180,13 @@ const OtherProfile = () => {
     const decidingcoach = role === 'coach'; 
     const decidinguser = role === 'user';
     const decidingorganization = role === 'organization';
+    const handlenavigation = (userId) => {
+        navigate(`/displayQr/${userId}`);
+    }
     useEffect(() => {
         const timer = setTimeout(() => {
             setLoading(false);
-        }, 3000);
+        }, 1000);
         const fetchProfile2 = async () => {
             
             if (user) {
@@ -694,12 +697,6 @@ const OtherProfile = () => {
                                             <div className='pl-5'>
                                                 <div className='flex flex-row' style={{ justifyContent: 'space-between' }}>
                                                     <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
-                                                        {post.isEvent && (
-                                                            <div className='absolute w-full'>
-
-                                                                <div className='absolute right-0 rounded-full border px-3 text-center border-blue-700 md:mt-4 mt-14 '>Event ✅</div>
-                                                            </div>
-                                                        )}
                                                         <img
                                                             className='mt-5'
                                                             src={profile.profilePic || profileicon}
@@ -785,26 +782,7 @@ const OtherProfile = () => {
 
                                                         </div>
                                                         <h3 className='mt-8 text-gray-400 text-sm ml-4'>{formatTimestamp(post.timestamp)}</h3>
-                                                    </div>
-                                                    <div style={{ position: "relative" }}>
-                                                        {/* Three Dots Button */}
-                                                        <button onClick={() => setOpenDropdownId(openDropdownId === post.id ? null : post.id)} className='font-extrabold mr-3 mt-3 hover:bg-gray-200 focus:bg-gray-200 px-2.5 rounded-full'>⋮</button>
-
-                                                        {/* Dropdown Menu */}
-                                                        {openDropdownId === post.id && (
-                                                            <div onClick={() => deletePost(post.id)} className='md:w-[10vw] w-[30vw] border rounded-lg cursor-pointer hover:bg-gray-50 bg-white mr-0.5' style={{
-                                                                position: "absolute",
-                                                                right: 0,
-                                                                boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
-                                                                padding: "5px"
-                                                            }}>
-                                                                <button  style={{ display: "flex", alignItems: "center", border: "none", background: "none", cursor: "pointer" }}>
-                                                                <IoTrashOutline className='text-red-600 ml-0.5 text-base' />
-                                                                    <p className='ml-3 text-red-600'>Delete</p>
-                                                                </button>
-                                                            </div>
-                                                        )}
-                                                    </div>                                                
+                                                    </div>                                             
                                                 </div>
 
                                                 <h1 className='ml-5'><ReadMore text={post.textPost} /></h1>
@@ -883,12 +861,6 @@ const OtherProfile = () => {
                                             <div className='pl-5'>
                                                 <div className='flex flex-row' style={{ justifyContent: 'space-between' }}>
                                                     <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
-                                                        {post.isEvent && (
-                                                            <div className='absolute w-full'>
-
-                                                                <div className='absolute right-0 rounded-full border px-3 text-center border-blue-700 md:mt-4 mt-14 '>Event ✅</div>
-                                                            </div>
-                                                        )}
                                                         <img
                                                             className='mt-6'
                                                             src={profile.profilePic || profileicon}
@@ -967,12 +939,7 @@ const OtherProfile = () => {
                                                             <h1>{capital(post.role)}</h1>
                                                         </div>
                                                         <h3 className='mt-8 text-gray-400 text-sm ml-4'>{formatTimestamp(post.timestamp)}</h3>
-                                                    </div>
-                                                    <div style={{ position: "relative" }}>
-                                                        {/* Three Dots Button */}
-                                                        <button onClick={() => setOpenDropdownId(openDropdownId === post.id ? null : post.id)} className='font-extrabold mr-3 mt-3 hover:bg-gray-200 focus:bg-gray-200 px-2.5 rounded-full'>⋮</button>
-
-                                                    </div>                                                
+                                                    </div>                                              
                                                 </div>
                                                 <br />
                                                 <h1><ReadMore text={post.textPost} /></h1>
@@ -1114,26 +1081,7 @@ const OtherProfile = () => {
                                                             <h1>{capital(post.role)}</h1>
                                                         </div>
                                                         <h3 className='mt-8 text-gray-400 text-sm ml-4'>{formatTimestamp(post.timestamp)}</h3>
-                                                    </div>
-                                                    <div style={{ position: "relative" }}>
-                                                        {/* Three Dots Button */}
-                                                        <button onClick={() => setOpenDropdownId(openDropdownId === post.id ? null : post.id)} className='font-extrabold mr-3 mt-3 hover:bg-gray-200 focus:bg-gray-200 px-2.5 rounded-full'>⋮</button>
-
-                                                        {/* Dropdown Menu */}
-                                                        {openDropdownId === post.id && (
-                                                            <div onClick={() => deletePost(post.id)} className='md:w-[10vw] w-[30vw] border rounded-lg cursor-pointer hover:bg-gray-50 bg-white mr-0.5' style={{
-                                                                position: "absolute",
-                                                                right: 0,
-                                                                boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
-                                                                padding: "5px"
-                                                            }}>
-                                                                <button  style={{ display: "flex", alignItems: "center", border: "none", background: "none", cursor: "pointer" }}>
-                                                                <IoTrashOutline className='text-red-600 ml-0.5 text-base' />
-                                                                    <p className='ml-3 text-red-600'>Delete</p>
-                                                                </button>
-                                                            </div>
-                                                        )}
-                                                    </div>                                                
+                                                    </div>                                            
                                                 </div>
                                                 <br />
                                                 <h1 className='md:mx-4 whitespace-pre-wrap'><ReadMore text={post.textPost} /></h1>
@@ -1270,31 +1218,13 @@ const OtherProfile = () => {
                                                                 flexDirection: 'column',
                                                                 justifyContent: 'center',
                                                             }}
+                                                            onClick={() => handlenavigation(post.Id)}
                                                         >
                                                             <h1 className='font-bold text-lg mt-5'>{post.username}</h1>
                                                             <h1>{capital(post.role)}</h1>
                                                         </div>
                                                         <h3 className='mt-8 text-gray-400 text-sm ml-4'>{formatTimestamp(post.timestamp)}</h3>
-                                                    </div>
-                                                    <div style={{ position: "relative" }}>
-                                                        {/* Three Dots Button */}
-                                                        <button onClick={() => setOpenDropdownId(openDropdownId === post.id ? null : post.id)} className='font-extrabold mr-3 mt-3 hover:bg-gray-200 focus:bg-gray-200 px-2.5 rounded-full'>⋮</button>
-
-                                                        {/* Dropdown Menu */}
-                                                        {openDropdownId === post.id && (
-                                                            <div onClick={() => deletePost(post.id)} className='md:w-[10vw] w-[30vw] border rounded-lg cursor-pointer hover:bg-gray-50 bg-white mr-0.5' style={{
-                                                                position: "absolute",
-                                                                right: 0,
-                                                                boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
-                                                                padding: "5px"
-                                                            }}>
-                                                                <button  style={{ display: "flex", alignItems: "center", border: "none", background: "none", cursor: "pointer" }}>
-                                                                <IoTrashOutline className='text-red-600 ml-0.5 text-base' />
-                                                                    <p className='ml-3 text-red-600'>Delete</p>
-                                                                </button>
-                                                            </div>
-                                                        )}
-                                                    </div>                                                
+                                                    </div> 
                                                 </div>
                                                 <h1 className='whitespace-pre-wrap text-base mr-2 mt-4'><ReadMore text={post.textPost} /></h1>
                                             </div>

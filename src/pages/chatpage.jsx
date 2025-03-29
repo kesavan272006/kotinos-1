@@ -1065,7 +1065,7 @@ const ChatPage = () => {
                                 <div className="bg-white p-6 rounded-lg shadow-lg w-96 max-h-[90vh] overflow-y-auto">
                                     <h1><strong>Create a Group</strong></h1>
                                     <br />
-                                    <input label='Group Name' className='w-[90%] ' value={groupName} onChange={handlenamechange} />
+                                    <input onKeyDown={(e) => e.key === "Enter" && handleSave()} type='text' style={{border:'2px solid black', height:'50px', width:'90%', paddingLeft:'10px', marginBottom:'10px'}} placeholder='Group Name' value={groupName} onChange={handlenamechange} />
 
                                     <Autocomplete
                                         disablePortal
@@ -1091,6 +1091,7 @@ const ChatPage = () => {
                                     <br />
                                     <input 
                                         type='text' 
+                                        onKeyDown={(e) => e.key === "Enter" && handleCommunitySave()}
                                         style={{
                                             border: '2px solid black', 
                                             height: '50px', 
@@ -1183,7 +1184,9 @@ const ChatPage = () => {
                                                     marginRight: isCurrentUser ? '0' : '10px',
                                                 }}>
 
+                                                <Link to={`/otherprofile/${message.senderId}`}>
                                                     <span className='hover:underline cursor-pointer' style={{ fontSize: '15px', fontWeight: 'bolder' }}>{senderNames[message.senderId] || "Loading..."}</span>
+                                                </Link>
                                                     <br />
                                                     {message.images && message.images.map((img, index) => (
                                                         <img
@@ -1238,6 +1241,7 @@ const ChatPage = () => {
                                     <TextField
                                         value={grpmessage}
                                         className=' border pl-5 pb-1'
+                                        onKeyDown={(e) => e.key === "Enter" && handleSendMessage(selectedGroup)}
                                         onChange={(e) => setGrpMessage(e.target.value)}
                                         placeholder="Type a message"
                                         style={{
@@ -1463,6 +1467,7 @@ const ChatPage = () => {
                                         className=' border pl-5'
                                         onChange={(e) => setMessage(e.target.value)}
                                         placeholder="Type a message"
+                                        onKeyDown={(e) => e.key === "Enter" && sendMessage()}
                                         style={{
                                             width: '85%',
                                             marginRight: '10px',
@@ -1592,6 +1597,7 @@ const ChatPage = () => {
                                         multiline
                                         value={comMessage}
                                         className=' border pl-5'
+                                        onKeyDown={(e) => e.key === "Enter" && handleSendCommunityMessage(selectedCommunity)}
                                         onChange={(e) => setComMessage(e.target.value)}
                                         placeholder="Type a message"
                                         style={{
@@ -1672,6 +1678,7 @@ const ChatPage = () => {
                             <TextField
                                 multiline
                                 value={message}
+                                onKeyDown={(e) => e.key === "Enter" && sendMessage()}
                                 onChange={(e) => setMessage(e.target.value)}
                                 label="Add a Descreption"
                                 className=''
@@ -1747,6 +1754,7 @@ const ChatPage = () => {
                             <TextField
                                 multiline
                                 value={grpmessage}
+                                onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
                                 onChange={(e) => setGrpMessage(e.target.value)}
                                 label="Add a Descreption"
                                 className=''
@@ -1822,7 +1830,8 @@ const ChatPage = () => {
                             <TextField
                                 multiline
                                 value={comMessage}
-                                onChange={(e) => setGrpMessage(e.target.value)}
+                                onKeyDown={(e) => e.key === "Enter" && handleSendCommunityMessage()}
+                                onChange={(e) => setComMessage(e.target.value)}
                                 label="Add a Descreption"
                                 className=''
                                 style={{
@@ -2308,7 +2317,9 @@ const ChatPage = () => {
                                                 marginRight: isCurrentUser ? '0' : '10px',
                                             }}>
 
-                                                <span className='hover:underline cursor-pointer' style={{ fontSize: '15px', fontWeight: 'bolder' }}>{senderNames[message.senderId] || "Loading..."}</span>
+                                                <Link to={`/otherprofile/${message.senderId}`}>
+                                                    <span className='hover:underline cursor-pointer' style={{ fontSize: '15px', fontWeight: 'bolder' }}>{senderNames[message.senderId] || "Loading..."}</span>
+                                                </Link>
                                                 <br />
                                                 {message.images && message.images.map((img, index) => (
                                                     <img
@@ -2367,6 +2378,7 @@ const ChatPage = () => {
                                         className=' border pl-5'
                                         onChange={(e) => setComMessage(e.target.value)}
                                         placeholder="Type a message"
+                                        onKeyDown={(e) => e.key === "Enter" && handleSendMessage(selectedGroup)}
                                         style={{
                                             width: '85%',
                                             marginRight: '10px',
@@ -2549,6 +2561,7 @@ const ChatPage = () => {
                                 <TextField
                                         multiline
                                         value={message}
+                                        onKeyDown={(e) => e.key === "Enter" && sendMessage()}
                                         className=' border pl-5'
                                         onChange={(e) => setMessage(e.target.value)}
                                         placeholder="Type a message"
@@ -2682,6 +2695,7 @@ const ChatPage = () => {
                                         multiline
                                         value={comMessage}
                                         className=' border pl-5'
+                                        onKeyDown={(e) => e.key === "Enter" && handleSendCommunityMessage(selectedCommunity)}
                                         onChange={(e) => setComMessage(e.target.value)}
                                         placeholder="Type a message"
                                         style={{
@@ -2704,7 +2718,7 @@ const ChatPage = () => {
                             <div className="bg-white p-6 rounded-lg shadow-lg w-96 max-h-[90vh] overflow-y-auto">
                                 <h1><strong>Create a Group</strong></h1>
                                 <br />
-                                <input type='text' style={{border:'2px solid black', height:'50px', width:'90%', paddingLeft:'10px', marginBottom:'10px'}} placeholder='Group Name' value={groupName} onChange={handlenamechange} />
+                                <input onKeyDown={(e) => e.key === "Enter" && handleSave()} type='text' style={{border:'2px solid black', height:'50px', width:'90%', paddingLeft:'10px', marginBottom:'10px'}} placeholder='Group Name' value={groupName} onChange={handlenamechange} />
                                 <br />
                                 <Autocomplete
                                     disablePortal
@@ -2729,6 +2743,7 @@ const ChatPage = () => {
                                 <br />
                                 <input 
                                     type='text' 
+                                    onKeyDown={(e) => e.key === "Enter" && handleCommunitySave()}
                                     style={{
                                         border: '2px solid black', 
                                         height: '50px', 
@@ -2746,6 +2761,7 @@ const ChatPage = () => {
                                 <TextField 
                                     label='Describe the purpose of this community' 
                                     value={communityDescription} 
+                                    onKeyDown={(e) => e.key === "Enter" && handleCommunitySave()}
                                     onChange={(e) => setcommunityDescription(e.target.value)} 
                                     variant="outlined" 
                                     fullWidth 
@@ -2793,6 +2809,7 @@ const ChatPage = () => {
                             <TextField
                                 multiline
                                 value={message}
+                                onKeyDown={(e) => e.key === "Enter" && sendMessage()}
                                 onChange={(e) => setMessage(e.target.value)}
                                 label="Add a Descreption"
                                 className=''
@@ -2868,6 +2885,7 @@ const ChatPage = () => {
                             <TextField
                                 multiline
                                 value={grpmessage}
+                                onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
                                 onChange={(e) => setGrpMessage(e.target.value)}
                                 label="Add a Descreption"
                                 className=''
@@ -2943,7 +2961,8 @@ const ChatPage = () => {
                             <TextField
                                 multiline
                                 value={comMessage}
-                                onChange={(e) => setGrpMessage(e.target.value)}
+                                onKeyDown={(e) => e.key === "Enter" && handleSendCommunityMessage()}
+                                onChange={(e) => setComMessage(e.target.value)}
                                 label="Add a Descreption"
                                 className=''
                                 style={{
