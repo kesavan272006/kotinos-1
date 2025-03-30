@@ -75,14 +75,14 @@ function Home() {
             <div className="flex flex-grow">
                 <Sidebar className="sticky top-0 w-[20vw] bg-white" />
 
-                <div className="flex flex-col justify-center items-center w-full overflow-y-scroll h-full">
+                <div className="flex flex-col justify-center items-center w-full overflow-y-scroll h-full md:h-[100vh]">
                     <Middle userData={userData} />
                 </div>
             </div>
 
             {/* Floating Chatbot Button */}
                 {!isChatbotOpen && !isMobile && (
-                        <div className={`fixed bottom-4 right-4 flex flex-col items-end transition-opacity ${isFooterVisible ? 'opacity-0' : 'opacity-100'}`}>
+                        <div className={`absolute bottom-4 right-4 flex flex-col items-end transition-opacity ${isFooterVisible ? 'opacity-0' : 'opacity-100'}`}>
                             <div className="bg-blue-500 text-white text-xs p-2 rounded-t-lg mb-2 shadow-lg">
                                 Need assistance? Chat with <strong>Rio</strong>!
                             </div>

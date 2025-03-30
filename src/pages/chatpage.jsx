@@ -1464,7 +1464,7 @@ const ChatPage = () => {
                                 <TextField
                                         multiline
                                         value={message}
-                                        className=' border pl-5'
+                                        className=' border pl-5 overflow-y-scroll max-h-14'
                                         onChange={(e) => setMessage(e.target.value)}
                                         placeholder="Type a message"
                                         onKeyDown={(e) => e.key === "Enter" && sendMessage()}
@@ -1878,7 +1878,7 @@ const ChatPage = () => {
                 </div>
             )}
             {isMobile && (
-                <div className='flex h-[90vh]'>
+                <div className='flex h-[83vh]'>
 
                     {(!selectedGroup && !selectedUser && !selectedCommunity) && (
                         <div style={{ 
