@@ -120,7 +120,7 @@ const CompChatBot = () => {
 
       {/* <Navbar /> */}
       <AnimatedBeam><div className="text-white ">
-        <div className="w-full h-[100vh] overflow-hidden flex flex-col ">
+        <div className="w-full h-[70vh] overflow-hidden flex flex-col ">
 
           {/* Chat Messages */}
 
@@ -158,7 +158,7 @@ const CompChatBot = () => {
             )}
           </div>
           {/* Input & Send Button */}
-          <div className="flex items-center justify-center p-4 bg-opacity-0 bg-[#001F54] fixed bottom-8">
+          <div className="flex items-center justify-center p-4 bg-opacity-0 bg-[#001F54] absolute bottom-8">
 
             <div className="md:w-1/2 w-full flex items-center" style={{width:'90%'}}>
               <input

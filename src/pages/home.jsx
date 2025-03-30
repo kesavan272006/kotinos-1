@@ -103,7 +103,7 @@ function Home() {
             )}
             {/* Chatbot Popup */}
             {isChatbotOpen && !isMobile && (
-                <div style={{marginTop:'100px'}} className="fixed bottom-5 right-4 w-80 min-h-[400px] max-h-[600px] bg-white shadow-xl rounded-lg flex flex-col">
+                <div className="absolute bottom-5 mb-10 right-4 w-80 min-h-[400px] max-h-[600px] bg-white rounded-lg flex flex-col">
                     {/* Chatbot Header */}
                     <div className="flex justify-between items-center bg-blue-500 text-white p-3 rounded-t-lg">
                         <span>Rio - AI Sports Buddy</span>

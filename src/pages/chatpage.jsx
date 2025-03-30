@@ -1596,7 +1596,7 @@ const ChatPage = () => {
                                     <TextField
                                         multiline
                                         value={comMessage}
-                                        className=' border pl-5'
+                                        className=' border pl-5 overflow-y-scroll max-h-14'
                                         onKeyDown={(e) => e.key === "Enter" && handleSendCommunityMessage(selectedCommunity)}
                                         onChange={(e) => setComMessage(e.target.value)}
                                         placeholder="Type a message"
@@ -2374,9 +2374,9 @@ const ChatPage = () => {
                                 </div>
                                 <TextField
                                         multiline
-                                        value={comMessage}
-                                        className=' border pl-5'
-                                        onChange={(e) => setComMessage(e.target.value)}
+                                        value={grpmessage}
+                                        className=' border pl-5 overflow-y-scroll max-h-14'
+                                        onChange={(e) => setGrpMessage(e.target.value)}
                                         placeholder="Type a message"
                                         onKeyDown={(e) => e.key === "Enter" && handleSendMessage(selectedGroup)}
                                         style={{
@@ -2427,7 +2427,7 @@ const ChatPage = () => {
                             <div style={{
                                 display: "flex",
                                 flexDirection: "column",
-                                flex: 1,
+                                
                                 overflowY: 'scroll',
                                 paddingBottom: '80px',
                                 backgroundImage: `url(${chat_bg})`,
@@ -2562,7 +2562,7 @@ const ChatPage = () => {
                                         multiline
                                         value={message}
                                         onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-                                        className=' border pl-5'
+                                        className=' border pl-5 overflow-y-scroll max-h-14'
                                         onChange={(e) => setMessage(e.target.value)}
                                         placeholder="Type a message"
                                         style={{
@@ -2694,7 +2694,7 @@ const ChatPage = () => {
                                 <TextField
                                         multiline
                                         value={comMessage}
-                                        className=' border pl-5'
+                                        className=' border pl-5 overflow-y-scroll max-h-14'
                                         onKeyDown={(e) => e.key === "Enter" && handleSendCommunityMessage(selectedCommunity)}
                                         onChange={(e) => setComMessage(e.target.value)}
                                         placeholder="Type a message"

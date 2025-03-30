@@ -487,7 +487,7 @@ const Middle = ({ userData }) => {
                                                                 marginRight: '20px'
                                                             }}
                                                         >
-                                                            <h1 className='font-bold'>{post.username}</h1>
+                                                            <h1 className='font-bold w-1/2 md:w-full'>{post.username}</h1>
                                                             <h1>{capital(post.role)}</h1>
                                                         </div>
                                                         <h3 className='absolute md:relative m-1 top-full md:ml-6 mt-1 text-sm text-gray-400'>{formatTimestamp(post.timestamp)}</h3>
@@ -668,7 +668,7 @@ const Middle = ({ userData }) => {
                                                                 marginRight: '20px'
                                                             }}
                                                         >
-                                                            <h1 className='font-bold'>{post.username}</h1>
+                                                            <h1 className='font-bold md:w-full w-1/2'>{post.username}</h1>
                                                             <h1>{capital(post.role)}</h1>
                                                         </div>
                                                         <h3 className='absolute md:relative m-1 top-full md:ml-6 mt-1 text-sm text-gray-400'>{formatTimestamp(post.timestamp)}</h3>
@@ -853,7 +853,7 @@ const Middle = ({ userData }) => {
                                                         marginRight: '20px'
                                                     }}
                                                 >
-                                                    <h1 className='font-bold'>{post.username}</h1>
+                                                    <h1 className='font-bold md:w-full w-1/2'>{post.username}</h1>
                                                     <h1>{capital(post.role)}</h1>
 
                                                 </div>
