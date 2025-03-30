@@ -57,6 +57,7 @@ const Invitation = () => {
   };
 
   const acceptReq = async (user) => {
+    console.log(user);
     try {
       await setDoc(doc(database, "Users", `${auth.currentUser?.uid}`, "RequestIn", `${user.id}`), {
         role: user.role,
@@ -73,6 +74,7 @@ const Invitation = () => {
   };
 
   const addConnect = async (requestId, user) => {
+    const currentUser = auth.currentUser;
     const userRef = doc(database, "Users", currentUser.uid);
     const userSnap = await getDoc(userRef);
     if (userSnap.exists()) {
