@@ -10,6 +10,13 @@ import { AiOutlineSend } from "react-icons/ai";
 import AiButton from "../components/animata/button/ai-button";
 import AnimatedBeam from "../components/animata/button/animated-beam";
 import '../pages/Aichatbot.css'
+import FlowerMenu from "../components/animata/button/animated-dock";
+
+import { GoHomeFill } from "react-icons/go";
+import { IoChatbubbleEllipses } from "react-icons/io5";
+import { IoPersonSharp } from "react-icons/io5";
+import { IoIosNotifications } from "react-icons/io";
+
 
 const API_KEY = import.meta.env.VITE_AI_APP_ID;
 const genAI = new GoogleGenerativeAI(API_KEY);
@@ -106,6 +113,9 @@ const ChatBot = () => {
       setIsLoading(false);
     }
   };
+  const HomeIcon = (props) => (
+    <img src={Home} alt="Home" {...props} />
+  );
 
   useEffect(() => {
     setTimeout(() => {
@@ -119,86 +129,107 @@ const ChatBot = () => {
     <>
 
       {/* <Navbar /> */}
-      <AnimatedBeam><div className="text-white ">
-        <div className="w-full h-[100vh] overflow-hidden flex flex-col ">
-          {/* Chat Header */}
-          <div className="p-5 w-full flex justify-center text-center font-bold text-4xl text-[beige]">
-            <div className="animate-text w-fit px-4 bg-opacity-10 backdrop-blur-sm bg-gradient-to-r from-teal-500 via-purple-500 to-blue-500 bg-clip-text h-fit pb-3 text-transparent text-5xl font-black">
-              Rio - Your AI Sports Buddy
+      <AnimatedBeam>
+        <div className="absolute top-[30%] md:top-[30%] z-50 ml-[-35px] mt-2">
+          <FlowerMenu
+            backgroundColor="rgba(255, 255, 255, 0.9)" 
+            iconColor="black"
+            
+            
+            menuItems={[
+              { icon: GoHomeFill, href: "/home" },//x
+              { icon: GoHomeFill, href: "/home" },//x
+
+              { icon: GoHomeFill, href: "/home" },
+              { icon: IoChatbubbleEllipses, href: "/chatpage" },
+              { icon: IoIosNotifications, href: "/invitation" },
+              { icon: IoPersonSharp, href: "/profile" },
+
+              { icon: GoHomeFill, href: "/home" },//x
+            ]}
+          />
+        </div>
+        <div className="text-white ">
+
+          <div className="w-full h-[100vh] overflow-hidden flex flex-col ">
+            {/* Chat Header */}
+            <div className="p-5 w-full flex justify-center text-center font-bold text-4xl text-[beige]">
+              <div className="animate-text w-fit px-4 pt-6 bg-opacity-10 backdrop-blur-sm bg-gradient-to-r from-teal-500 via-purple-500 to-blue-500 bg-clip-text h-fit pb-3 text-transparent text-5xl font-black">
+                Rio - Your AI Sports Buddy
+              </div>
             </div>
-          </div>
 
-          {/* Chat Messages */}
+            {/* Chat Messages */}
 
-          <div
-            className="flex-1 flex  flex-col items-center overflow-y-auto p-5 space-y-3 chat-bot-ctr "
-            ref={chatBoxRef}
-          >
+            <div
+              className="flex-1 flex  flex-col items-center overflow-y-auto p-5 space-y-3 chat-bot-ctr "
+              ref={chatBoxRef}
+            >
 
-            <div className="md:w-1/2 w-full ">
-              {messages.length === 0 ? (
-                <div className=" text-[beige] w-full text-center h-[50vh] text-3xl flex justify-center items-center mx-auto">
-                  <div className="backdrop-blur-sm bg-opacity-10 py-14 px-10">
-                    Welcome back {username}, How can I assist you today?
+              <div className="md:w-1/2 w-full ">
+                {messages.length === 0 ? (
+                  <div className=" text-[beige] w-full text-center h-[50vh] text-3xl flex justify-center items-center mx-auto">
+                    <div className="backdrop-blur-sm bg-opacity-10 py-14 px-10">
+                      Welcome back {username}, How can I assist you today?
+                    </div>
+                  </div>
+                ) : (
+                  messages.map((msg, index) => (
+                    <div
+                      key={index}
+                      className={`p-4 rounded-2xl ${msg.role === "user"
+                        ? "bg-gradient-to-r from-[#0057D9] to-[#002F6C] text-white self-end ml-auto w-fit my-5"
+                        : "text-[beige] w-full my-5 backdrop-blur-sm bg-opacity-10"
+                        }`}
+                    >
+                      <ReactMarkdown>{msg.content}</ReactMarkdown>
+                    </div>
+                  ))
+                )}
+              </div>
+
+
+
+              {/* Bot Typing Animation */}
+              {isLoading && (
+                <div className="self-start p-4 rounded-2xl w-full text-gray-400 animate-pulse">
+                  <div className="flex md:w-1/2 w-full md:ml-7 ml-3 md:justify-center md:items-center space-x-1">
+                    <span className="animate-bounce">●</span>
+                    <span className="animate-bounce delay-200">●</span>
+                    <span className="animate-bounce delay-500">●</span>
                   </div>
                 </div>
-              ) : (
-                messages.map((msg, index) => (
-                  <div
-                    key={index}
-                    className={`p-4 rounded-2xl ${msg.role === "user"
-                      ? "bg-gradient-to-r from-[#0057D9] to-[#002F6C] text-white self-end ml-auto w-fit my-5"
-                      : "text-[beige] w-full my-5 backdrop-blur-sm bg-opacity-10"
-                      }`}
-                  >
-                    <ReactMarkdown>{msg.content}</ReactMarkdown>
-                  </div>
-                ))
               )}
             </div>
 
+            <div onClick={() => setInput("How to recover from a sports injury?")} className=" relative z-50 flex items-center justify-center p-4 bg-[#0A0F38]/0 h-20">
+              <AiButton className="" />
+            </div>
+            {/* Input & Send Button */}
+            <div className="flex items-center justify-center p-4 bg-opacity-0 bg-[#001F54]">
 
-
-            {/* Bot Typing Animation */}
-            {isLoading && (
-              <div className="self-start p-4 rounded-2xl w-full text-gray-400 animate-pulse">
-                <div className="flex md:w-1/2 w-full md:ml-7 ml-3 md:justify-center md:items-center space-x-1">
-                  <span className="animate-bounce">●</span>
-                  <span className="animate-bounce delay-200">●</span>
-                  <span className="animate-bounce delay-500">●</span>
-                </div>
+              <div className="md:w-1/2 w-full flex items-center">
+                <input
+                  type="text"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  placeholder="Type your question..."
+                  onKeyDown={(e) => e.key === "Enter" && handleSend()}
+                  className="flex-1 p-3 md:w-[90%] w-[70%] ml-4 md:ml-0 rounded-full border border-gray-500 bg-[#002F6C] text-white focus:outline-none focus:ring-2 focus:ring-[#0057D9] shadow-md"
+                />
+                <button
+                  onClick={handleSend}
+                  className="ml-3 py-4 bg-gradient-to-r from-[#003B8B] to-[#007BFF] text-white px-4 rounded-full shadow-lg hover:scale-110 transition-all duration-300"
+                >
+                  <AiOutlineSend className="ml-1" />
+                </button>
               </div>
-            )}
-          </div>
 
-          <div onClick={() => setInput("How to recover from a sports injury?")} className=" relative z-50 flex items-center justify-center p-4 bg-[#0A0F38]/0 h-20">
-            <AiButton className="" />
-          </div>
-          {/* Input & Send Button */}
-          <div className="flex items-center justify-center p-4 bg-opacity-0 bg-[#001F54]">
-
-            <div className="md:w-1/2 w-full flex items-center">
-              <input
-                type="text"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                placeholder="Type your question..."
-                onKeyDown={(e) => e.key === "Enter" && handleSend()}
-                className="flex-1 p-3 md:w-[90%] w-[70%] ml-4 md:ml-0 rounded-full border border-gray-500 bg-[#002F6C] text-white focus:outline-none focus:ring-2 focus:ring-[#0057D9] shadow-md"
-              />
-              <button
-                onClick={handleSend}
-                className="ml-3 py-4 bg-gradient-to-r from-[#003B8B] to-[#007BFF] text-white px-4 rounded-full shadow-lg hover:scale-110 transition-all duration-300"
-              >
-                <AiOutlineSend className="ml-1" />
-              </button>
             </div>
 
           </div>
 
-        </div>
-
-      </div></AnimatedBeam>
+        </div></AnimatedBeam>
 
     </>
   );

@@ -8,6 +8,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { auth, database } from "../config/firebase";
 import boticon from '../assets/boticon.svg';
 import CompChatBot from "./CompChatBot";
+import { HiSparkles } from "react-icons/hi2";
 import { useNavigate } from "react-router-dom";
 function Home() {
     const [userData, setUserData] = useState(null);
@@ -86,18 +87,18 @@ function Home() {
                             <div className="bg-blue-500 text-white text-xs p-2 rounded-t-lg mb-2 shadow-lg">
                                 Need assistance? Chat with <strong>Rio</strong>!
                             </div>
-                            <div onClick={toggleChatbot} className="bg-blue-500 text-white p-3 rounded-full shadow-lg cursor-pointer flex items-center justify-center">
-                                <img src={boticon} alt="Chatbot" className="w-8 h-8" />
+                            <div onClick={toggleChatbot} className="bg-blue-500 text-white p-4 rounded-full shadow-lg cursor-pointer flex items-center justify-center">
+                            <HiSparkles className="scale-[140%]"/>
                             </div>
                        </div>
                 )}
             {isMobile && (
                 <div className={`fixed bottom-4 right-4 flex flex-col items-end transition-opacity ${isFooterVisible ? 'opacity-0' : 'opacity-100'}`}>
                     <div className="bg-blue-500 text-white text-xs p-2 rounded-t-lg mb-2 shadow-lg">
-                        Need assistance in injury management?<br /> I am <strong>Rio</strong>, your Ai assistant on <strong>Kotinos</strong>..
+                        Need assistance in injury prevention?<br /> I am <strong>Rio</strong>, your Ai assistant on <strong>Kotinos</strong>..
                     </div>
                     <div onClick={() => handlenavigation()} className="bg-blue-500 text-white p-3 rounded-full shadow-lg cursor-pointer flex items-center justify-center">
-                        <img src={boticon} alt="Chatbot" className="w-8 h-8" />
+                        <HiSparkles className="scale-[140%]"/>
                     </div>
                 </div>
             )}
@@ -111,7 +112,7 @@ function Home() {
                     </div>
 
                     {/* Chatbot Content */}
-                    <div className="flex-1 p-3 overflow-y-auto">
+                    <div className="flex-1 overflow-y-auto">
                         <CompChatBot />
                     </div>
                 </div>
