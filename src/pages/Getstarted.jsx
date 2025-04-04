@@ -12,6 +12,8 @@ import Glowcard from '../components/animata/button/glowing-card'
 import img1 from '../test/test_bg1.jpg'
 import AnimatedBeam from '../components/animata/button/animated-beam'
 
+import ImageCarousel from '../components/image-carousel'
+
 
 import ss1 from '../test/SS1.png'
 
@@ -38,7 +40,7 @@ function Getstarted() {
     }, []);
     const navigate = useNavigate();
     const comp = useRef(null);
-
+    
     const handleclick = () => {
         navigate("/signin");
     };
@@ -197,7 +199,7 @@ function Getstarted() {
                 </div>
 
                 {/* Demo Section */}
-                <div className="demo-section mt-20 w-full text-center scale-reveal mb-20">
+                <div className="demo-section mt-20 w-full text-center scale-reveal mb-20 hidden md:block">
                     <h2 className="text-4xl font-bold neon-title text-white fade-up">
                         See <span className="text-[#2BCEE0]">It In Action</span>
                     </h2>
@@ -205,26 +207,17 @@ function Getstarted() {
                         Explore the power of our platform with these real-time previews. From performance tracking to event management, experience it all.
                     </p>
 
-                    {/* 3D Carousel */}
-                    <div className="flex justify-center mt-10 overflow-hidden">
-                        <div className="relative flex gap-5">
-                            {[img1, ss1, img1, test].map((image, index) => (
-                                <div key={index} className="carousel-item w-60 md:w-72 h-40 md:h-52 bg-blue-950 shadow-lg rounded-3xl p-2 hover:scale-105 transition-all duration-300 hover:shadow-glowC hover:brightness-110 hover:-rotate-2">
-                                    <img
-                                        src={image}
-                                        alt={`Demo ${index + 1}`}
-                                        className="rounded-2xl w-full h-full object-cover"
-                                    />
-                                </div>
-                            ))}
-                        </div>
-                    </div>
+                    
 
-                    {/* CTA */}
-                    <div className="mt-10 fade-up">
+                    
+                </div>
+                <div className="hidden md:block">
+                <ImageCarousel/>
+                </div>
+                {/* CTA */}
+                <div className="my-10">
                         <GetstartedBtn onClick={handleclick} className="glow-btn" />
                     </div>
-                </div>
                 
 
 
