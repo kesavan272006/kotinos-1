@@ -1,0 +1,11 @@
+.custom-carousel .carousel-control-prev-icon,
+.custom-carousel .carousel-control-next-icon {
+  background-image: none !important;
+  width: 2rem;
+  height: 2rem;
+  background-color: rgba(133, 133, 135, 0.9);
+  mask: url("data:image/svg+xml;charset=UTF8,<svg xmlns='http://www.w3.org/2000/svg' fill='white' viewBox='0 0 16 16'><path d='M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z'/></svg>") center/contain no-repeat;
+}
+.custom-carousel .carousel-control-next-icon {
+  transform: rotate(180deg);
+}

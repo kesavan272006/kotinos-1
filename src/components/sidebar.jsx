@@ -22,6 +22,7 @@ import { IoIosPeople } from "react-icons/io";
 import { ImNewspaper } from "react-icons/im";
 import { IoGameController } from "react-icons/io5";
 import { MdKeyboardArrowLeft } from "react-icons/md";
+import { HiSparkles } from "react-icons/hi2";
 import { signOut } from 'firebase/auth';
 
 const Sidebar = () => {
@@ -181,9 +182,9 @@ const Sidebar = () => {
           <Link to='/aichatbot' className=' russo inverter' state={{ username: username, role: role, email: email }}>
             <div className="flex items-center hover:scale-105 hover:bg-black hover:bg-opacity-5 rounded-full p-1 my-3 transition-all cursor-pointer gap-5 md:gap-5 pl-4">
               <div>
-                <IoIosPeople className='scale-[180%]' />
+                <HiSparkles className='scale-[180%]' />
               </div>
-              <div className='russo mt-1 text-xl'>Chatbot</div>
+              <div className='russo mt-1 text-xl'>AI Assistant</div>
             </div>
           </Link>
           <Link to='/profile' className=' russo inverter'>
