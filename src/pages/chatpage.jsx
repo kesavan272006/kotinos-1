@@ -864,45 +864,46 @@ const ChatPage = () => {
                                 </div>
                                 <List>
                                     {mobiledefaults && (
-                                        user.filter(user => user.status === 'connected').map((eachuser) => (
-                                            <Paper 
-                                                key={eachuser.id} 
-                                                style={{ 
-                                                    marginBottom: '8px', 
-                                                    borderRadius: '8px',
-                                                    overflow: 'hidden',
-                                                    transition: 'transform 0.2s, box-shadow 0.2s',
-                                                    cursor: 'pointer'
-                                                }}
-                                                elevation={1}
-                                            >
-                                                <ListItem button onClick={() => handleuserselection(eachuser)} style={{ padding: '8px 12px' }}>
-                                                    <Avatar 
-                                                        src={profilePics[eachuser.id]} 
-                                                        sx={{ 
-                                                            width: 48, 
-                                                            height: 48,
-                                                        }}
+                                        user.filter(user => user.status === 'connected').map((eachuser) => {
+                                            console.log(eachuser);
+                                            return <Paper 
+                                            key={eachuser.id} 
+                                            style={{ 
+                                                marginBottom: '8px', 
+                                                borderRadius: '8px',
+                                                overflow: 'hidden',
+                                                transition: 'transform 0.2s, box-shadow 0.2s',
+                                                cursor: 'pointer'
+                                            }}
+                                            elevation={1}
+                                        >
+                                            <ListItem button onClick={() => handleuserselection(eachuser)} style={{ padding: '8px 12px' }}>
+                                                <Avatar 
+                                                    src={profilePics[eachuser.id]} 
+                                                    sx={{ 
+                                                        width: 48, 
+                                                        height: 48,
+                                                    }}
+                                                />
+                                                <div style={{ marginLeft: '12px', overflow: 'hidden' }}>
+                                                    <ListItemText 
+                                                        primary={
+                                                            <span style={{ fontWeight: 500, color: '#424242' }}>
+                                                                {eachuser.username}
+                                                            </span>
+                                                        } 
+                                                        secondary={
+                                                            <span style={{ fontSize: '12px', color: '#757575' }}>
+                                                                {eachuser.role}
+                                                            </span>
+                                                        }
+                                                        primaryTypographyProps={{ noWrap: true }}
+                                                        secondaryTypographyProps={{ noWrap: true }}
                                                     />
-                                                    <div style={{ marginLeft: '12px', overflow: 'hidden' }}>
-                                                        <ListItemText 
-                                                            primary={
-                                                                <span style={{ fontWeight: 500, color: '#424242' }}>
-                                                                    {eachuser.username}
-                                                                </span>
-                                                            } 
-                                                            secondary={
-                                                                <span style={{ fontSize: '12px', color: '#757575' }}>
-                                                                    {eachuser.role}
-                                                                </span>
-                                                            }
-                                                            primaryTypographyProps={{ noWrap: true }}
-                                                            secondaryTypographyProps={{ noWrap: true }}
-                                                        />
-                                                    </div>
-                                                </ListItem>
-                                            </Paper>
-                                        ))
+                                                </div>
+                                            </ListItem>
+                                        </Paper>
+                                        })
                                     )}
                                     {!mobiledefaults && (
                                         mobilefilteredUsers.filter(user => user.status === 'connected').map((eachuser) => (

@@ -6,7 +6,7 @@ import { Button } from "@mui/material";
 import { collection, doc, getDocs, deleteDoc, setDoc, getDoc } from "firebase/firestore";
 import { auth, database } from "../config/firebase";
 import Loading from "./Loading";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useRequestContext } from "../context/RequestContext";
 
 const Invitation = () => {
@@ -17,7 +17,30 @@ const Invitation = () => {
   const [requestedUser, setrequestUser] = useState("");
   const [requestRole, setRequestedRole] = useState("");
   const location = useLocation();
-
+  const [username, setUsername]=useState('');
+  const [role, setRole]=useState('');
+  const navigate = useNavigate();
+  useEffect(() => {
+      const fetchUserData = async () => {
+        const currentUser = auth.currentUser;
+  
+        if (currentUser) {
+          const userRef = doc(database, "Users", currentUser.uid);
+          const userSnap = await getDoc(userRef);
+          if (userSnap.exists()) {
+            const userData = userSnap.data();
+            setUsername(userData.username || 'No Username');
+            setRole(userData.role || 'No Role');
+          } else {
+            alert("Error occured");
+          }
+        } else {
+          console.log("Error occured");
+        }
+      };
+  
+      fetchUserData();
+    }, [navigate]);
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setIsAuthenticated(!!user);
@@ -57,6 +80,7 @@ const Invitation = () => {
   };
 
   const acceptReq = async (user) => {
+    console.log(user);
     try {
       await setDoc(doc(database, "Users", `${auth.currentUser?.uid}`, "RequestIn", `${user.id}`), {
         role: user.role,
@@ -73,17 +97,12 @@ const Invitation = () => {
   };
 
   const addConnect = async (requestId, user) => {
-    const docSnap = await getDoc(doc(database, "Users", `${auth.currentUser?.id}`));
-    if (docSnap.exists()) {
-      const reference = docSnap.data();
-      setrequestUser(reference.username);
-      setRequestedRole(reference.role);
-    }
     try {
-      await setDoc(doc(database, "Users", `${user.id}`, "RequestIn", `${auth.currentUser?.uid}`), {
+      const referenceDoc = doc(database, "Users", `${user.id}`, "RequestIn", `${auth.currentUser?.uid}`);
+      await setDoc(referenceDoc, {
         id: auth.currentUser?.uid,
-        role: requestRole,
-        username: requestedUser,
+        role: role,
+        username: username,
         status: "connected",
       });
       await showrequest();
